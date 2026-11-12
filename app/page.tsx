@@ -47,6 +47,7 @@ export default function Home() {
   const [asked, setAsked] = useState(""); // the text that produced the current draft
   const [text, setText] = useState("");
   const [parsing, setParsing] = useState(false);
+  const [editing, setEditing] = useState<Entry | null>(null);
 
   const load = useCallback(async () => {
     const r = await fetch(`/api/entries?date=${date}`);
@@ -123,7 +124,7 @@ export default function Home() {
           <Summary data={data} onEditEnergy={() => setSheet("energy")} />
           <div className="mt-3 space-y-3 px-4">
             {MEALS.map((m) => (
-              <MealCard key={m} meal={m} entries={data.entries.filter((e) => e.meal === m)} onRemove={remove} />
+              <MealCard key={m} meal={m} entries={data.entries.filter((e) => e.meal === m)} onRemove={remove} onEdit={(e) => setEditing(e)} />
             ))}
           </div>
         </>
@@ -145,6 +146,20 @@ export default function Home() {
         <ComposeSheet text={text} setText={setText} parsing={parsing} error={error} onSubmit={submitText} onManual={addItems} onClose={() => setSheet(null)} />
       )}
       {sheet === "review" && <ReviewSheet items={draft} questions={questions} onAnswer={answer} onClose={() => setSheet(null)} onAdd={addItems} />}
+      {editing && (
+        <EntrySheet
+          entry={editing}
+          onClose={() => setEditing(null)}
+          onDelete={() => {
+            remove(editing.id);
+            setEditing(null);
+          }}
+          onSaved={() => {
+            setEditing(null);
+            load();
+          }}
+        />
+      )}
       {sheet === "energy" && data && (
         <EnergySheet date={date} energy={data.energy} onClose={() => setSheet(null)} onSaved={() => { setSheet(null); load(); }} />
       )}
@@ -264,7 +279,7 @@ function MacroBar({ label, value, target, color }: { label: string; value: numbe
 
 /* ---------------- Diary ---------------- */
 
-function MealCard({ meal, entries, onRemove }: { meal: Meal; entries: Entry[]; onRemove: (id: number) => void }) {
+function MealCard({ meal, entries, onRemove, onEdit }: { meal: Meal; entries: Entry[]; onRemove: (id: number) => void; onEdit: (e: Entry) => void }) {
   const total = Math.round(sum(entries, "kcal"));
   return (
     <section className="rounded-2xl bg-card shadow-sm ring-1 ring-line">
@@ -283,15 +298,18 @@ function MealCard({ meal, entries, onRemove }: { meal: Meal; entries: Entry[]; o
         <ul className="divide-y divide-line border-t border-line">
           {entries.map((e) => (
             <li key={e.id} className="flex items-center gap-3 px-4 py-2.5">
-              <div className="min-w-0 flex-1">
+              <button onClick={() => onEdit(e)} className="min-w-0 flex-1 text-left" aria-label={`Edit ${e.name}`}>
                 <div className="truncate text-[15px]">{e.name}</div>
                 <div className="truncate text-xs text-ink-3">
                   {e.quantity}
                   {e.quantity ? " · " : ""}
                   {sourceLabel(e.source)} · <ConfidenceTag c={e.confidence} />
                 </div>
-              </div>
-              <span className="tabular text-sm font-medium">{Math.round(e.kcal)}</span>
+              </button>
+              <button onClick={() => onEdit(e)} className="text-right" tabIndex={-1} aria-hidden>
+                <div className="tabular text-sm font-medium">{Math.round(e.kcal)}</div>
+                {e.kcalLow !== undefined && <div className="tabular text-[10px] text-ink-3">{e.kcalLow}–{Math.round(e.kcal)}</div>}
+              </button>
               <button
                 aria-label={`Delete ${e.name}`}
                 onClick={() => confirm(`Delete ${e.name}?`) && onRemove(e.id)}
@@ -330,7 +348,32 @@ function ConfidenceTag({ c }: { c: FoodItem["confidence"] }) {
   );
 }
 
-function ReviewItem({ item: it, onKcal, onRemove }: { item: FoodItem & { breakdown: { label: string; kcal: number }[] }; onKcal: (k: number) => void; onRemove: () => void }) {
+function ReviewItem({
+  item: it,
+  onKcal,
+  onFix,
+  onRemove,
+}: {
+  item: FoodItem & { breakdown: { label: string; kcal: number }[] };
+  onKcal: (k: number) => void;
+  onFix: (note: string) => Promise<void>;
+  onRemove: () => void;
+}) {
+  const [fixOpen, setFixOpen] = useState(false);
+  const [note, setNote] = useState("");
+  const [fixing, setFixing] = useState(false);
+  const [fixError, setFixError] = useState<string | null>(null);
+  async function submitFix() {
+    if (!note.trim()) return;
+    setFixing(true);
+    setFixError(null);
+    try {
+      await onFix(note.trim());
+    } catch (e) {
+      setFixError(e instanceof Error ? e.message : "Lookup failed");
+      setFixing(false);
+    }
+  }
   const aiTotal = it.breakdown.reduce((a, b) => a + b.kcal, 0);
   const yourEdit = Math.round(it.kcal) - aiTotal;
   const signed = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : "0");
@@ -384,10 +427,44 @@ function ReviewItem({ item: it, onKcal, onRemove }: { item: FoodItem & { breakdo
           </tr>
         </tbody>
       </table>
+      {it.kcalLow !== undefined && (
+        <div className="mt-1.5 rounded-lg bg-track px-2.5 py-1.5 text-xs text-ink-2">
+          Likely <span className="tabular font-semibold text-ink">{it.kcalLow}–{Math.round(it.kcal)} kcal</span>, depending on portion and oil.
+          Logging the upper end.
+        </div>
+      )}
       <div className="tabular mt-2 text-xs text-ink-2">
         Protein {Math.round(it.protein)}g · Carbs {Math.round(it.carbs)}g · Fat {Math.round(it.fat)}g
       </div>
-      <p className="mt-1 text-[11px] text-ink-3">Tap the total to correct it. Your number is remembered for next time.</p>
+      {fixOpen ? (
+        <form
+          className="mt-2 flex gap-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            submitFix();
+          }}
+        >
+          <input
+            autoFocus
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="What's different? e.g. large plate, no gravy, it was fish"
+            className="min-w-0 flex-1 rounded-lg bg-track px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand"
+          />
+          <button disabled={fixing || !note.trim()} className="rounded-lg bg-brand px-3 text-sm font-semibold text-white disabled:opacity-40">
+            {fixing ? "…" : "Fix"}
+          </button>
+        </form>
+      ) : (
+        <p className="mt-1.5 text-[11px] text-ink-3">
+          Tap the total to type your own number, or{" "}
+          <button onClick={() => setFixOpen(true)} className="font-semibold text-brand-strong underline">
+            tell the AI what&apos;s off
+          </button>
+          . Corrections are remembered.
+        </p>
+      )}
+      {fixError && <p className="mt-1 text-xs text-over">{fixError}</p>}
     </li>
   );
 }
@@ -563,9 +640,23 @@ function ReviewSheet(p: {
         if (i !== idx) return x;
         // Scale macros with the calorie edit so they stay consistent.
         const f = x.kcal > 0 ? kcal / x.kcal : 1;
-        return { ...x, kcal, protein: +(x.protein * f).toFixed(1), carbs: +(x.carbs * f).toFixed(1), fat: +(x.fat * f).toFixed(1), source: x.source.includes("edited") ? x.source : `${x.source} (edited)` };
+        return { ...x, kcal, kcalLow: undefined, protein: +(x.protein * f).toFixed(1), carbs: +(x.carbs * f).toFixed(1), fat: +(x.fat * f).toFixed(1), source: x.source.includes("edited") ? x.source : `${x.source} (edited)` };
       }),
     );
+  }
+
+  // Re-asks the AI about one item with the user's correction, e.g. "it was a large plate".
+  async function fix(idx: number, note: string) {
+    const it = items[idx];
+    const r = await fetch("/api/parse", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ text: `${it.name}, ${it.quantity}\nCorrection from me: ${note}` }),
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error ?? "Lookup failed");
+    if (!j.items.length) throw new Error("Couldn't work that out. Try rewording.");
+    setItems((xs) => [...xs.slice(0, idx), ...withBreakdown(j.items), ...xs.slice(idx + 1)]);
   }
 
   return (
@@ -578,6 +669,7 @@ function ReviewSheet(p: {
             key={i}
             item={it}
             onKcal={(k) => setKcal(i, k)}
+            onFix={(note) => fix(i, note)}
             onRemove={() => setItems((xs) => xs.filter((_, j) => j !== i))}
           />
         ))}
@@ -644,6 +736,92 @@ function Questions({ questions, onAnswer }: { questions: Clarification[]; onAnsw
         <span className="text-xs text-ink-3">Or skip: the numbers below use the most common choice.</span>
       </div>
     </div>
+  );
+}
+
+function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClose: () => void; onSaved: () => void; onDelete: () => void }) {
+  const [meal, setMeal] = useState<Meal>(entry.meal);
+  const [f, setF] = useState({
+    name: entry.name,
+    quantity: entry.quantity,
+    kcal: String(Math.round(entry.kcal)),
+    protein: String(entry.protein),
+    carbs: String(entry.carbs),
+    fat: String(entry.fat),
+  });
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
+  // Changing calories scales the macros along with it, unless you edit those yourself.
+  const setKcal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const k = Number(e.target.value);
+    const ratio = entry.kcal > 0 && k > 0 ? k / entry.kcal : null;
+    setF({
+      ...f,
+      kcal: e.target.value,
+      ...(ratio && {
+        protein: String(+(entry.protein * ratio).toFixed(1)),
+        carbs: String(+(entry.carbs * ratio).toFixed(1)),
+        fat: String(+(entry.fat * ratio).toFixed(1)),
+      }),
+    });
+  };
+  const field = "mt-1 w-full rounded-lg bg-track px-3 py-2 text-ink outline-none focus:ring-2 focus:ring-brand";
+
+  async function save() {
+    setSaving(true);
+    setError(null);
+    const r = await fetch("/api/entries", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ id: entry.id, meal, ...f }),
+    });
+    setSaving(false);
+    if (!r.ok) return setError((await r.json()).error ?? "Couldn't save");
+    onSaved();
+  }
+
+  return (
+    <Sheet title="Edit food" onClose={onClose}>
+      <div className="space-y-3">
+        <MealPicker meal={meal} setMeal={setMeal} />
+        <label className="block text-sm text-ink-2">
+          Dish
+          <input value={f.name} onChange={set("name")} className={field} />
+        </label>
+        <div className="grid grid-cols-[1fr_7rem] gap-2">
+          <label className="block text-sm text-ink-2">
+            Amount
+            <input value={f.quantity} onChange={set("quantity")} className={field} />
+          </label>
+          <label className="block text-sm text-ink-2">
+            Calories
+            <input type="number" inputMode="numeric" value={f.kcal} onChange={setKcal} className={`${field} tabular font-semibold`} />
+          </label>
+        </div>
+        {entry.kcalLow !== undefined && (
+          <p className="text-xs text-ink-3">
+            The AI&apos;s likely range was {entry.kcalLow}–{Math.round(entry.kcal)} kcal. Saving makes your number exact.
+          </p>
+        )}
+        <div className="grid grid-cols-3 gap-2">
+          {(["protein", "carbs", "fat"] as const).map((k) => (
+            <label key={k} className="block text-xs text-ink-3">
+              {k[0].toUpperCase() + k.slice(1)} g
+              <input type="number" inputMode="decimal" value={f[k]} onChange={set(k)} className={`${field} tabular`} />
+            </label>
+          ))}
+        </div>
+        {error && <p className="text-sm text-over">{error}</p>}
+        <button disabled={saving || !f.name.trim() || f.kcal === ""} onClick={save} className="h-12 w-full rounded-xl bg-brand font-semibold text-white disabled:opacity-40">
+          {saving ? "Saving…" : "Save changes"}
+        </button>
+        <p className="text-center text-xs text-ink-3">Your corrected numbers are remembered for next time.</p>
+        <button onClick={() => confirm(`Delete ${entry.name}?`) && onDelete()} className="h-11 w-full rounded-xl text-sm text-over active:bg-track">
+          Delete from diary
+        </button>
+      </div>
+    </Sheet>
   );
 }
 

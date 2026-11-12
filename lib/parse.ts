@@ -24,6 +24,7 @@ const ItemSchema = z.object({
   name: z.string(),
   quantity: z.string(),
   kcal: z.number(),
+  kcal_low: z.number(),
   protein: z.number(),
   carbs: z.number(),
   fat: z.number(),
@@ -62,11 +63,12 @@ const RESULT_JSON_SCHEMA = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["name", "quantity", "kcal", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown"],
+        required: ["name", "quantity", "kcal", "kcal_low", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown"],
         properties: {
           name: { type: "string", description: "Short display name, e.g. 'Roasted chicken rice'" },
           quantity: { type: "string", description: "Amount eaten, e.g. '1 plate, less rice' or '3 tbsp'" },
-          kcal: { type: "number" },
+          kcal: { type: "number", description: "Upper end of the likely range (this is what gets logged)" },
+          kcal_low: { type: "number", description: "Low end of the likely range for this item" },
           protein: { type: "number", description: "grams" },
           carbs: { type: "number", description: "grams" },
           fat: { type: "number", description: "grams" },
@@ -116,9 +118,11 @@ Modifiers to apply:
 - Economic rice/cai fan: rice base (half rice = half) + each scoop from the cf-* rows.
 - "half", "shared", "ate a few spoons": scale proportionally.
 
+Range: real portions and oil vary, so also give kcal_low, the low end of a realistic range for what they described. kcal is the upper end. For a reference-table dish with no adjustments, kcal_low is about 15% below kcal; for your own estimates it's usually 20–35% below; for MY FOODS, HOME UNITS and branded items with published values, kcal_low = kcal.
+
 Breakdown: for every item, show the working. Row 1 is the base serving you started from (label like "Chicken rice, 1 plate" with its kcal). Each later row is one modifier or scaling step as a signed kcal change (e.g. "Less rice" -80, "Extra plate" +607, "Half portion" -300). Use only the base row if nothing was adjusted. The rows must add up exactly to kcal.
 
-Clarifying questions: if the user left out a detail that changes the calories a lot (about 15% or 80+ kcal), add a question with 2–4 short options. Examples: "chicken rice" → "Steamed or roasted chicken?" [Steamed, Roasted]; "nasi lemak" → "Which main?" [Fried chicken wing, Fried fish, Egg only]; "fried rice" → "Which kind?" [Egg, Chicken, Seafood, Yang zhou]; "mee goreng" → "Plate size?" [Regular, Large]. Ask at most 2 questions per message and only about things that matter for calories. Never ask about something the text already states (e.g. "roasted chicken rice" already answers steamed vs roasted). Don't ask when the user already said it, when MY FOODS or HOME UNITS already pin it down, or about drinks' ice. Still return items now using the most common choice, and say which in the note (e.g. "Assumed steamed"). If the message includes "Answers to your questions", use them and return no further questions about the same food.
+Clarifying questions: if the user left out a detail that changes the calories a lot (about 15% or 80+ kcal), add a question with 2–4 short options. Examples: "chicken rice" → "Steamed or roasted chicken?" [Steamed, Roasted]; "nasi lemak" → "Which main?" [Fried chicken wing, Fried fish, Egg only]; "fried rice" → "Which kind?" [Egg, Chicken, Seafood, Yang zhou]; "mee goreng" → "Plate size?" [Regular, Large]. Ask at most 2 questions per message and only about things that matter for calories. Never ask about something the text already states (e.g. "roasted chicken rice" already answers steamed vs roasted). Don't ask when the user already said it, when MY FOODS or HOME UNITS already pin it down, or about drinks' ice. Still return items now using the most common choice, and say which in the note (e.g. "Assumed steamed"). If the message includes "Correction from me", apply that correction to the food (it may change the dish, portion or cooking) and ask no questions. If the message includes "Answers to your questions", use them and return no further questions about the same food.
 
 Round kcal to whole numbers and macros to 1 decimal place. One entry per distinct food/drink. If the text isn't food at all, return an empty items list.
 
@@ -159,7 +163,12 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: Fo
         const breakdown = i.breakdown.map((b) => ({ label: b.label, kcal: Math.round(b.kcal) }));
         // Trust the shown working so the table always adds up.
         const kcal = breakdown.length ? breakdown.reduce((a, b) => a + b.kcal, 0) : Math.round(i.kcal);
-        return { ...i, kcal, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
+        // Keep the range's width but anchor it to the shown total.
+        const width = Math.max(0, Math.round(i.kcal) - Math.round(i.kcal_low));
+        const kcalLow = width > 0 && width < kcal ? kcal - width : undefined;
+        const { kcal_low: _low, ...rest } = i;
+        void _low;
+        return { ...rest, kcal, kcalLow, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
       });
       const questions = parsed.questions
         .filter((q) => q.question.trim() && q.options.length >= 2)

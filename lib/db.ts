@@ -46,7 +46,8 @@ async function db(): Promise<Client> {
             confidence TEXT NOT NULL DEFAULT 'medium',
             note TEXT,
             created_at TEXT NOT NULL DEFAULT (datetime('now')),
-            user_id INTEGER NOT NULL DEFAULT 0
+            user_id INTEGER NOT NULL DEFAULT 0,
+            kcal_low REAL
           )`,
           `CREATE TABLE IF NOT EXISTS daily_energy (
             user_id INTEGER NOT NULL,
@@ -106,6 +107,7 @@ async function migrateSingleUserData(c: Client) {
   const entryCols = (await c.execute("SELECT name FROM pragma_table_info('entries')")).rows.map((r) => String(r.name));
   const stmts: string[] = [];
   if (!entryCols.includes("user_id")) stmts.push("ALTER TABLE entries ADD COLUMN user_id INTEGER NOT NULL DEFAULT 0");
+  if (!entryCols.includes("kcal_low")) stmts.push("ALTER TABLE entries ADD COLUMN kcal_low REAL");
   if (tables.has("energy")) {
     stmts.push(
       `INSERT OR IGNORE INTO daily_energy (user_id, date, active, resting, total, source, updated_at)
@@ -196,6 +198,7 @@ export async function listEntries(userId: number, date: string): Promise<Entry[]
     name: String(row.name),
     quantity: String(row.quantity),
     kcal: Number(row.kcal),
+    kcalLow: row.kcal_low === null || row.kcal_low === undefined ? undefined : Number(row.kcal_low),
     protein: Number(row.protein),
     carbs: Number(row.carbs),
     fat: Number(row.fat),
@@ -210,12 +213,24 @@ export async function addEntries(userId: number, date: string, meal: Meal, items
   const c = await db();
   await c.batch(
     items.map((i) => ({
-      sql: `INSERT INTO entries (user_id, date, meal, name, quantity, kcal, protein, carbs, fat, source, confidence, note)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [userId, date, meal, i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source, i.confidence, i.note ?? null],
+      sql: `INSERT INTO entries (user_id, date, meal, name, quantity, kcal, kcal_low, protein, carbs, fat, source, confidence, note)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [userId, date, meal, i.name, i.quantity, i.kcal, i.kcalLow ?? null, i.protein, i.carbs, i.fat, i.source, i.confidence, i.note ?? null],
     })),
     "write",
   );
+}
+
+// A correction from the diary: the numbers become exact (no range) and are marked as edited.
+export async function updateEntry(userId: number, id: number, f: { meal: Meal; name: string; quantity: string; kcal: number; protein: number; carbs: number; fat: number }) {
+  const c = await db();
+  const r = await c.execute({
+    sql: `UPDATE entries SET meal = ?, name = ?, quantity = ?, kcal = ?, kcal_low = NULL, protein = ?, carbs = ?, fat = ?,
+            source = CASE WHEN source LIKE '%(edited)%' THEN source ELSE source || ' (edited)' END
+          WHERE id = ? AND user_id = ? RETURNING source, confidence`,
+    args: [f.meal, f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat, id, userId],
+  });
+  return r.rows[0] ? String(r.rows[0].source) : null;
 }
 
 export async function deleteEntry(userId: number, id: number) {
@@ -303,7 +318,7 @@ export async function foodsForAI(userId: number): Promise<FoodItem[]> {
 }
 
 // Called on every log. Keeps counts; corrected numbers win, otherwise the latest AI numbers are kept.
-export async function recordFoods(userId: number, items: FoodItem[]) {
+export async function recordFoods(userId: number, items: FoodItem[], countUse = true) {
   if (!items.length) return;
   const c = await db();
   const pick = (col: string) =>
@@ -311,8 +326,8 @@ export async function recordFoods(userId: number, items: FoodItem[]) {
   await c.batch(
     items.map((i) => ({
       sql: `INSERT INTO user_foods (user_id, key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'recorded', ?, 1, datetime('now'))
-            ON CONFLICT(user_id, key) DO UPDATE SET times = user_foods.times + 1, last_used = excluded.last_used,
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'recorded', ?, ${countUse ? 1 : 0}, datetime('now'))
+            ON CONFLICT(user_id, key) DO UPDATE SET times = user_foods.times + ${countUse ? 1 : 0}, last_used = excluded.last_used,
               ${["kcal", "protein", "carbs", "fat"].map(pick).join(", ")},
               edited = MAX(user_foods.edited, excluded.edited), updated_at = datetime('now')`,
       args: [userId, foodKey(i.name, i.quantity), i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source.includes("(edited)") ? 1 : 0],

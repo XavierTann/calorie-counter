@@ -16,12 +16,22 @@ function getClient(): Client {
   return client;
 }
 
+// Data owned by "user 0" is from before accounts existed; the first account to sign up claims it.
+const LEGACY_USER = 0;
+
 async function db(): Promise<Client> {
   const c = getClient();
   if (!ready) {
     ready = c
       .batch(
         [
+          `CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            pass_hash TEXT NOT NULL,
+            sync_token TEXT NOT NULL UNIQUE,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+          )`,
           `CREATE TABLE IF NOT EXISTS entries (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             date TEXT NOT NULL,
@@ -35,25 +45,28 @@ async function db(): Promise<Client> {
             source TEXT NOT NULL DEFAULT '',
             confidence TEXT NOT NULL DEFAULT 'medium',
             note TEXT,
-            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
+            user_id INTEGER NOT NULL DEFAULT 0
           )`,
-          `CREATE INDEX IF NOT EXISTS entries_date ON entries(date)`,
-          `CREATE TABLE IF NOT EXISTS energy (
-            date TEXT PRIMARY KEY,
+          `CREATE TABLE IF NOT EXISTS daily_energy (
+            user_id INTEGER NOT NULL,
+            date TEXT NOT NULL,
             active REAL,
             resting REAL,
             total REAL,
             source TEXT NOT NULL DEFAULT 'manual',
-            updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+            PRIMARY KEY (user_id, date)
           )`,
-          `CREATE TABLE IF NOT EXISTS settings (
-            id INTEGER PRIMARY KEY CHECK (id = 1),
+          `CREATE TABLE IF NOT EXISTS user_settings (
+            user_id INTEGER PRIMARY KEY,
             json TEXT NOT NULL
           )`,
-          // Your food dictionary: everything you've logged ("recorded") plus foods you added yourself ("custom").
-          `CREATE TABLE IF NOT EXISTS my_foods (
+          // Each user's food dictionary: everything they've logged ("recorded") plus foods they added ("custom").
+          `CREATE TABLE IF NOT EXISTS user_foods (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            key TEXT NOT NULL UNIQUE,
+            user_id INTEGER NOT NULL,
+            key TEXT NOT NULL,
             name TEXT NOT NULL,
             quantity TEXT NOT NULL DEFAULT '',
             kcal REAL NOT NULL,
@@ -64,13 +77,13 @@ async function db(): Promise<Client> {
             edited INTEGER NOT NULL DEFAULT 0,
             times INTEGER NOT NULL DEFAULT 0,
             last_used TEXT,
-            updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+            UNIQUE (user_id, key)
           )`,
-          `CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL)`,
         ],
         "write",
       )
-      .then(() => backfillMyFoods(c))
+      .then(() => migrateSingleUserData(c))
       .catch((e) => {
         ready = null;
         throw e;
@@ -80,30 +93,95 @@ async function db(): Promise<Client> {
   return c;
 }
 
-// One-off: fill the food dictionary from past diary entries and the old learned_foods table.
-async function backfillMyFoods(c: Client) {
-  const done = await c.execute("SELECT v FROM meta WHERE k = 'my_foods_backfilled'");
-  if (done.rows[0]) return;
-  await c.execute(`INSERT OR IGNORE INTO my_foods (key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used)
-    SELECT lower(trim(name)) || '|' || lower(trim(quantity)), name, quantity, kcal, protein, carbs, fat, 'recorded',
-      CASE WHEN source LIKE '%(edited)%' THEN 1 ELSE 0 END, COUNT(*), MAX(created_at)
-    FROM entries GROUP BY lower(trim(name)), lower(trim(quantity))`);
-  try {
-    await c.execute(`INSERT INTO my_foods (key, name, quantity, kcal, protein, carbs, fat, kind, edited, times)
-      SELECT lower(trim(name)) || '|' || lower(trim(quantity)), name, quantity, kcal, protein, carbs, fat, 'recorded', 1, 0 FROM learned_foods WHERE true
-      ON CONFLICT(key) DO UPDATE SET kcal = excluded.kcal, protein = excluded.protein, carbs = excluded.carbs, fat = excluded.fat, edited = 1`);
-    await c.execute("DROP TABLE learned_foods");
-  } catch {
-    // No old table: nothing to move.
+// Moves data from the single-user tables into the per-user ones (owned by LEGACY_USER until claimed).
+async function migrateSingleUserData(c: Client) {
+  const tables = new Set((await c.execute("SELECT name FROM sqlite_master WHERE type = 'table'")).rows.map((r) => String(r.name)));
+  const entryCols = (await c.execute("SELECT name FROM pragma_table_info('entries')")).rows.map((r) => String(r.name));
+  const stmts: string[] = [];
+  if (!entryCols.includes("user_id")) stmts.push("ALTER TABLE entries ADD COLUMN user_id INTEGER NOT NULL DEFAULT 0");
+  if (tables.has("energy")) {
+    stmts.push(
+      `INSERT OR IGNORE INTO daily_energy (user_id, date, active, resting, total, source, updated_at)
+       SELECT ${LEGACY_USER}, date, active, resting, total, source, updated_at FROM energy`,
+      "DROP TABLE energy",
+    );
   }
-  await c.execute("INSERT OR IGNORE INTO meta (k, v) VALUES ('my_foods_backfilled', datetime('now'))");
+  if (tables.has("settings")) {
+    stmts.push(`INSERT OR IGNORE INTO user_settings (user_id, json) SELECT ${LEGACY_USER}, json FROM settings`, "DROP TABLE settings");
+  }
+  if (tables.has("my_foods")) {
+    stmts.push(
+      `INSERT OR IGNORE INTO user_foods (user_id, key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used, updated_at)
+       SELECT ${LEGACY_USER}, key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used, updated_at FROM my_foods`,
+      "DROP TABLE my_foods",
+    );
+  }
+  for (const old of ["learned_foods", "meta"]) if (tables.has(old)) stmts.push(`DROP TABLE ${old}`);
+  if (tables.has("entries")) stmts.push("DROP INDEX IF EXISTS entries_date");
+  stmts.push("CREATE INDEX IF NOT EXISTS entries_user_date ON entries(user_id, date)");
+  await c.batch(stmts, "write");
+}
+
+/* ---------------- Users ---------------- */
+
+export type User = { id: number; username: string; passHash: string; syncToken: string };
+
+function rowToUser(row: Record<string, unknown>): User {
+  return { id: Number(row.id), username: String(row.username), passHash: String(row.pass_hash), syncToken: String(row.sync_token) };
+}
+
+export async function getUserByName(username: string): Promise<User | null> {
+  const c = await db();
+  const r = await c.execute({ sql: "SELECT * FROM users WHERE username = ?", args: [username] });
+  return r.rows[0] ? rowToUser(r.rows[0] as Record<string, unknown>) : null;
+}
+
+export async function getUserById(id: number): Promise<User | null> {
+  const c = await db();
+  const r = await c.execute({ sql: "SELECT * FROM users WHERE id = ?", args: [id] });
+  return r.rows[0] ? rowToUser(r.rows[0] as Record<string, unknown>) : null;
+}
+
+export async function getUserBySyncToken(token: string): Promise<User | null> {
+  if (!token) return null;
+  const c = await db();
+  const r = await c.execute({ sql: "SELECT * FROM users WHERE sync_token = ?", args: [token] });
+  return r.rows[0] ? rowToUser(r.rows[0] as Record<string, unknown>) : null;
+}
+
+// Creates the account. The very first account also takes over the data from before accounts existed.
+export async function createUser(username: string, passHash: string, syncToken: string): Promise<User> {
+  const c = await db();
+  const r = await c.execute({
+    sql: "INSERT INTO users (username, pass_hash, sync_token) VALUES (?, ?, ?) RETURNING *",
+    args: [username, passHash, syncToken],
+  });
+  const user = rowToUser(r.rows[0] as Record<string, unknown>);
+  const first = await c.execute("SELECT MIN(id) AS id FROM users");
+  if (Number(first.rows[0].id) === user.id) {
+    await c.batch(
+      ["entries", "daily_energy", "user_settings", "user_foods"].map((t) => ({
+        sql: `UPDATE ${t} SET user_id = ? WHERE user_id = ${LEGACY_USER}`,
+        args: [user.id],
+      })),
+      "write",
+    );
+  }
+  return user;
+}
+
+export async function setSyncToken(userId: number, token: string) {
+  const c = await db();
+  await c.execute({ sql: "UPDATE users SET sync_token = ? WHERE id = ?", args: [token, userId] });
 }
 
 const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
 
-export async function listEntries(date: string): Promise<Entry[]> {
+/* ---------------- Diary ---------------- */
+
+export async function listEntries(userId: number, date: string): Promise<Entry[]> {
   const c = await db();
-  const r = await c.execute({ sql: "SELECT * FROM entries WHERE date = ? ORDER BY id", args: [date] });
+  const r = await c.execute({ sql: "SELECT * FROM entries WHERE user_id = ? AND date = ? ORDER BY id", args: [userId, date] });
   return r.rows.map((row) => ({
     id: Number(row.id),
     date: String(row.date),
@@ -121,26 +199,26 @@ export async function listEntries(date: string): Promise<Entry[]> {
   }));
 }
 
-export async function addEntries(date: string, meal: Meal, items: FoodItem[]) {
+export async function addEntries(userId: number, date: string, meal: Meal, items: FoodItem[]) {
   const c = await db();
   await c.batch(
     items.map((i) => ({
-      sql: `INSERT INTO entries (date, meal, name, quantity, kcal, protein, carbs, fat, source, confidence, note)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [date, meal, i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source, i.confidence, i.note ?? null],
+      sql: `INSERT INTO entries (user_id, date, meal, name, quantity, kcal, protein, carbs, fat, source, confidence, note)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [userId, date, meal, i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source, i.confidence, i.note ?? null],
     })),
     "write",
   );
 }
 
-export async function deleteEntry(id: number) {
+export async function deleteEntry(userId: number, id: number) {
   const c = await db();
-  await c.execute({ sql: "DELETE FROM entries WHERE id = ?", args: [id] });
+  await c.execute({ sql: "DELETE FROM entries WHERE id = ? AND user_id = ?", args: [id, userId] });
 }
 
-export async function getEnergy(date: string): Promise<Energy | null> {
+export async function getEnergy(userId: number, date: string): Promise<Energy | null> {
   const c = await db();
-  const r = await c.execute({ sql: "SELECT * FROM energy WHERE date = ?", args: [date] });
+  const r = await c.execute({ sql: "SELECT * FROM daily_energy WHERE user_id = ? AND date = ?", args: [userId, date] });
   const row = r.rows[0];
   if (!row) return null;
   return {
@@ -153,21 +231,21 @@ export async function getEnergy(date: string): Promise<Energy | null> {
   };
 }
 
-export async function upsertEnergy(e: { date: string; active: number | null; resting: number | null; total: number | null; source: string }) {
+export async function upsertEnergy(userId: number, e: { date: string; active: number | null; resting: number | null; total: number | null; source: string }) {
   const c = await db();
   const total = e.total ?? (e.active !== null && e.resting !== null ? e.active + e.resting : null);
   await c.execute({
-    sql: `INSERT INTO energy (date, active, resting, total, source, updated_at)
-          VALUES (?, ?, ?, ?, ?, datetime('now'))
-          ON CONFLICT(date) DO UPDATE SET active = excluded.active, resting = excluded.resting,
+    sql: `INSERT INTO daily_energy (user_id, date, active, resting, total, source, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+          ON CONFLICT(user_id, date) DO UPDATE SET active = excluded.active, resting = excluded.resting,
             total = excluded.total, source = excluded.source, updated_at = excluded.updated_at`,
-    args: [e.date, e.active, e.resting, total, e.source],
+    args: [userId, e.date, e.active, e.resting, total, e.source],
   });
 }
 
-export async function getSettings(): Promise<Settings> {
+export async function getSettings(userId: number): Promise<Settings> {
   const c = await db();
-  const r = await c.execute("SELECT json FROM settings WHERE id = 1");
+  const r = await c.execute({ sql: "SELECT json FROM user_settings WHERE user_id = ?", args: [userId] });
   if (!r.rows[0]) return DEFAULT_SETTINGS;
   const saved = { ...DEFAULT_SETTINGS, ...JSON.parse(String(r.rows[0].json)) } as Settings;
   // Older versions measured home cooking in scoops; switch those to the tablespoon defaults.
@@ -175,11 +253,11 @@ export async function getSettings(): Promise<Settings> {
   return saved;
 }
 
-export async function saveSettings(s: Settings) {
+export async function saveSettings(userId: number, s: Settings) {
   const c = await db();
   await c.execute({
-    sql: "INSERT INTO settings (id, json) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json",
-    args: [JSON.stringify(s)],
+    sql: "INSERT INTO user_settings (user_id, json) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET json = excluded.json",
+    args: [userId, JSON.stringify(s)],
   });
 }
 
@@ -201,33 +279,36 @@ function rowToMyFood(row: Record<string, unknown>): MyFood {
   };
 }
 
-export async function listMyFoods(): Promise<MyFood[]> {
+export async function listMyFoods(userId: number): Promise<MyFood[]> {
   const c = await db();
-  const r = await c.execute("SELECT * FROM my_foods ORDER BY COALESCE(last_used, updated_at) DESC");
+  const r = await c.execute({ sql: "SELECT * FROM user_foods WHERE user_id = ? ORDER BY COALESCE(last_used, updated_at) DESC", args: [userId] });
   return r.rows.map((row) => rowToMyFood(row as Record<string, unknown>));
 }
 
 // Foods the AI should treat as the user's own numbers: custom foods and corrected ones.
-export async function foodsForAI(): Promise<FoodItem[]> {
+export async function foodsForAI(userId: number): Promise<FoodItem[]> {
   const c = await db();
-  const r = await c.execute("SELECT * FROM my_foods WHERE kind = 'custom' OR edited = 1 ORDER BY COALESCE(last_used, updated_at) DESC LIMIT 300");
+  const r = await c.execute({
+    sql: "SELECT * FROM user_foods WHERE user_id = ? AND (kind = 'custom' OR edited = 1) ORDER BY COALESCE(last_used, updated_at) DESC LIMIT 300",
+    args: [userId],
+  });
   return r.rows.map((row) => ({ ...rowToMyFood(row as Record<string, unknown>), source: "my food", confidence: "high" as const }));
 }
 
 // Called on every log. Keeps counts; corrected numbers win, otherwise the latest AI numbers are kept.
-export async function recordFoods(items: FoodItem[]) {
+export async function recordFoods(userId: number, items: FoodItem[]) {
   if (!items.length) return;
   const c = await db();
   const pick = (col: string) =>
-    `${col} = CASE WHEN excluded.edited = 1 OR (my_foods.kind = 'recorded' AND my_foods.edited = 0) THEN excluded.${col} ELSE my_foods.${col} END`;
+    `${col} = CASE WHEN excluded.edited = 1 OR (user_foods.kind = 'recorded' AND user_foods.edited = 0) THEN excluded.${col} ELSE user_foods.${col} END`;
   await c.batch(
     items.map((i) => ({
-      sql: `INSERT INTO my_foods (key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'recorded', ?, 1, datetime('now'))
-            ON CONFLICT(key) DO UPDATE SET times = my_foods.times + 1, last_used = excluded.last_used,
+      sql: `INSERT INTO user_foods (user_id, key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'recorded', ?, 1, datetime('now'))
+            ON CONFLICT(user_id, key) DO UPDATE SET times = user_foods.times + 1, last_used = excluded.last_used,
               ${["kcal", "protein", "carbs", "fat"].map(pick).join(", ")},
-              edited = MAX(my_foods.edited, excluded.edited), updated_at = datetime('now')`,
-      args: [foodKey(i.name, i.quantity), i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source.includes("(edited)") ? 1 : 0],
+              edited = MAX(user_foods.edited, excluded.edited), updated_at = datetime('now')`,
+      args: [userId, foodKey(i.name, i.quantity), i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source.includes("(edited)") ? 1 : 0],
     })),
     "write",
   );
@@ -235,27 +316,27 @@ export async function recordFoods(items: FoodItem[]) {
 
 export type FoodInput = { name: string; quantity: string; kcal: number; protein: number; carbs: number; fat: number };
 
-export async function createCustomFood(f: FoodInput) {
+export async function createCustomFood(userId: number, f: FoodInput) {
   const c = await db();
   await c.execute({
-    sql: `INSERT INTO my_foods (key, name, quantity, kcal, protein, carbs, fat, kind, edited)
-          VALUES (?, ?, ?, ?, ?, ?, ?, 'custom', 1)
-          ON CONFLICT(key) DO UPDATE SET name = excluded.name, quantity = excluded.quantity, kcal = excluded.kcal, protein = excluded.protein,
+    sql: `INSERT INTO user_foods (user_id, key, name, quantity, kcal, protein, carbs, fat, kind, edited)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'custom', 1)
+          ON CONFLICT(user_id, key) DO UPDATE SET name = excluded.name, quantity = excluded.quantity, kcal = excluded.kcal, protein = excluded.protein,
             carbs = excluded.carbs, fat = excluded.fat, kind = 'custom', edited = 1, updated_at = datetime('now')`,
-    args: [foodKey(f.name, f.quantity), f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat],
+    args: [userId, foodKey(f.name, f.quantity), f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat],
   });
 }
 
-export async function updateMyFood(id: number, f: FoodInput) {
+export async function updateMyFood(userId: number, id: number, f: FoodInput) {
   const c = await db();
   await c.execute({
-    sql: `UPDATE my_foods SET key = ?, name = ?, quantity = ?, kcal = ?, protein = ?, carbs = ?, fat = ?, edited = 1, updated_at = datetime('now')
-          WHERE id = ?`,
-    args: [foodKey(f.name, f.quantity), f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat, id],
+    sql: `UPDATE user_foods SET key = ?, name = ?, quantity = ?, kcal = ?, protein = ?, carbs = ?, fat = ?, edited = 1, updated_at = datetime('now')
+          WHERE id = ? AND user_id = ?`,
+    args: [foodKey(f.name, f.quantity), f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat, id, userId],
   });
 }
 
-export async function deleteMyFood(id: number) {
+export async function deleteMyFood(userId: number, id: number) {
   const c = await db();
-  await c.execute({ sql: "DELETE FROM my_foods WHERE id = ?", args: [id] });
+  await c.execute({ sql: "DELETE FROM user_foods WHERE id = ? AND user_id = ?", args: [id, userId] });
 }

@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
 import { getSettings, saveSettings } from "@/lib/db";
+import { currentUserId, unauthorized } from "@/lib/session";
 import type { Settings } from "@/lib/types";
 
 export async function GET() {
-  return NextResponse.json(await getSettings());
+  const uid = await currentUserId();
+  if (!uid) return unauthorized();
+  return NextResponse.json(await getSettings(uid));
 }
 
 export async function PUT(req: Request) {
+  const uid = await currentUserId();
+  if (!uid) return unauthorized();
   const s = (await req.json()) as Settings;
   const clean: Settings = {
     targetKcal: Number(s.targetKcal) || 2000,
@@ -26,6 +31,6 @@ export async function PUT(req: Request) {
         fat: Number(u.fat) || 0,
       })),
   };
-  await saveSettings(clean);
+  await saveSettings(uid, clean);
   return NextResponse.json(clean);
 }

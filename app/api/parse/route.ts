@@ -2,14 +2,17 @@ import { ApiError } from "@google/genai";
 import { NextResponse } from "next/server";
 import { foodsForAI, getSettings } from "@/lib/db";
 import { parseMeal } from "@/lib/parse";
+import { currentUserId, unauthorized } from "@/lib/session";
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
+  const uid = await currentUserId();
+  if (!uid) return unauthorized();
   const { text } = (await req.json()) as { text?: string };
   if (!text?.trim()) return NextResponse.json({ error: "Type what you ate" }, { status: 400 });
   try {
-    const [settings, myFoods] = await Promise.all([getSettings(), foodsForAI()]);
+    const [settings, myFoods] = await Promise.all([getSettings(uid), foodsForAI(uid)]);
     const items = await parseMeal(text.slice(0, 2000), settings.homeUnits, myFoods);
     return NextResponse.json({ items });
   } catch (e) {

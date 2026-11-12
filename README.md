@@ -10,6 +10,10 @@ A calorie counter where you type what you ate in plain language ("roasted chicke
 - **Garmin**: burned calories adjust your daily budget (see below).
 - **Installable on your phone (PWA)**: open the site in Safari/Chrome → Share → *Add to Home Screen*.
 
+## Accounts
+
+Anyone with the link can create an account (set `INVITE_CODE` to require a code). Each person has their own diary, burned calories, settings, foods and Apple Health sync token. The first account created takes over any data from before accounts existed. Everyone shares your Gemini free-tier quota.
+
 ## Run locally
 
 ```bash
@@ -18,7 +22,7 @@ npm install
 npm run dev                  # http://localhost:3000
 ```
 
-Local data is stored in `local.db` (SQLite). If `APP_PASSWORD` isn't set, there's no login.
+Local data is stored in `local.db` (SQLite). Open the app, tap **Create an account**, and you're in.
 
 To try it on your phone over home Wi-Fi: `npm run dev -- -H 0.0.0.0`, then open `http://<your-mac-ip>:3000`.
 
@@ -28,7 +32,7 @@ To try it on your phone over home Wi-Fi: `npm run dev -- -H 0.0.0.0`, then open 
    `turso db create makan-log` → `turso db show makan-log --url` → `turso db tokens create makan-log`
 2. **Push this folder to GitHub**, then import the repo at [vercel.com/new](https://vercel.com/new).
 3. In Vercel → Settings → Environment Variables, add:
-   `GEMINI_API_KEY`, `APP_PASSWORD`, `INGEST_TOKEN` (any long random string), `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
+   `GEMINI_API_KEY`, `AUTH_SECRET` (any long random string), `INVITE_CODE` (optional), `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
 4. Deploy. On your phone, open the URL → log in → Share → **Add to Home Screen**.
 
 Tables are created automatically on the first request.
@@ -43,7 +47,7 @@ Garmin only gives API access to approved businesses, not personal accounts, so c
    - *Find Health Samples* → Type: **Active Energy**, Start Date: **Today**. Then *Calculate Statistics* → **Sum**
    - *Find Health Samples* → Type: **Resting Energy**, Start Date: **Today**. Then *Calculate Statistics* → **Sum**
    - *Get Contents of URL* → `https://YOUR-APP/api/energy/sync`, Method **POST**,
-     Headers: `Authorization` = `Bearer YOUR_INGEST_TOKEN`,
+     Headers: `Authorization` = `Bearer YOUR_SYNC_TOKEN` (each person's token is in their Settings),
      Request Body **JSON**: `active` = (first sum), `resting` = (second sum), `source` = `garmin`
 3. Automation tab → **Time of Day** (e.g. every hour, or at 12pm, 6pm and 10pm) → run the shortcut, with "Ask before running" off.
 

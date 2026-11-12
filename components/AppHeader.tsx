@@ -13,7 +13,21 @@ const LINKS = [
 // Top bar with a menu button on the left, `center` in the middle and `right` on the right.
 export function AppHeader({ center, right }: { center: React.ReactNode; right?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (!open || username) return;
+    fetch("/api/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => j && setUsername(j.username))
+      .catch(() => {});
+  }, [open, username]);
+
+  async function logout() {
+    await fetch("/api/logout", { method: "POST" });
+    window.location.href = "/login";
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -63,6 +77,13 @@ export function AppHeader({ center, right }: { center: React.ReactNode; right?: 
                 );
               })}
             </ul>
+            <div className="mt-auto border-t border-line pt-3" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
+              {username && <p className="px-3 pb-2 text-sm text-ink-3">Logged in as <span className="font-semibold text-ink-2">{username}</span></p>}
+              <button onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-ink-2 active:bg-track">
+                <span className="text-lg">👋</span>
+                Log out
+              </button>
+            </div>
           </nav>
         </div>
       )}

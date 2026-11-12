@@ -1,16 +1,21 @@
 import { NextResponse } from "next/server";
 import { addEntries, deleteEntry, getEnergy, getSettings, listEntries, recordFoods } from "@/lib/db";
 import { isDate } from "@/lib/date";
+import { currentUserId, unauthorized } from "@/lib/session";
 import { MEALS, type FoodItem, type Meal } from "@/lib/types";
 
 export async function GET(req: Request) {
+  const uid = await currentUserId();
+  if (!uid) return unauthorized();
   const date = new URL(req.url).searchParams.get("date");
   if (!isDate(date)) return NextResponse.json({ error: "bad date" }, { status: 400 });
-  const [entries, energy, settings] = await Promise.all([listEntries(date), getEnergy(date), getSettings()]);
+  const [entries, energy, settings] = await Promise.all([listEntries(uid, date), getEnergy(uid, date), getSettings(uid)]);
   return NextResponse.json({ entries, energy, settings });
 }
 
 export async function POST(req: Request) {
+  const uid = await currentUserId();
+  if (!uid) return unauthorized();
   const body = (await req.json()) as { date?: string; meal?: Meal; items?: FoodItem[] };
   if (!isDate(body.date) || !body.meal || !MEALS.includes(body.meal) || !Array.isArray(body.items)) {
     return NextResponse.json({ error: "bad request" }, { status: 400 });
@@ -28,15 +33,17 @@ export async function POST(req: Request) {
       confidence: (["high", "medium", "low"].includes(i.confidence) ? i.confidence : "medium") as FoodItem["confidence"],
       note: i.note ? String(i.note).slice(0, 300) : undefined,
     }));
-  if (items.length) await addEntries(body.date, body.meal, items);
+  if (items.length) await addEntries(uid, body.date, body.meal, items);
   // Every logged food goes into your Foods dictionary; corrected calories are used by the AI next time.
-  await recordFoods(items);
+  await recordFoods(uid, items);
   return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(req: Request) {
+  const uid = await currentUserId();
+  if (!uid) return unauthorized();
   const id = Number(new URL(req.url).searchParams.get("id"));
   if (!Number.isInteger(id)) return NextResponse.json({ error: "bad id" }, { status: 400 });
-  await deleteEntry(id);
+  await deleteEntry(uid, id);
   return NextResponse.json({ ok: true });
 }

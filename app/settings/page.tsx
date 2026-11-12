@@ -100,21 +100,7 @@ export default function SettingsPage() {
         </button>
       </Card>
 
-      <Card title="Garmin sync">
-        <p className="text-sm text-ink-2">
-          Garmin doesn&apos;t give personal accounts API access, so calories come in through your phone&apos;s health app or a sync script.
-          Send a POST request to:
-        </p>
-        <pre className="mt-2 overflow-x-auto rounded-lg bg-track p-3 text-xs">{`POST ${origin}/api/energy/sync
-Authorization: Bearer <INGEST_TOKEN>
-Content-Type: application/json
-
-{"active": 650, "resting": 1650}`}</pre>
-        <p className="mt-2 text-sm text-ink-2">
-          Set up an iPhone Shortcut (Garmin → Apple Health → this app) that sends this every hour. Steps are in the README. You can also tap
-          &quot;Burned&quot; on the diary screen to type it in.
-        </p>
-      </Card>
+      <AppleHealthSync origin={origin} />
 
       </div>
 
@@ -161,5 +147,91 @@ function Radio({ checked, onChange, title, desc }: { checked: boolean; onChange:
         <span className="block text-sm text-ink-2">{desc}</span>
       </span>
     </label>
+  );
+}
+
+function AppleHealthSync({ origin }: { origin: string }) {
+  const [token, setToken] = useState<string | null>(null);
+  const [shown, setShown] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/me").then(async (r) => r.ok && setToken((await r.json()).syncToken));
+  }, []);
+
+  async function copy(label: string, text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(label);
+      setTimeout(() => setCopied(null), 1500);
+    } catch {
+      setShown(true);
+    }
+  }
+
+  async function rotate() {
+    if (!confirm("Make a new token? Your current iPhone Shortcut will stop working until you paste the new one in.")) return;
+    const r = await fetch("/api/me", { method: "POST" });
+    if (r.ok) {
+      setToken((await r.json()).syncToken);
+      setShown(true);
+    }
+  }
+
+  const url = `${origin}/api/energy/sync`;
+  return (
+    <Card title="Apple Health sync (Garmin calories)">
+      <p className="text-sm text-ink-2">
+        Garmin Connect writes your calories into Apple Health. An iPhone Shortcut then reads them and sends them here. The token below is
+        yours alone, so keep it private.
+      </p>
+      <div className="mt-3 space-y-2 text-sm">
+        <CopyRow label="URL" value={url} onCopy={() => copy("url", url)} copied={copied === "url"} />
+        <CopyRow
+          label="Token"
+          value={token ? (shown ? token : "•".repeat(16)) : "…"}
+          onCopy={() => token && copy("token", token)}
+          copied={copied === "token"}
+          extra={
+            <button onClick={() => setShown((v) => !v)} className="rounded-lg px-2 py-1 text-xs text-ink-2 active:bg-card">
+              {shown ? "Hide" : "Show"}
+            </button>
+          }
+        />
+      </div>
+      <details className="mt-3 text-sm text-ink-2">
+        <summary className="cursor-pointer font-medium text-ink">How to set up the Shortcut</summary>
+        <ol className="mt-2 list-decimal space-y-1.5 pl-5">
+          <li>Garmin Connect app → Settings → Connected Apps → Apple Health → turn on Active Energy and Resting Energy.</li>
+          <li>
+            Shortcuts app → new shortcut:
+            <ul className="mt-1 list-disc space-y-1 pl-4">
+              <li>Find Health Samples: Active Energy, start date Today → Calculate Statistics: Sum</li>
+              <li>Find Health Samples: Resting Energy, start date Today → Calculate Statistics: Sum</li>
+              <li>
+                Get Contents of URL: the URL above, Method POST, Header <code>Authorization</code> = <code>Bearer</code> + a space + your token,
+                Request Body JSON: <code>active</code> = first sum, <code>resting</code> = second sum
+              </li>
+            </ul>
+          </li>
+          <li>Automation tab → Time of Day (e.g. every hour) → run the shortcut, with &quot;Ask before running&quot; off.</li>
+        </ol>
+        <p className="mt-2">Or tap &quot;Burned&quot; on the Today screen and type the numbers in yourself.</p>
+      </details>
+      <button onClick={rotate} className="mt-3 text-sm text-ink-3 underline">Make a new token</button>
+    </Card>
+  );
+}
+
+function CopyRow({ label, value, onCopy, copied, extra }: { label: string; value: string; onCopy: () => void; copied: boolean; extra?: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2 rounded-xl bg-track p-2 pl-3">
+      <span className="w-11 shrink-0 text-xs text-ink-3">{label}</span>
+      <code className="min-w-0 flex-1 truncate text-xs">{value}</code>
+      {extra}
+      <button onClick={onCopy} className="rounded-lg bg-card px-2.5 py-1 text-xs font-semibold ring-1 ring-line active:opacity-70">
+        {copied ? "Copied" : "Copy"}
+      </button>
+    </div>
   );
 }

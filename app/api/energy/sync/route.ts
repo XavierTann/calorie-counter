@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { ingestToken } from "@/lib/auth";
-import { upsertEnergy } from "@/lib/db";
+import { getUserBySyncToken, upsertEnergy } from "@/lib/db";
 import { isDate, todaySG } from "@/lib/date";
 
-// Called by an iOS Shortcut / Android automation / Garmin sync script:
+// Called by each user's iPhone Shortcut (Apple Health → this app):
 //   POST /api/energy/sync
-//   Authorization: Bearer <INGEST_TOKEN>
+//   Authorization: Bearer <that user's sync token, shown in Settings>
 //   { "date": "2026-11-12", "active": 650, "resting": 1650 }   (or "total": 2300)
 const n = (v: unknown) => {
   if (v === null || v === undefined || v === "") return null;
@@ -14,11 +13,9 @@ const n = (v: unknown) => {
 };
 
 export async function POST(req: Request) {
-  const token = ingestToken();
-  const auth = req.headers.get("authorization") ?? "";
-  if (!token || auth !== `Bearer ${token}`) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const token = (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "").trim();
+  const user = await getUserBySyncToken(token);
+  if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const b = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   const date = isDate(b.date) ? b.date : todaySG();
   const active = n(b.active);
@@ -27,6 +24,6 @@ export async function POST(req: Request) {
   if (active === null && resting === null && total === null) {
     return NextResponse.json({ error: "send active, resting and/or total" }, { status: 400 });
   }
-  await upsertEnergy({ date, active, resting, total, source: String(b.source ?? "garmin") });
+  await upsertEnergy(user.id, { date, active, resting, total, source: String(b.source ?? "apple health") });
   return NextResponse.json({ ok: true, date, active, resting, total });
 }

@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  color-scheme: light;
+  --bg: #f4f3ef;
+  --card: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --ink-3: #8a8983;
+  --line: #e4e2dc;
+  --track: #ebe9e3;
+  --brand: #e2622b;
+  --brand-ink: #ffffff;
+  --protein: #2a78d6;
+  --carbs: #eb6834;
+  --fat: #1baf7a;
+  --energy: #0b0b0b;
+  --over: #d03b3b;
+  --good: #1f8a4c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+    --bg: #111110;
+    --card: #1a1a19;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --ink-3: #8f8e86;
+    --line: #2c2c2a;
+    --track: #2a2a28;
+    --brand: #ef7440;
+    --brand-ink: #111110;
+    --protein: #3987e5;
+    --carbs: #d95926;
+    --fat: #199e70;
+    --energy: #f0efec;
+    --over: #e66767;
+    --good: #4cb877;
   }
 }
 
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-track: var(--track);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-protein: var(--protein);
+  --color-carbs: var(--carbs);
+  --color-fat: var(--fat);
+  --color-over: var(--over);
+  --color-good: var(--good);
+  --font-sans: var(--font-geist-sans);
+}
+
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px; /* stops iOS zooming into inputs */
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
 }

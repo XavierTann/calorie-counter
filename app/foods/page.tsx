@@ -100,7 +100,7 @@ export default function FoodsPage() {
       {tab === "custom" && (
         <button
           onClick={() => setDraft(emptyDraft)}
-          className="fab fixed right-5 z-10 flex h-14 items-center gap-2 rounded-full px-5 font-semibold text-brand-ink shadow-lg active:scale-95"
+          className="fab fixed right-5 z-10 flex h-14 items-center gap-2 rounded-full px-5 font-semibold text-white shadow-lg active:scale-95"
           style={{ bottom: "max(calc(env(safe-area-inset-bottom) + 12px), 24px)" }}
         >
           <span className="text-2xl leading-none">+</span> Custom food

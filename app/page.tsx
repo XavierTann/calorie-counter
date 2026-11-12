@@ -1,12 +1,14 @@
 "use client";
 
 import { AppHeader } from "@/components/AppHeader";
+import { Buddy, buddyLine } from "@/components/Buddy";
 import { Sheet } from "@/components/Sheet";
 import { useCallback, useEffect, useState } from "react";
 import { dailyBudget } from "@/lib/budget";
 import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type Settings } from "@/lib/types";
 
 const MEAL_LABEL: Record<Meal, string> = { breakfast: "Breakfast", lunch: "Lunch", dinner: "Dinner", snacks: "Snacks" };
+const MEAL_ICON: Record<Meal, string> = { breakfast: "☀️", lunch: "🍜", dinner: "🌙", snacks: "🍪" };
 
 function localDate(d = new Date()) {
   return new Intl.DateTimeFormat("en-CA").format(d);
@@ -119,7 +121,7 @@ export default function Home() {
           setError(null);
           setSheet("compose");
         }}
-        className="fab fixed right-5 z-10 flex h-16 w-16 items-center justify-center rounded-full text-4xl leading-none font-light text-brand-ink shadow-lg active:scale-95"
+        className="fab fixed right-5 z-10 flex h-16 w-16 items-center justify-center rounded-full text-4xl leading-none font-light text-white shadow-lg active:scale-95"
         style={{ bottom: "max(calc(env(safe-area-inset-bottom) + 12px), 24px)", transition: "transform 120ms" }}
       >
         +
@@ -147,7 +149,13 @@ function Summary({ data, onEditEnergy }: { data: DayData; onEditEnergy: () => vo
   const burned = energy?.total ?? null;
 
   return (
-    <section className="mx-4 rounded-2xl bg-card p-4 shadow-sm ring-1 ring-line">
+    <section className="summary-card mx-4 rounded-3xl p-4 shadow-sm ring-1 ring-line">
+      <div className="mb-3 flex items-center gap-3">
+        <Buddy mood={over ? "sad" : "happy"} />
+        <p className={`bubble relative flex-1 rounded-2xl px-3 py-2 text-sm font-medium ${over ? "bubble-sad" : ""}`}>
+          {buddyLine(consumed, remaining, budget)}
+        </p>
+      </div>
       <div className="flex items-center gap-4">
         <Ring value={consumed} max={budget} over={over}>
           <div className={`tabular text-3xl font-semibold ${over ? "text-over" : ""}`}>{Math.abs(remaining).toLocaleString()}</div>
@@ -185,13 +193,19 @@ function Ring({ value, max, over, children }: { value: number; max: number; over
   return (
     <div className="relative h-36 w-36 shrink-0" role="img" aria-label={`${value} of ${max} kcal eaten`}>
       <svg viewBox="0 0 128 128" className="h-full w-full -rotate-90">
+        <defs>
+          <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffb547" />
+            <stop offset="100%" stopColor="var(--brand)" />
+          </linearGradient>
+        </defs>
         <circle cx="64" cy="64" r={r} fill="none" stroke="var(--track)" strokeWidth="10" />
         <circle
           cx="64"
           cy="64"
           r={r}
           fill="none"
-          stroke={over ? "var(--over)" : "var(--brand)"}
+          stroke={over ? "var(--over)" : "url(#ring-grad)"}
           strokeWidth="10"
           strokeLinecap="round"
           strokeDasharray={`${frac * c} ${c}`}
@@ -240,9 +254,16 @@ function MealCard({ meal, entries, onRemove }: { meal: Meal; entries: Entry[]; o
   const total = Math.round(sum(entries, "kcal"));
   return (
     <section className="rounded-2xl bg-card shadow-sm ring-1 ring-line">
-      <div className="flex items-center justify-between px-4 py-3">
-        <h2 className="font-semibold">{MEAL_LABEL[meal]}</h2>
-        <span className="tabular text-sm text-ink-2">{total ? `${total} kcal` : ""}</span>
+      <div className="flex items-center gap-3 px-4 py-3">
+        <span className={`meal-${meal} flex h-9 w-9 items-center justify-center rounded-xl text-lg`} aria-hidden>
+          {MEAL_ICON[meal]}
+        </span>
+        <h2 className="flex-1 font-semibold">{MEAL_LABEL[meal]}</h2>
+        {total ? (
+          <span className={`meal-${meal} tabular rounded-full px-2.5 py-0.5 text-sm font-semibold`}>{total} kcal</span>
+        ) : (
+          <span className="text-xs text-ink-3">Nothing yet</span>
+        )}
       </div>
       {entries.length > 0 && (
         <ul className="divide-y divide-line border-t border-line">

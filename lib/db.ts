@@ -144,7 +144,10 @@ export async function getSettings(): Promise<Settings> {
   const c = await db();
   const r = await c.execute("SELECT json FROM settings WHERE id = 1");
   if (!r.rows[0]) return DEFAULT_SETTINGS;
-  return { ...DEFAULT_SETTINGS, ...JSON.parse(String(r.rows[0].json)) };
+  const saved = { ...DEFAULT_SETTINGS, ...JSON.parse(String(r.rows[0].json)) } as Settings;
+  // Older versions measured home cooking in scoops; switch those to the tablespoon defaults.
+  if (saved.homeUnits.some((u) => u.id.endsWith("-scoop"))) saved.homeUnits = DEFAULT_SETTINGS.homeUnits;
+  return saved;
 }
 
 export async function saveSettings(s: Settings) {

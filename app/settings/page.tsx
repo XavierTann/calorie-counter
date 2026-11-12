@@ -68,11 +68,11 @@ export default function SettingsPage() {
         </div>
       </Card>
 
-      <Card title="Home cooking: scoop sizes">
+      <Card title="Home cooking: tablespoon sizes">
         <p className="mb-3 text-sm text-ink-2">
-          One &quot;scoop&quot; = one scoop with the family serving spoon. To calibrate: put a bowl on a kitchen scale, press tare, add one
-          scoop, then look up the grams (HPB / Google &quot;kcal per 100g&quot;) and update the numbers here. Do it once per dish type.
-          The AI also uses these when you type things like &quot;2 scoops kailan&quot;.
+          Measure mum&apos;s cooking in heaped tablespoons (rice by the bowl). To calibrate: put a bowl on a kitchen scale, press tare,
+          add one tablespoon of the dish, then look up the kcal for that many grams (HPB / Google &quot;kcal per 100g&quot;) and update the
+          numbers here. Do it once per dish type. The AI uses these when you type things like &quot;1 bowl rice, 3 tbsp kailan&quot;.
         </p>
         <ul className="space-y-3">
           {s.homeUnits.map((u, i) => (
@@ -96,10 +96,10 @@ export default function SettingsPage() {
           ))}
         </ul>
         <button
-          onClick={() => set("homeUnits", [...s.homeUnits, { id: `unit-${Date.now()}`, label: "New scoop type", kcal: 100, protein: 5, carbs: 5, fat: 5 }])}
+          onClick={() => set("homeUnits", [...s.homeUnits, { id: `unit-${Date.now()}`, label: "Tbsp of new dish", kcal: 100, protein: 5, carbs: 5, fat: 5 }])}
           className="mt-3 rounded-full bg-track px-3 py-1.5 text-sm"
         >
-          + Add scoop type
+          + Add dish type
         </button>
       </Card>
 

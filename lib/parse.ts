@@ -48,14 +48,14 @@ const RESULT_JSON_SCHEMA = {
         required: ["name", "quantity", "kcal", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown"],
         properties: {
           name: { type: "string", description: "Short display name, e.g. 'Roasted chicken rice'" },
-          quantity: { type: "string", description: "Amount eaten, e.g. '1 plate, less rice' or '2 scoops'" },
+          quantity: { type: "string", description: "Amount eaten, e.g. '1 plate, less rice' or '3 tbsp'" },
           kcal: { type: "number" },
           protein: { type: "number", description: "grams" },
           carbs: { type: "number", description: "grams" },
           fat: { type: "number", description: "grams" },
           source: {
             type: "string",
-            description: "'db:<id>' for the reference table, 'home:<unit id>' for home units, 'learned' for learned foods, 'estimate' otherwise",
+            description: "'db:<id>' for the reference table, 'home:<unit id>' for home units, 'my food' for MY FOODS, 'estimate' otherwise",
           },
           confidence: { type: "string", enum: ["high", "medium", "low"] },
           note: { type: "string", description: "One short line on adjustments made, or empty string" },
@@ -84,8 +84,8 @@ The user types what they ate in casual language (Singlish and hawker terms are n
 
 How to find the numbers, in this order:
 1. The REFERENCE TABLE below (Singapore hawker servings, based on HPB data). Use it whenever a dish matches, even loosely (e.g. "ckt" = char kway teow, "bcm" = bak chor mee). Scale it for quantity and modifiers. source = "db:<id>", confidence high (or medium if you adjusted it a lot).
-2. HOME UNITS (the user's calibrated "scoop" sizes for mum's cooking). Use them when the user talks about scoops, bowls of rice or home food. A specific dish ("2 scoops kailan", "1 scoop curry chicken") maps to the closest unit type. source = "home:<unit id>".
-3. LEARNED FOODS (numbers the user corrected or confirmed before). These override the reference table for the same food. source = "learned".
+2. HOME UNITS (the user's calibrated sizes for mum's cooking, mostly per tablespoon). Use them when the user talks about tablespoons/tbsp, bowls of rice or home food. A specific dish ("3 tbsp kailan", "2 tbsp curry chicken") maps to the closest unit type; multiply by the number of tablespoons. If they say "spoon" for home food, treat it as 1 tbsp; a "scoop" with a serving spoon ≈ 3 tbsp. source = "home:<unit id>".
+3. MY FOODS (custom foods the user added, and numbers they corrected). These override the reference table for the same food. source = "my food".
 4. Otherwise estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
 Modifiers to apply:
@@ -109,7 +109,7 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], learned: Fo
     "HOME UNITS (id | label | kcal | macros per unit):",
     homeUnits.map((u) => `${u.id} | ${u.label} | ${u.kcal} kcal | P${u.protein} C${u.carbs} F${u.fat}`).join("\n"),
     "",
-    "LEARNED FOODS:",
+    "MY FOODS:",
     learned.length
       ? learned.map((f) => `${f.name} | ${f.quantity} | ${f.kcal} kcal | P${f.protein} C${f.carbs} F${f.fat} | ${f.source}`).join("\n")
       : "(none yet)",

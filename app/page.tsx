@@ -249,7 +249,7 @@ function MealCard({ meal, entries, onRemove }: { meal: Meal; entries: Entry[]; o
                 <div className="truncate text-xs text-ink-3">
                   {e.quantity}
                   {e.quantity ? " · " : ""}
-                  <ConfidenceTag c={e.confidence} /> {sourceLabel(e.source)}
+                  {sourceLabel(e.source)} · <ConfidenceTag c={e.confidence} />
                 </div>
               </div>
               <span className="tabular text-sm font-medium">{Math.round(e.kcal)}</span>
@@ -269,19 +269,86 @@ function MealCard({ meal, entries, onRemove }: { meal: Meal; entries: Entry[]; o
 }
 
 function sourceLabel(s: string) {
-  if (s.startsWith("db:")) return "hawker DB";
-  if (s.startsWith("home")) return "home scoop";
-  if (s.startsWith("web")) return s.replace(/^web:\s*/, "");
-  if (s === "learned") return "saved";
-  return s;
+  const edited = s.includes("(edited)") ? " (edited)" : "";
+  const base = s.replace(/\s*\(edited\)/, "");
+  if (base.startsWith("db:")) return "Hawker database" + edited;
+  if (base.startsWith("home")) return "Home cooking" + edited;
+  if (base.startsWith("web")) return base.replace(/^web:\s*/, "") + edited;
+  if (base === "learned" || base === "my food") return "My foods" + edited;
+  if (base === "estimate") return "AI estimate" + edited;
+  return base + edited;
 }
 
+const CONFIDENCE = { high: { dots: "●●●", word: "High" }, medium: { dots: "●●○", word: "Medium" }, low: { dots: "●○○", word: "Low" } } as const;
+
 function ConfidenceTag({ c }: { c: FoodItem["confidence"] }) {
-  const map = { high: "●●●", medium: "●●○", low: "●○○" } as const;
+  const { dots, word } = CONFIDENCE[c] ?? CONFIDENCE.medium;
   return (
-    <span title={`${c} confidence`} aria-label={`${c} confidence`} className="tracking-tighter">
-      {map[c]}
+    <span title={`${word} confidence`} aria-label={`${word} confidence`}>
+      <span className="tracking-tighter">{dots}</span> {word.toLowerCase()} confidence
     </span>
+  );
+}
+
+function ReviewItem({ item: it, onKcal, onRemove }: { item: FoodItem & { breakdown: { label: string; kcal: number }[] }; onKcal: (k: number) => void; onRemove: () => void }) {
+  const aiTotal = it.breakdown.reduce((a, b) => a + b.kcal, 0);
+  const yourEdit = Math.round(it.kcal) - aiTotal;
+  const signed = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : "0");
+  const conf = CONFIDENCE[it.confidence] ?? CONFIDENCE.medium;
+  return (
+    <li className="py-3">
+      <div className="flex items-start gap-2">
+        <div className="min-w-0 flex-1">
+          <div className="font-medium">{it.name}</div>
+          <div className="text-xs text-ink-3">{it.quantity}</div>
+        </div>
+        <button aria-label={`Remove ${it.name}`} onClick={onRemove} className="-mr-2 h-8 w-8 shrink-0 rounded-full text-ink-3 active:bg-track">
+          ×
+        </button>
+      </div>
+      <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
+        <span className={`rounded-full px-2 py-0.5 conf-${it.confidence}`}>
+          Confidence: <span className="tracking-tighter">{conf.dots}</span> {conf.word}
+        </span>
+        <span className="rounded-full bg-track px-2 py-0.5 text-ink-2">Source: {sourceLabel(it.source)}</span>
+      </div>
+      <table className="tabular mt-2 w-full text-sm">
+        <tbody>
+          {it.breakdown.map((b, j) => (
+            <tr key={j}>
+              <td className={`py-1 pr-2 ${j === 0 ? "" : "pl-3 text-ink-2"}`}>{b.label}</td>
+              <td className={`py-1 text-right ${j > 0 && b.kcal < 0 ? "text-good" : j > 0 ? "text-over" : ""}`}>{j === 0 ? b.kcal : signed(b.kcal)}</td>
+              <td className="w-10 py-1 pl-1 text-xs text-ink-3">kcal</td>
+            </tr>
+          ))}
+          {yourEdit !== 0 && (
+            <tr>
+              <td className="py-1 pr-2 pl-3 text-ink-2">Your edit</td>
+              <td className="py-1 text-right text-ink-2">{signed(yourEdit)}</td>
+              <td className="w-10 py-1 pl-1 text-xs text-ink-3">kcal</td>
+            </tr>
+          )}
+          <tr className="border-t border-line font-semibold">
+            <td className="pt-2 pr-2">Total</td>
+            <td className="pt-2 text-right">
+              <input
+                type="number"
+                inputMode="numeric"
+                value={Math.round(it.kcal)}
+                onChange={(e) => onKcal(Number(e.target.value) || 0)}
+                className="tabular w-20 rounded-lg bg-track px-2 py-1 text-right font-semibold ring-1 ring-line focus:ring-2 focus:ring-brand focus:outline-none"
+                aria-label={`${it.name} total calories`}
+              />
+            </td>
+            <td className="w-10 pt-2 pl-1 text-xs font-normal text-ink-3">kcal</td>
+          </tr>
+        </tbody>
+      </table>
+      <div className="tabular mt-2 text-xs text-ink-2">
+        Protein {Math.round(it.protein)}g · Carbs {Math.round(it.carbs)}g · Fat {Math.round(it.fat)}g
+      </div>
+      <p className="mt-1 text-[11px] text-ink-3">Tap the total to correct it. Your number is remembered for next time.</p>
+    </li>
   );
 }
 
@@ -378,7 +445,8 @@ function MealPicker({ meal, setMeal }: { meal: Meal; setMeal: (m: Meal) => void 
 }
 
 function ReviewSheet({ items: initial, onClose, onAdd }: { items: FoodItem[]; onClose: () => void; onAdd: (i: FoodItem[], m: Meal) => Promise<void> }) {
-  const [items, setItems] = useState(initial);
+  // Each item keeps the AI's original working so the table can show your edit separately.
+  const [items, setItems] = useState(() => initial.map((x) => ({ ...x, breakdown: x.breakdown ?? [{ label: `${x.name}, ${x.quantity}`, kcal: Math.round(x.kcal) }] })));
   const [meal, setMeal] = useState<Meal>(mealForNow);
   const [saving, setSaving] = useState(false);
   const total = Math.round(sum(items, "kcal"));
@@ -399,34 +467,12 @@ function ReviewSheet({ items: initial, onClose, onAdd }: { items: FoodItem[]; on
       <MealPicker meal={meal} setMeal={setMeal} />
       <ul className="mt-3 divide-y divide-line">
         {items.map((it, i) => (
-          <li key={i} className="py-3">
-            <div className="flex items-start gap-3">
-              <div className="min-w-0 flex-1">
-                <div className="font-medium">{it.name}</div>
-                <div className="text-xs text-ink-3">
-                  {it.quantity} · <ConfidenceTag c={it.confidence} /> {sourceLabel(it.source)}
-                </div>
-                <div className="tabular mt-1 text-xs text-ink-2">
-                  P {Math.round(it.protein)}g · C {Math.round(it.carbs)}g · F {Math.round(it.fat)}g
-                </div>
-                {it.note && <div className="mt-1 text-xs text-ink-3">{it.note}</div>}
-              </div>
-              <label className="flex items-center gap-1">
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  value={Math.round(it.kcal)}
-                  onChange={(e) => setKcal(i, Number(e.target.value) || 0)}
-                  className="tabular w-20 rounded-lg bg-track px-2 py-1.5 text-right"
-                  aria-label={`${it.name} calories`}
-                />
-                <span className="text-xs text-ink-3">kcal</span>
-              </label>
-              <button aria-label={`Remove ${it.name}`} onClick={() => setItems((xs) => xs.filter((_, j) => j !== i))} className="h-8 w-8 rounded-full text-ink-3 active:bg-track">
-                ×
-              </button>
-            </div>
-          </li>
+          <ReviewItem
+            key={i}
+            item={it}
+            onKcal={(k) => setKcal(i, k)}
+            onRemove={() => setItems((xs) => xs.filter((_, j) => j !== i))}
+          />
         ))}
       </ul>
       <button

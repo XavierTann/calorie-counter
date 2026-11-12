@@ -13,6 +13,8 @@ export type FoodItem = {
   source: string; // "db:<id>" | "home" | "web: <site>" | "estimate"
   confidence: Confidence;
   note?: string;
+  // How the calories were worked out: first row is the base serving, the rest are signed adjustments.
+  breakdown?: { label: string; kcal: number }[];
 };
 
 export type Entry = FoodItem & {

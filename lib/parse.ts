@@ -30,6 +30,7 @@ const ItemSchema = z.object({
   source: z.string(),
   confidence: z.enum(["high", "medium", "low"]),
   note: z.string(),
+  breakdown: z.array(z.object({ label: z.string(), kcal: z.number() })),
 });
 const ResultSchema = z.object({ items: z.array(ItemSchema) });
 
@@ -44,7 +45,7 @@ const RESULT_JSON_SCHEMA = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["name", "quantity", "kcal", "protein", "carbs", "fat", "source", "confidence", "note"],
+        required: ["name", "quantity", "kcal", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown"],
         properties: {
           name: { type: "string", description: "Short display name, e.g. 'Roasted chicken rice'" },
           quantity: { type: "string", description: "Amount eaten, e.g. '1 plate, less rice' or '2 scoops'" },
@@ -58,6 +59,19 @@ const RESULT_JSON_SCHEMA = {
           },
           confidence: { type: "string", enum: ["high", "medium", "low"] },
           note: { type: "string", description: "One short line on adjustments made, or empty string" },
+          breakdown: {
+            type: "array",
+            description: "How kcal was worked out. Row 1 = base serving; later rows = signed adjustments. Rows sum to kcal.",
+            items: {
+              type: "object",
+              additionalProperties: false,
+              required: ["label", "kcal"],
+              properties: {
+                label: { type: "string", description: "e.g. 'Chicken rice, 1 plate' or 'Less rice'" },
+                kcal: { type: "number", description: "Base kcal, or a signed change like -80" },
+              },
+            },
+          },
         },
       },
     },
@@ -82,6 +96,8 @@ Modifiers to apply:
 - Kopi/teh: no suffix = condensed milk + sugar; -O = sugar only; -C = evaporated milk + sugar; kosong = no sugar; siew dai = less sugar; gah dai = more sugar; peng = iced (same calories); "po" = weaker (same calories). Combine them, e.g. "kopi-c siew dai" ≈ 75 kcal.
 - Economic rice/cai fan: rice base (half rice = half) + each scoop from the cf-* rows.
 - "half", "shared", "ate a few spoons": scale proportionally.
+
+Breakdown: for every item, show the working. Row 1 is the base serving you started from (label like "Chicken rice, 1 plate" with its kcal). Each later row is one modifier or scaling step as a signed kcal change (e.g. "Less rice" -80, "Extra plate" +607, "Half portion" -300). Use only the base row if nothing was adjusted. The rows must add up exactly to kcal.
 
 Round kcal to whole numbers and macros to 1 decimal place. One entry per distinct food/drink. If the text isn't food at all, return an empty items list.
 
@@ -118,7 +134,12 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], learned: Fo
       if (!out) throw new Error("Empty answer");
       const parsed = ResultSchema.parse(JSON.parse(out));
       console.log(`Gemini ${model} ok`);
-      return parsed.items.map((i) => ({ ...i, note: i.note || undefined }));
+      return parsed.items.map((i) => {
+        const breakdown = i.breakdown.map((b) => ({ label: b.label, kcal: Math.round(b.kcal) }));
+        // Trust the shown working so the table always adds up.
+        const kcal = breakdown.length ? breakdown.reduce((a, b) => a + b.kcal, 0) : Math.round(i.kcal);
+        return { ...i, kcal, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
+      });
     } catch (e) {
       lastError = e;
       // A bad key won't work on any model, so stop straight away.

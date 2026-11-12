@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
+import { ReminderCard } from "@/components/ReminderCard";
 import { Sheet } from "@/components/Sheet";
 import type { Settings } from "@/lib/types";
 
@@ -161,6 +162,8 @@ export default function WeightPage() {
             <WeightChart data={shown} goal={goal} />
           )}
         </section>
+
+        <ReminderCard />
 
         {weights && weights.length > 0 && (
           <section className="rounded-2xl bg-card shadow-sm ring-1 ring-line">

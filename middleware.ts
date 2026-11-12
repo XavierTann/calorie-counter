@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { AUTH_COOKIE, verifySession } from "./lib/auth";
 
-const PUBLIC = ["/login", "/signup", "/api/login", "/api/signup", "/api/energy/sync", "/manifest.webmanifest", "/icon", "/apple-icon"];
+const PUBLIC = ["/login", "/signup", "/api/login", "/api/signup", "/api/energy/sync", "/api/cron", "/sw.js", "/manifest.webmanifest", "/icon", "/apple-icon"];
 
 // Redirects logged-out visitors to /login. API routes also check the session themselves.
 export async function middleware(req: NextRequest) {

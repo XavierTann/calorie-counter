@@ -32,7 +32,7 @@ To try it on your phone over home Wi-Fi: `npm run dev -- -H 0.0.0.0`, then open 
    `turso db create makan-log` → `turso db show makan-log --url` → `turso db tokens create makan-log`
 2. **Push this folder to GitHub**, then import the repo at [vercel.com/new](https://vercel.com/new).
 3. In Vercel → Settings → Environment Variables, add:
-   `GEMINI_API_KEY`, `AUTH_SECRET` (any long random string), `INVITE_CODE` (optional), `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
+   `GEMINI_API_KEY`, `AUTH_SECRET` (any long random string), `INVITE_CODE` (optional), `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, and for reminders `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `CRON_SECRET`
 4. Deploy. On your phone, open the URL → log in → Share → **Add to Home Screen**.
 
 Tables are created automatically on the first request.
@@ -57,6 +57,10 @@ Tap **Burned** on the dashboard and type the numbers from Garmin Connect.
 ### How the budget uses it (Settings)
 - **Target + active (default)**: budget = your calorie target + Garmin *active* calories. Accurate all day.
 - **Total − deficit**: budget = Garmin *total* calories − deficit. Only accurate at night, because resting calories build up through the day.
+
+## Weight and the 9am reminder
+
+Menu → **Weight** to log weigh-ins, see the trend and set a goal. To get a morning nudge, add the app to your iPhone home screen, open it from there, go to Weight → **Turn on 9am reminder**, then **Send a test**. A Vercel Cron job (`vercel.json`, 01:00 UTC = 9am Singapore) reminds everyone with reminders on who hasn't weighed in that day. On Vercel's free plan the job runs some time within that hour. Generate the keys once with `npx web-push generate-vapid-keys`.
 
 ## Measuring mum's cooking by tablespoon
 

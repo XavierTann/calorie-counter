@@ -70,6 +70,14 @@ async function db(): Promise<Client> {
             updated_at TEXT NOT NULL DEFAULT (datetime('now')),
             PRIMARY KEY (user_id, date)
           )`,
+          // Browser push subscriptions (one per device) for the morning weigh-in reminder.
+          `CREATE TABLE IF NOT EXISTS push_subs (
+            endpoint TEXT PRIMARY KEY,
+            user_id INTEGER NOT NULL,
+            p256dh TEXT NOT NULL,
+            auth TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+          )`,
           // Each user's food dictionary: everything they've logged ("recorded") plus foods they added ("custom").
           `CREATE TABLE IF NOT EXISTS user_foods (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -385,4 +393,43 @@ export async function upsertWeight(userId: number, date: string, kg: number) {
 export async function deleteWeight(userId: number, date: string) {
   const c = await db();
   await c.execute({ sql: "DELETE FROM weights WHERE user_id = ? AND date = ?", args: [userId, date] });
+}
+
+/* ---------------- Push reminders ---------------- */
+
+export type PushSub = { endpoint: string; userId: number; p256dh: string; auth: string };
+
+export async function savePushSub(userId: number, sub: { endpoint: string; p256dh: string; auth: string }) {
+  const c = await db();
+  await c.execute({
+    sql: `INSERT INTO push_subs (endpoint, user_id, p256dh, auth) VALUES (?, ?, ?, ?)
+          ON CONFLICT(endpoint) DO UPDATE SET user_id = excluded.user_id, p256dh = excluded.p256dh, auth = excluded.auth`,
+    args: [sub.endpoint, userId, sub.p256dh, sub.auth],
+  });
+}
+
+export async function deletePushSub(endpoint: string, userId?: number) {
+  const c = await db();
+  await c.execute(
+    userId === undefined
+      ? { sql: "DELETE FROM push_subs WHERE endpoint = ?", args: [endpoint] }
+      : { sql: "DELETE FROM push_subs WHERE endpoint = ? AND user_id = ?", args: [endpoint, userId] },
+  );
+}
+
+export async function pushSubsForUser(userId: number): Promise<PushSub[]> {
+  const c = await db();
+  const r = await c.execute({ sql: "SELECT * FROM push_subs WHERE user_id = ?", args: [userId] });
+  return r.rows.map((row) => ({ endpoint: String(row.endpoint), userId: Number(row.user_id), p256dh: String(row.p256dh), auth: String(row.auth) }));
+}
+
+// Devices whose owner hasn't logged a weight for `date` yet.
+export async function pushSubsMissingWeight(date: string): Promise<PushSub[]> {
+  const c = await db();
+  const r = await c.execute({
+    sql: `SELECT p.* FROM push_subs p
+          WHERE NOT EXISTS (SELECT 1 FROM weights w WHERE w.user_id = p.user_id AND w.date = ?)`,
+    args: [date],
+  });
+  return r.rows.map((row) => ({ endpoint: String(row.endpoint), userId: Number(row.user_id), p256dh: String(row.p256dh), auth: String(row.auth) }));
 }

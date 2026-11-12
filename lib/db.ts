@@ -62,6 +62,13 @@ async function db(): Promise<Client> {
             user_id INTEGER PRIMARY KEY,
             json TEXT NOT NULL
           )`,
+          `CREATE TABLE IF NOT EXISTS weights (
+            user_id INTEGER NOT NULL,
+            date TEXT NOT NULL,
+            kg REAL NOT NULL,
+            updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+            PRIMARY KEY (user_id, date)
+          )`,
           // Each user's food dictionary: everything they've logged ("recorded") plus foods they added ("custom").
           `CREATE TABLE IF NOT EXISTS user_foods (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -339,4 +346,28 @@ export async function updateMyFood(userId: number, id: number, f: FoodInput) {
 export async function deleteMyFood(userId: number, id: number) {
   const c = await db();
   await c.execute({ sql: "DELETE FROM user_foods WHERE id = ? AND user_id = ?", args: [id, userId] });
+}
+
+/* ---------------- Weight ---------------- */
+
+export type WeightEntry = { date: string; kg: number };
+
+export async function listWeights(userId: number): Promise<WeightEntry[]> {
+  const c = await db();
+  const r = await c.execute({ sql: "SELECT date, kg FROM weights WHERE user_id = ? ORDER BY date", args: [userId] });
+  return r.rows.map((row) => ({ date: String(row.date), kg: Number(row.kg) }));
+}
+
+export async function upsertWeight(userId: number, date: string, kg: number) {
+  const c = await db();
+  await c.execute({
+    sql: `INSERT INTO weights (user_id, date, kg) VALUES (?, ?, ?)
+          ON CONFLICT(user_id, date) DO UPDATE SET kg = excluded.kg, updated_at = datetime('now')`,
+    args: [userId, date, kg],
+  });
+}
+
+export async function deleteWeight(userId: number, date: string) {
+  const c = await db();
+  await c.execute({ sql: "DELETE FROM weights WHERE user_id = ? AND date = ?", args: [userId, date] });
 }

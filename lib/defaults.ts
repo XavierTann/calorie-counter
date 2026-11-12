@@ -9,6 +9,7 @@ export const DEFAULT_SETTINGS: Settings = {
   fatG: 65,
   budgetMode: "target_plus_active",
   deficit: 500,
+  goalWeightKg: null,
   homeUnits: [
     { id: "rice-bowl", label: "Bowl of white rice (~180g)", kcal: 234, protein: 4.5, carbs: 51, fat: 0.5 },
     { id: "rice-tbsp", label: "Tbsp white rice (~15g)", kcal: 20, protein: 0.4, carbs: 4.3, fat: 0 },

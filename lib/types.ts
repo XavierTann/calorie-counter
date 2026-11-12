@@ -43,6 +43,7 @@ export type Settings = {
   budgetMode: BudgetMode;
   deficit: number;
   homeUnits: HomeUnit[];
+  goalWeightKg: number | null;
 };
 
 export type Energy = {

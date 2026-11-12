@@ -81,3 +81,5 @@ textarea {
 .conf-medium { background: color-mix(in oklab, #d99a0b 18%, transparent); color: #a8740a; }
 .conf-low { background: color-mix(in oklab, var(--over) 14%, transparent); color: var(--over); }
 @media (prefers-color-scheme: dark) { .conf-medium { color: #f0b84a; } }
+
+.fab { background: linear-gradient(145deg, #f59a4a, var(--brand)); box-shadow: 0 8px 20px color-mix(in oklab, var(--brand) 40%, transparent); }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { dailyBudget } from "@/lib/budget";
 import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type Settings } from "@/lib/types";
 
@@ -37,7 +37,7 @@ export default function Home() {
   const [date, setDate] = useState(localDate);
   const [data, setData] = useState<DayData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [sheet, setSheet] = useState<null | "review" | "home" | "recent" | "energy">(null);
+  const [sheet, setSheet] = useState<null | "compose" | "review" | "energy">(null);
   const [draft, setDraft] = useState<FoodItem[]>([]);
   const [text, setText] = useState("");
   const [parsing, setParsing] = useState(false);
@@ -62,6 +62,7 @@ export default function Home() {
       if (!r.ok) throw new Error(j.error ?? "Lookup failed");
       if (!j.items.length) throw new Error("Couldn't find any food in that. Try rephrasing.");
       setDraft(j.items);
+      setText("");
       setSheet("review");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Lookup failed");
@@ -85,8 +86,9 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto min-h-dvh max-w-xl pb-40" style={{ paddingTop: "env(safe-area-inset-top)" }}>
-      <header className="flex items-center justify-between px-4 pt-4 pb-2">
+    <main className="mx-auto min-h-dvh max-w-xl pb-28" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+      <header className="grid grid-cols-[1fr_auto_1fr] items-center px-4 pt-4 pb-2">
+        <span />
         <div className="flex items-center gap-1">
           <IconButton label="Previous day" onClick={() => setDate((d) => shiftDate(d, -1))}>‹</IconButton>
           <button className="min-w-28 text-center text-lg font-semibold" onClick={() => setDate(localDate())}>
@@ -94,7 +96,7 @@ export default function Home() {
           </button>
           <IconButton label="Next day" onClick={() => setDate((d) => shiftDate(d, 1))}>›</IconButton>
         </div>
-        <Link href="/settings" className="rounded-full px-3 py-2 text-sm text-ink-2 active:bg-track">
+        <Link href="/settings" className="justify-self-end rounded-full px-3 py-2 text-sm text-ink-2 active:bg-track">
           Settings
         </Link>
       </header>
@@ -112,19 +114,22 @@ export default function Home() {
         </>
       )}
 
-      <Composer
-        text={text}
-        setText={setText}
-        parsing={parsing}
-        error={error}
-        onSubmit={submitText}
-        onHome={() => setSheet("home")}
-        onRecent={() => setSheet("recent")}
-      />
+      <button
+        aria-label="Log food"
+        onClick={() => {
+          setError(null);
+          setSheet("compose");
+        }}
+        className="fab fixed right-5 z-10 flex h-16 w-16 items-center justify-center rounded-full text-4xl leading-none font-light text-brand-ink shadow-lg active:scale-95"
+        style={{ bottom: "max(calc(env(safe-area-inset-bottom) + 12px), 24px)", transition: "transform 120ms" }}
+      >
+        +
+      </button>
 
+      {sheet === "compose" && (
+        <ComposeSheet text={text} setText={setText} parsing={parsing} error={error} onSubmit={submitText} onClose={() => setSheet(null)} />
+      )}
       {sheet === "review" && <ReviewSheet items={draft} onClose={() => setSheet(null)} onAdd={addItems} />}
-      {sheet === "home" && data && <HomeMealSheet settings={data.settings} onClose={() => setSheet(null)} onAdd={addItems} />}
-      {sheet === "recent" && <RecentSheet onClose={() => setSheet(null)} onPick={(i) => { setDraft([i]); setSheet("review"); }} />}
       {sheet === "energy" && data && (
         <EnergySheet date={date} energy={data.energy} onClose={() => setSheet(null)} onSaved={() => { setSheet(null); load(); }} />
       )}
@@ -352,62 +357,6 @@ function ReviewItem({ item: it, onKcal, onRemove }: { item: FoodItem & { breakdo
   );
 }
 
-/* ---------------- Composer ---------------- */
-
-function Composer(p: {
-  text: string;
-  setText: (s: string) => void;
-  parsing: boolean;
-  error: string | null;
-  onSubmit: () => void;
-  onHome: () => void;
-  onRecent: () => void;
-}) {
-  return (
-    <div
-      className="fixed inset-x-0 bottom-0 z-10 border-t border-line bg-card/95 backdrop-blur"
-      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 12px)" }}
-    >
-      <div className="mx-auto max-w-xl px-4 pt-3">
-        {p.error && <p className="mb-2 text-sm text-over">{p.error}</p>}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            p.onSubmit();
-          }}
-          className="flex items-end gap-2"
-        >
-          <textarea
-            value={p.text}
-            onChange={(e) => p.setText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                p.onSubmit();
-              }
-            }}
-            rows={1}
-            placeholder="e.g. chicken rice less rice + kopi-c"
-            className="max-h-32 min-h-11 min-w-0 flex-1 resize-none rounded-xl bg-track px-3 py-2.5 outline-none placeholder:text-ink-3 focus:ring-2 focus:ring-brand"
-          />
-          <button
-            type="submit"
-            disabled={p.parsing || !p.text.trim()}
-            className="h-11 rounded-xl bg-brand px-4 font-semibold text-brand-ink disabled:opacity-40"
-          >
-            {p.parsing ? "…" : "Log"}
-          </button>
-        </form>
-        <div className="mt-2 flex gap-2 text-sm">
-          <button onClick={p.onHome} className="rounded-full bg-track px-3 py-1.5 active:opacity-70">🍚 Home meal (scoops)</button>
-          <button onClick={p.onRecent} className="rounded-full bg-track px-3 py-1.5 active:opacity-70">↺ Recent</button>
-          {p.parsing && <span className="self-center text-xs text-ink-3">Looking it up…</span>}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ---------------- Sheets ---------------- */
 
 function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -441,6 +390,53 @@ function MealPicker({ meal, setMeal }: { meal: Meal; setMeal: (m: Meal) => void 
         </button>
       ))}
     </div>
+  );
+}
+
+const EXAMPLES = ["chicken rice less rice + kopi-c", "1 bowl rice, 3 tbsp kailan, 2 tbsp curry chicken", "2 egg prata + teh peng"];
+
+function ComposeSheet(p: { text: string; setText: (s: string) => void; parsing: boolean; error: string | null; onSubmit: () => void; onClose: () => void }) {
+  return (
+    <Sheet title="What did you eat?" onClose={p.onClose}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          p.onSubmit();
+        }}
+      >
+        <textarea
+          autoFocus
+          value={p.text}
+          onChange={(e) => p.setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              p.onSubmit();
+            }
+          }}
+          rows={3}
+          placeholder="e.g. chicken rice less rice + kopi-c"
+          className="w-full resize-none rounded-xl bg-track px-3 py-2.5 outline-none placeholder:text-ink-3 focus:ring-2 focus:ring-brand"
+        />
+        {p.error && <p className="mt-2 text-sm text-over">{p.error}</p>}
+        {!p.text && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {EXAMPLES.map((x) => (
+              <button type="button" key={x} onClick={() => p.setText(x)} className="rounded-full bg-track px-2.5 py-1 text-xs text-ink-2 active:opacity-70">
+                {x}
+              </button>
+            ))}
+          </div>
+        )}
+        <button
+          type="submit"
+          disabled={p.parsing || !p.text.trim()}
+          className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-brand-ink disabled:opacity-40"
+        >
+          {p.parsing ? "Looking it up…" : "Look up calories"}
+        </button>
+      </form>
+    </Sheet>
   );
 }
 
@@ -485,99 +481,6 @@ function ReviewSheet({ items: initial, onClose, onAdd }: { items: FoodItem[]; on
       >
         Add {total} kcal to {MEAL_LABEL[meal]}
       </button>
-    </Sheet>
-  );
-}
-
-function HomeMealSheet({ settings, onClose, onAdd }: { settings: Settings; onClose: () => void; onAdd: (i: FoodItem[], m: Meal) => Promise<void> }) {
-  const [counts, setCounts] = useState<Record<string, number>>({});
-  const [meal, setMeal] = useState<Meal>(mealForNow);
-  const [saving, setSaving] = useState(false);
-
-  const items: FoodItem[] = useMemo(
-    () =>
-      settings.homeUnits
-        .filter((u) => (counts[u.id] ?? 0) > 0)
-        .map((u) => {
-          const n = counts[u.id];
-          return {
-            name: `Home: ${u.label.replace(/\s*\(.*\)$/, "")}`,
-            quantity: `${n} × ${u.label.toLowerCase().startsWith("bowl") ? "bowl" : "scoop"}`,
-            kcal: Math.round(u.kcal * n),
-            protein: +(u.protein * n).toFixed(1),
-            carbs: +(u.carbs * n).toFixed(1),
-            fat: +(u.fat * n).toFixed(1),
-            source: `home:${u.id}`,
-            confidence: "medium" as const,
-          };
-        }),
-    [counts, settings.homeUnits],
-  );
-  const total = Math.round(sum(items, "kcal"));
-
-  return (
-    <Sheet title="Home meal" onClose={onClose}>
-      <p className="mb-3 text-sm text-ink-2">Count scoops with the serving spoon. Half scoops are fine. You can change the scoop sizes in Settings.</p>
-      <MealPicker meal={meal} setMeal={setMeal} />
-      <ul className="mt-2 divide-y divide-line">
-        {settings.homeUnits.map((u) => {
-          const n = counts[u.id] ?? 0;
-          const set = (v: number) => setCounts((c) => ({ ...c, [u.id]: Math.max(0, v) }));
-          return (
-            <li key={u.id} className="flex items-center gap-3 py-2.5">
-              <div className="min-w-0 flex-1">
-                <div className="text-[15px]">{u.label}</div>
-                <div className="tabular text-xs text-ink-3">{u.kcal} kcal each</div>
-              </div>
-              <div className="flex items-center gap-1">
-                <button aria-label={`Less ${u.label}`} onClick={() => set(n - 0.5)} className="h-9 w-9 rounded-full bg-track text-lg active:opacity-70">−</button>
-                <span className="tabular w-8 text-center font-semibold">{n}</span>
-                <button aria-label={`More ${u.label}`} onClick={() => set(n + (n === 0 ? 1 : 0.5))} className="h-9 w-9 rounded-full bg-track text-lg active:opacity-70">+</button>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-      <button
-        disabled={!items.length || saving}
-        onClick={async () => {
-          setSaving(true);
-          await onAdd(items, meal);
-        }}
-        className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-brand-ink disabled:opacity-40"
-      >
-        Add {total} kcal to {MEAL_LABEL[meal]}
-      </button>
-    </Sheet>
-  );
-}
-
-function RecentSheet({ onClose, onPick }: { onClose: () => void; onPick: (i: FoodItem) => void }) {
-  const [items, setItems] = useState<FoodItem[] | null>(null);
-  useEffect(() => {
-    fetch("/api/recent").then((r) => r.json()).then((j) => setItems(j.items));
-  }, []);
-  return (
-    <Sheet title="Recent foods" onClose={onClose}>
-      {!items ? (
-        <p className="text-ink-3">Loading…</p>
-      ) : !items.length ? (
-        <p className="text-ink-3">Nothing logged yet.</p>
-      ) : (
-        <ul className="divide-y divide-line">
-          {items.map((it, i) => (
-            <li key={i}>
-              <button onClick={() => onPick(it)} className="flex w-full items-center gap-3 py-3 text-left active:bg-track">
-                <div className="min-w-0 flex-1">
-                  <div className="truncate">{it.name}</div>
-                  <div className="truncate text-xs text-ink-3">{it.quantity}</div>
-                </div>
-                <span className="tabular text-sm">{Math.round(it.kcal)}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
     </Sheet>
   );
 }

@@ -186,23 +186,3 @@ export async function saveLearnedFoods(items: FoodItem[]) {
     "write",
   );
 }
-
-// Recent distinct foods, for one-tap re-logging.
-export async function recentFoods(limit = 12): Promise<FoodItem[]> {
-  const c = await db();
-  const r = await c.execute({
-    sql: `SELECT name, quantity, kcal, protein, carbs, fat, source, confidence, MAX(id) AS last
-          FROM entries GROUP BY name, quantity ORDER BY last DESC LIMIT ?`,
-    args: [limit],
-  });
-  return r.rows.map((row) => ({
-    name: String(row.name),
-    quantity: String(row.quantity),
-    kcal: Number(row.kcal),
-    protein: Number(row.protein),
-    carbs: Number(row.carbs),
-    fat: Number(row.fat),
-    source: String(row.source),
-    confidence: String(row.confidence) as FoodItem["confidence"],
-  }));
-}

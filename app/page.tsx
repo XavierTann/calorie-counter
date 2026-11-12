@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { AppHeader } from "@/components/AppHeader";
+import { Sheet } from "@/components/Sheet";
 import { useCallback, useEffect, useState } from "react";
 import { dailyBudget } from "@/lib/budget";
 import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type Settings } from "@/lib/types";
@@ -87,19 +88,17 @@ export default function Home() {
 
   return (
     <main className="mx-auto min-h-dvh max-w-xl pb-28" style={{ paddingTop: "env(safe-area-inset-top)" }}>
-      <header className="grid grid-cols-[1fr_auto_1fr] items-center px-4 pt-4 pb-2">
-        <span />
-        <div className="flex items-center gap-1">
-          <IconButton label="Previous day" onClick={() => setDate((d) => shiftDate(d, -1))}>‹</IconButton>
-          <button className="min-w-28 text-center text-lg font-semibold" onClick={() => setDate(localDate())}>
-            {prettyDate(date)}
-          </button>
-          <IconButton label="Next day" onClick={() => setDate((d) => shiftDate(d, 1))}>›</IconButton>
-        </div>
-        <Link href="/settings" className="justify-self-end rounded-full px-3 py-2 text-sm text-ink-2 active:bg-track">
-          Settings
-        </Link>
-      </header>
+      <AppHeader
+        center={
+          <div className="flex items-center gap-1">
+            <IconButton label="Previous day" onClick={() => setDate((d) => shiftDate(d, -1))}>‹</IconButton>
+            <button className="min-w-28 text-center text-lg font-semibold" onClick={() => setDate(localDate())}>
+              {prettyDate(date)}
+            </button>
+            <IconButton label="Next day" onClick={() => setDate((d) => shiftDate(d, 1))}>›</IconButton>
+          </div>
+        }
+      />
 
       {!data ? (
         <p className="px-4 py-10 text-center text-ink-3">Loading…</p>
@@ -358,24 +357,6 @@ function ReviewItem({ item: it, onKcal, onRemove }: { item: FoodItem & { breakdo
 }
 
 /* ---------------- Sheets ---------------- */
-
-function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
-  return (
-    <div className="fixed inset-0 z-20 flex items-end justify-center bg-black/40" onClick={onClose}>
-      <div
-        className="max-h-[88dvh] w-full max-w-xl overflow-y-auto rounded-t-2xl bg-card p-4"
-        style={{ paddingBottom: "max(env(safe-area-inset-bottom), 16px)" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">{title}</h2>
-          <button onClick={onClose} className="rounded-full px-3 py-1 text-ink-2 active:bg-track">Close</button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
-}
 
 function MealPicker({ meal, setMeal }: { meal: Meal; setMeal: (m: Meal) => void }) {
   return (

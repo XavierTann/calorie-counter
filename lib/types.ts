@@ -53,3 +53,18 @@ export type Energy = {
   source: string;
   updated_at: string;
 };
+
+// An entry in the Foods dictionary.
+export type MyFood = {
+  id: number;
+  name: string;
+  quantity: string;
+  kcal: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  kind: "recorded" | "custom";
+  edited: boolean;
+  times: number;
+  lastUsed: string | null;
+};

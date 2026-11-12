@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { AppHeader } from "@/components/AppHeader";
 import { useEffect, useState } from "react";
 import type { HomeUnit, Settings } from "@/lib/types";
 
@@ -33,12 +33,9 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-xl px-4 pb-32" style={{ paddingTop: "max(env(safe-area-inset-top), 16px)" }}>
-      <div className="flex items-center justify-between py-2">
-        <Link href="/" className="rounded-full px-2 py-1 text-ink-2 active:bg-track">‹ Diary</Link>
-        <h1 className="text-lg font-semibold">Settings</h1>
-        <span className="w-14" />
-      </div>
+    <main className="mx-auto max-w-xl pb-32" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+      <AppHeader center={<h1 className="text-lg font-semibold">Settings</h1>} />
+      <div className="px-4">
 
       <Card title="Daily targets">
         <div className="grid grid-cols-2 gap-3">
@@ -118,6 +115,8 @@ Content-Type: application/json
           &quot;Burned&quot; on the diary screen to type it in.
         </p>
       </Card>
+
+      </div>
 
       <div className="fixed inset-x-0 bottom-0 border-t border-line bg-card/95 backdrop-blur" style={{ paddingBottom: "max(env(safe-area-inset-bottom), 12px)" }}>
         <div className="mx-auto flex max-w-xl items-center gap-3 px-4 pt-3">

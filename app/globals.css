@@ -11,6 +11,8 @@
   --track: #ebe9e3;
   --brand: #e2622b;
   --brand-ink: #ffffff;
+  --brand-soft: #fde7da;
+  --brand-strong: #b8461a;
   --protein: #2a78d6;
   --carbs: #eb6834;
   --fat: #1baf7a;
@@ -31,6 +33,8 @@
     --track: #2a2a28;
     --brand: #ef7440;
     --brand-ink: #111110;
+    --brand-soft: #3a2418;
+    --brand-strong: #f6a77f;
     --protein: #3987e5;
     --carbs: #d95926;
     --fat: #199e70;
@@ -50,6 +54,8 @@
   --color-track: var(--track);
   --color-brand: var(--brand);
   --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-strong: var(--brand-strong);
   --color-protein: var(--protein);
   --color-carbs: var(--carbs);
   --color-fat: var(--fat);
@@ -83,3 +89,9 @@ textarea {
 @media (prefers-color-scheme: dark) { .conf-medium { color: #f0b84a; } }
 
 .fab { background: linear-gradient(145deg, #f59a4a, var(--brand)); box-shadow: 0 8px 20px color-mix(in oklab, var(--brand) 40%, transparent); }
+
+@keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } }
+@keyframes drawer-in { from { transform: translateX(-100%); } }
+.sheet-in { animation: sheet-in 180ms ease-out; }
+.drawer-in { animation: drawer-in 200ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .sheet-in, .drawer-in { animation: none; } }

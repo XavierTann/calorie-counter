@@ -104,14 +104,14 @@ Round kcal to whole numbers and macros to 1 decimal place. One entry per distinc
 REFERENCE TABLE (id | name | serving | kcal | macros):
 ${foodsAsPromptTable(FOODS)}`;
 
-export async function parseMeal(text: string, homeUnits: HomeUnit[], learned: FoodItem[]): Promise<FoodItem[]> {
+export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[]): Promise<FoodItem[]> {
   const dynamicContext = [
     "HOME UNITS (id | label | kcal | macros per unit):",
     homeUnits.map((u) => `${u.id} | ${u.label} | ${u.kcal} kcal | P${u.protein} C${u.carbs} F${u.fat}`).join("\n"),
     "",
     "MY FOODS:",
-    learned.length
-      ? learned.map((f) => `${f.name} | ${f.quantity} | ${f.kcal} kcal | P${f.protein} C${f.carbs} F${f.fat} | ${f.source}`).join("\n")
+    myFoods.length
+      ? myFoods.map((f) => `${f.name} | ${f.quantity} | ${f.kcal} kcal | P${f.protein} C${f.carbs} F${f.fat}`).join("\n")
       : "(none yet)",
   ].join("\n");
 

@@ -1,6 +1,6 @@
 import { ApiError } from "@google/genai";
 import { NextResponse } from "next/server";
-import { getSettings, listLearnedFoods } from "@/lib/db";
+import { foodsForAI, getSettings } from "@/lib/db";
 import { parseMeal } from "@/lib/parse";
 
 export const maxDuration = 60;
@@ -9,8 +9,8 @@ export async function POST(req: Request) {
   const { text } = (await req.json()) as { text?: string };
   if (!text?.trim()) return NextResponse.json({ error: "Type what you ate" }, { status: 400 });
   try {
-    const [settings, learned] = await Promise.all([getSettings(), listLearnedFoods()]);
-    const items = await parseMeal(text.slice(0, 2000), settings.homeUnits, learned);
+    const [settings, myFoods] = await Promise.all([getSettings(), foodsForAI()]);
+    const items = await parseMeal(text.slice(0, 2000), settings.homeUnits, myFoods);
     return NextResponse.json({ items });
   } catch (e) {
     console.error(e);

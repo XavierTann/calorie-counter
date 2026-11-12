@@ -1,9 +1,16 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { FOODS, foodsAsPromptTable } from "./foods";
 import type { FoodItem, HomeUnit } from "./types";
 
-const client = new Anthropic();
+// Free tier: get a key at https://aistudio.google.com/apikey
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+let ai: GoogleGenAI | null = null;
+function client() {
+  if (!process.env.GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is not set");
+  ai ??= new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  return ai;
+}
 
 const ItemSchema = z.object({
   name: z.string(),
@@ -39,7 +46,7 @@ const RESULT_JSON_SCHEMA = {
           fat: { type: "number", description: "grams" },
           source: {
             type: "string",
-            description: "'db:<id>' for the reference table, 'home:<unit id>' for home units, 'learned' for learned foods, 'web: <domain>' for web results, 'estimate' otherwise",
+            description: "'db:<id>' for the reference table, 'home:<unit id>' for home units, 'learned' for learned foods, 'estimate' otherwise",
           },
           confidence: { type: "string", enum: ["high", "medium", "low"] },
           note: { type: "string", description: "One short line on adjustments made, or empty string" },
@@ -56,10 +63,8 @@ The user types what they ate in casual language (Singlish and hawker terms are n
 How to find the numbers, in this order:
 1. The REFERENCE TABLE below (Singapore hawker servings, based on HPB data). Use it whenever a dish matches, even loosely (e.g. "ckt" = char kway teow, "bcm" = bak chor mee). Scale it for quantity and modifiers. source = "db:<id>", confidence high (or medium if you adjusted it a lot).
 2. HOME UNITS (the user's calibrated "scoop" sizes for mum's cooking). Use them when the user talks about scoops, bowls of rice or home food. A specific dish ("2 scoops kailan", "1 scoop curry chicken") maps to the closest unit type. source = "home:<unit id>".
-3. LEARNED FOODS (looked up before). source = "learned".
-4. Only if none of these cover the item: use web_search. Prefer HPB / HealthHub (healthhub.sg, focos.hpb.gov.sg), official nutrition pages for chains (McDonald's SG, Subway, Starbucks, KFC, etc.) and product labels. source = "web: <domain>", confidence medium.
-5. Otherwise estimate from your own knowledge. source = "estimate", confidence low.
-Don't search for items the table, home units or common knowledge already cover well. Searching is slow.
+3. LEARNED FOODS (numbers the user corrected or confirmed before). These override the reference table for the same food. source = "learned".
+4. Otherwise estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
 Modifiers to apply:
 - "less rice" ≈ -80 kcal (-18g carbs); "more/extra rice" ≈ +100 kcal; "no rice" removes the rice portion.
@@ -86,58 +91,18 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], learned: Fo
       : "(none yet)",
   ].join("\n");
 
-  const messages: Anthropic.Beta.Messages.BetaMessageParam[] = [
-    { role: "user", content: `${dynamicContext}\n\nWhat I ate:\n${text}` },
-  ];
-
-  // Web search runs server-side; if the server loop pauses, resend to resume.
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const response = await client.beta.messages.create({
-      model: "claude-opus-5-5",
-      max_tokens: 16000,
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
-      output_config: {
-        effort: "medium",
-        format: { type: "json_schema", schema: RESULT_JSON_SCHEMA },
-      },
-      cache_control: { type: "ephemeral" },
-      system: STATIC_SYSTEM,
-      tools: [
-        {
-          type: "web_search_20260209",
-          name: "web_search",
-          max_uses: 3,
-          user_location: { type: "approximate", country: "SG", city: "Singapore", timezone: "Asia/Singapore" },
-        },
-      ],
-      messages,
-    });
-
-    if (response.stop_reason === "pause_turn") {
-      messages.push({ role: "assistant", content: response.content });
-      continue;
-    }
-    if (response.stop_reason === "refusal") {
-      throw new Error("The model declined this request.");
-    }
-    if (response.stop_reason === "max_tokens") {
-      throw new Error("Response was cut off. Try logging fewer items at once.");
-    }
-
-    // The structured JSON is the final text block (earlier ones can precede a search).
-    const textBlocks = response.content.filter(
-      (b): b is Anthropic.Beta.Messages.BetaTextBlock => b.type === "text",
-    );
-    const last = textBlocks.at(-1)?.text ?? "";
-    let json: unknown;
-    try {
-      json = JSON.parse(last);
-    } catch {
-      json = JSON.parse(textBlocks.map((b) => b.text).join(""));
-    }
-    const parsed = ResultSchema.parse(json);
-    return parsed.items.map((i) => ({ ...i, note: i.note || undefined }));
-  }
-  throw new Error("Lookup took too long. Try again.");
+  const response = await client().models.generateContent({
+    model: MODEL,
+    contents: `${dynamicContext}\n\nWhat I ate:\n${text}`,
+    config: {
+      systemInstruction: STATIC_SYSTEM,
+      responseMimeType: "application/json",
+      responseJsonSchema: RESULT_JSON_SCHEMA,
+      temperature: 0.2,
+    },
+  });
+  const out = response.text;
+  if (!out) throw new Error("No answer from Gemini. Try again.");
+  const parsed = ResultSchema.parse(JSON.parse(out));
+  return parsed.items.map((i) => ({ ...i, note: i.note || undefined }));
 }

@@ -3,7 +3,7 @@
 A calorie counter where you type what you ate in plain language ("roasted chicken rice less rice + kopi-c siew dai") and it fills in calories and macros. It's built around Singapore hawker food and home-cooked meals measured in scoops.
 
 - **Hawker database**: ~120 dishes and kopitiam drinks with HPB-based values, in `lib/foods.ts`. Edit or add to it freely.
-- **AI parsing** (Claude): understands hawker terms and modifiers (less rice, no skin, siew dai, kosong…). It checks the database first and searches the web only for things the database doesn't have. Foods found online are saved, so the next lookup is instant.
+- **AI parsing** (Gemini, free tier): understands hawker terms and modifiers (less rice, no skin, siew dai, kosong…). It checks the hawker database and your scoop sizes first and estimates anything else (marked ●○○). If you correct a number on the Check & log screen, the app remembers it and uses your number next time.
 - **Home meals by scoop**: tap "Home meal" and count scoops, or just type "1 bowl rice, 2 scoops kailan, 1 scoop curry chicken". You can calibrate scoop sizes in Settings.
 - **Cronometer-style dashboard**: calories eaten, budget, burned, remaining, and protein/carbs/fat bars.
 - **Garmin**: burned calories adjust your daily budget (see below).
@@ -12,7 +12,7 @@ A calorie counter where you type what you ate in plain language ("roasted chicke
 ## Run locally
 
 ```bash
-cp .env.example .env.local   # add your ANTHROPIC_API_KEY
+cp .env.example .env.local   # add your GEMINI_API_KEY
 npm install
 npm run dev                  # http://localhost:3000
 ```
@@ -27,7 +27,7 @@ To try it on your phone over home Wi-Fi: `npm run dev -- -H 0.0.0.0`, then open 
    `turso db create makan-log` → `turso db show makan-log --url` → `turso db tokens create makan-log`
 2. **Push this folder to GitHub**, then import the repo at [vercel.com/new](https://vercel.com/new).
 3. In Vercel → Settings → Environment Variables, add:
-   `ANTHROPIC_API_KEY`, `APP_PASSWORD`, `INGEST_TOKEN` (any long random string), `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
+   `GEMINI_API_KEY`, `APP_PASSWORD`, `INGEST_TOKEN` (any long random string), `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
 4. Deploy. On your phone, open the URL → log in → Share → **Add to Home Screen**.
 
 Tables are created automatically on the first request.
@@ -62,4 +62,4 @@ Tap **Burned** on the dashboard and type the numbers from Garmin Connect.
 
 ## Notes
 - Every logged item shows its source (hawker DB, home scoop, a website, or estimate) and confidence (●●● / ●●○ / ●○○). You can edit calories before saving.
-- AI calls use Claude Opus 5.5 with server-side refusal fallbacks enabled. Each lookup costs a few US cents (more if it has to search the web). The hawker database is prompt-cached. To make it cheaper, change the model in `lib/parse.ts` to `claude-sonnet-5-5` or `claude-haiku-5-5`.
+- AI calls use the Gemini API free tier (`gemini-3.8-flash` by default; set `GEMINI_MODEL` to change it, e.g. `gemini-3.5-flash-lite` for higher free limits). Get a key at aistudio.google.com/apikey, no card needed. Google may use free-tier requests to improve its products. Google Search grounding isn't on the free tier, so foods outside the database are estimated from the model's own knowledge.

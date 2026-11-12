@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { addEntries, deleteEntry, getEnergy, getSettings, listEntries } from "@/lib/db";
+import { addEntries, deleteEntry, getEnergy, getSettings, listEntries, saveLearnedFoods } from "@/lib/db";
 import { isDate } from "@/lib/date";
 import { MEALS, type FoodItem, type Meal } from "@/lib/types";
 
@@ -29,6 +29,10 @@ export async function POST(req: Request) {
       note: i.note ? String(i.note).slice(0, 300) : undefined,
     }));
   if (items.length) await addEntries(body.date, body.meal, items);
+  // Calories you corrected on the Check & log screen are remembered for next time.
+  await saveLearnedFoods(
+    items.filter((i) => i.source.includes("(edited)")).map((i) => ({ ...i, source: "learned" })),
+  );
   return NextResponse.json({ ok: true });
 }
 

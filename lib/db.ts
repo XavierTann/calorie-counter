@@ -50,7 +50,7 @@ async function db(): Promise<Client> {
             id INTEGER PRIMARY KEY CHECK (id = 1),
             json TEXT NOT NULL
           )`,
-          // Foods the AI looked up on the web, saved so the next lookup is instant.
+          // Foods whose calories you corrected, so the AI uses your numbers next time.
           `CREATE TABLE IF NOT EXISTS learned_foods (
             name TEXT PRIMARY KEY,
             quantity TEXT NOT NULL,

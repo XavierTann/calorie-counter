@@ -5,6 +5,7 @@ import { Buddy, buddyLine } from "@/components/Buddy";
 import { Sheet } from "@/components/Sheet";
 import { useCallback, useEffect, useState } from "react";
 import { dailyBudget } from "@/lib/budget";
+import type { Clarification } from "@/lib/parse";
 import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type Settings } from "@/lib/types";
 
 const MEAL_LABEL: Record<Meal, string> = { breakfast: "Breakfast", lunch: "Lunch", dinner: "Dinner", snacks: "Snacks" };
@@ -42,6 +43,8 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [sheet, setSheet] = useState<null | "compose" | "review" | "energy">(null);
   const [draft, setDraft] = useState<FoodItem[]>([]);
+  const [questions, setQuestions] = useState<Clarification[]>([]);
+  const [asked, setAsked] = useState(""); // the text that produced the current draft
   const [text, setText] = useState("");
   const [parsing, setParsing] = useState(false);
 
@@ -55,16 +58,22 @@ export default function Home() {
     load();
   }, [load]);
 
+  async function lookup(query: string) {
+    const r = await fetch("/api/parse", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: query }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error ?? "Lookup failed");
+    if (!j.items.length) throw new Error("Couldn't find any food in that. Try rephrasing.");
+    setDraft(j.items);
+    setQuestions(j.questions ?? []);
+    setAsked(query);
+  }
+
   async function submitText() {
     if (!text.trim() || parsing) return;
     setParsing(true);
     setError(null);
     try {
-      const r = await fetch("/api/parse", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text }) });
-      const j = await r.json();
-      if (!r.ok) throw new Error(j.error ?? "Lookup failed");
-      if (!j.items.length) throw new Error("Couldn't find any food in that. Try rephrasing.");
-      setDraft(j.items);
+      await lookup(text);
       setText("");
       setSheet("review");
     } catch (e) {
@@ -72,6 +81,11 @@ export default function Home() {
     } finally {
       setParsing(false);
     }
+  }
+
+  // Re-runs the lookup with the answers to the AI's clarifying questions.
+  async function answer(answers: { question: string; answer: string }[]) {
+    await lookup(`${asked}\n\nAnswers to your questions:\n${answers.map((a) => `- ${a.question} ${a.answer}`).join("\n")}`);
   }
 
   async function addItems(items: FoodItem[], meal: Meal) {
@@ -130,7 +144,7 @@ export default function Home() {
       {sheet === "compose" && (
         <ComposeSheet text={text} setText={setText} parsing={parsing} error={error} onSubmit={submitText} onClose={() => setSheet(null)} />
       )}
-      {sheet === "review" && <ReviewSheet items={draft} onClose={() => setSheet(null)} onAdd={addItems} />}
+      {sheet === "review" && <ReviewSheet items={draft} questions={questions} onAnswer={answer} onClose={() => setSheet(null)} onAdd={addItems} />}
       {sheet === "energy" && data && (
         <EnergySheet date={date} energy={data.energy} onClose={() => setSheet(null)} onSaved={() => { setSheet(null); load(); }} />
       )}
@@ -442,9 +456,19 @@ function ComposeSheet(p: { text: string; setText: (s: string) => void; parsing: 
   );
 }
 
-function ReviewSheet({ items: initial, onClose, onAdd }: { items: FoodItem[]; onClose: () => void; onAdd: (i: FoodItem[], m: Meal) => Promise<void> }) {
+const withBreakdown = (xs: FoodItem[]) => xs.map((x) => ({ ...x, breakdown: x.breakdown ?? [{ label: `${x.name}, ${x.quantity}`, kcal: Math.round(x.kcal) }] }));
+
+function ReviewSheet(p: {
+  items: FoodItem[];
+  questions: Clarification[];
+  onAnswer: (a: { question: string; answer: string }[]) => Promise<void>;
+  onClose: () => void;
+  onAdd: (i: FoodItem[], m: Meal) => Promise<void>;
+}) {
+  const { items: initial, onClose, onAdd } = p;
   // Each item keeps the AI's original working so the table can show your edit separately.
-  const [items, setItems] = useState(() => initial.map((x) => ({ ...x, breakdown: x.breakdown ?? [{ label: `${x.name}, ${x.quantity}`, kcal: Math.round(x.kcal) }] })));
+  const [items, setItems] = useState(() => withBreakdown(initial));
+  useEffect(() => setItems(withBreakdown(initial)), [initial]);
   const [meal, setMeal] = useState<Meal>(mealForNow);
   const [saving, setSaving] = useState(false);
   const total = Math.round(sum(items, "kcal"));
@@ -462,6 +486,7 @@ function ReviewSheet({ items: initial, onClose, onAdd }: { items: FoodItem[]; on
 
   return (
     <Sheet title="Check & log" onClose={onClose}>
+      {p.questions.length > 0 && <Questions questions={p.questions} onAnswer={p.onAnswer} />}
       <MealPicker meal={meal} setMeal={setMeal} />
       <ul className="mt-3 divide-y divide-line">
         {items.map((it, i) => (
@@ -484,6 +509,57 @@ function ReviewSheet({ items: initial, onClose, onAdd }: { items: FoodItem[]; on
         Add {total} kcal to {MEAL_LABEL[meal]}
       </button>
     </Sheet>
+  );
+}
+
+function Questions({ questions, onAnswer }: { questions: Clarification[]; onAnswer: (a: { question: string; answer: string }[]) => Promise<void> }) {
+  const [picked, setPicked] = useState<Record<number, string>>({});
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => setPicked({}), [questions]);
+  const answered = Object.keys(picked).length;
+
+  async function submit() {
+    setBusy(true);
+    setError(null);
+    try {
+      await onAnswer(Object.entries(picked).map(([i, answer]) => ({ question: questions[Number(i)].question, answer })));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Lookup failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="mb-3 rounded-2xl bg-brand-soft p-3">
+      <div className="flex items-center gap-2 text-sm font-semibold text-brand-strong">
+        <span aria-hidden>🤔</span> A quick question so the numbers are right
+      </div>
+      {questions.map((q, i) => (
+        <div key={q.question} className="mt-2">
+          <div className="text-sm">{q.question}</div>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {q.options.map((o) => (
+              <button
+                key={o}
+                onClick={() => setPicked((p) => ({ ...p, [i]: o }))}
+                className={`rounded-full px-3 py-1.5 text-sm ring-1 ${picked[i] === o ? "bg-brand font-semibold text-white ring-brand" : "bg-card ring-line active:opacity-70"}`}
+              >
+                {o}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+      {error && <p className="mt-2 text-sm text-over">{error}</p>}
+      <div className="mt-3 flex items-center gap-2">
+        <button disabled={!answered || busy} onClick={submit} className="h-10 rounded-xl bg-brand px-4 text-sm font-semibold text-white disabled:opacity-40">
+          {busy ? "Updating…" : "Update calories"}
+        </button>
+        <span className="text-xs text-ink-3">Or skip: the numbers below use the most common choice.</span>
+      </div>
+    </div>
   );
 }
 

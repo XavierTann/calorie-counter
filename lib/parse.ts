@@ -32,14 +32,31 @@ const ItemSchema = z.object({
   note: z.string(),
   breakdown: z.array(z.object({ label: z.string(), kcal: z.number() })),
 });
-const ResultSchema = z.object({ items: z.array(ItemSchema) });
+const QuestionSchema = z.object({ question: z.string(), options: z.array(z.string()) });
+const ResultSchema = z.object({ items: z.array(ItemSchema), questions: z.array(QuestionSchema) });
+
+export type Clarification = z.infer<typeof QuestionSchema>;
+export type ParseResult = { items: FoodItem[]; questions: Clarification[] };
 
 // JSON schema handed to structured outputs (kept in sync with ItemSchema).
 const RESULT_JSON_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["items"],
+  required: ["items", "questions"],
   properties: {
+    questions: {
+      type: "array",
+      description: "Up to 2 clarifying questions about details that change the calories a lot. Empty if none.",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["question", "options"],
+        properties: {
+          question: { type: "string", description: "Short question, e.g. 'Steamed or roasted chicken?'" },
+          options: { type: "array", items: { type: "string" }, description: "2-4 short answers, e.g. ['Steamed', 'Roasted']" },
+        },
+      },
+    },
     items: {
       type: "array",
       items: {
@@ -101,12 +118,14 @@ Modifiers to apply:
 
 Breakdown: for every item, show the working. Row 1 is the base serving you started from (label like "Chicken rice, 1 plate" with its kcal). Each later row is one modifier or scaling step as a signed kcal change (e.g. "Less rice" -80, "Extra plate" +607, "Half portion" -300). Use only the base row if nothing was adjusted. The rows must add up exactly to kcal.
 
+Clarifying questions: if the user left out a detail that changes the calories a lot (about 15% or 80+ kcal), add a question with 2–4 short options. Examples: "chicken rice" → "Steamed or roasted chicken?" [Steamed, Roasted]; "nasi lemak" → "Which main?" [Fried chicken wing, Fried fish, Egg only]; "fried rice" → "Which kind?" [Egg, Chicken, Seafood, Yang zhou]; "mee goreng" → "Plate size?" [Regular, Large]. Ask at most 2 questions per message and only about things that matter for calories. Never ask about something the text already states (e.g. "roasted chicken rice" already answers steamed vs roasted). Don't ask when the user already said it, when MY FOODS or HOME UNITS already pin it down, or about drinks' ice. Still return items now using the most common choice, and say which in the note (e.g. "Assumed steamed"). If the message includes "Answers to your questions", use them and return no further questions about the same food.
+
 Round kcal to whole numbers and macros to 1 decimal place. One entry per distinct food/drink. If the text isn't food at all, return an empty items list.
 
 REFERENCE TABLE (id | name | serving | kcal | macros):
 ${foodsAsPromptTable(FOODS)}`;
 
-export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[]): Promise<FoodItem[]> {
+export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[]): Promise<ParseResult> {
   const dynamicContext = [
     "HOME UNITS (id | label | kcal | macros per unit):",
     homeUnits.map((u) => `${u.id} | ${u.label} | ${u.kcal} kcal | P${u.protein} C${u.carbs} F${u.fat}`).join("\n"),
@@ -136,12 +155,19 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: Fo
       if (!out) throw new Error("Empty answer");
       const parsed = ResultSchema.parse(JSON.parse(out));
       console.log(`Gemini ${model} ok`);
-      return parsed.items.map((i) => {
+      const items = parsed.items.map((i) => {
         const breakdown = i.breakdown.map((b) => ({ label: b.label, kcal: Math.round(b.kcal) }));
         // Trust the shown working so the table always adds up.
         const kcal = breakdown.length ? breakdown.reduce((a, b) => a + b.kcal, 0) : Math.round(i.kcal);
         return { ...i, kcal, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
       });
+      const questions = parsed.questions
+        .filter((q) => q.question.trim() && q.options.length >= 2)
+        // Safety net: skip a question if the user's text already contains one of its answers.
+        .filter((q) => !q.options.some((o) => new RegExp(`\\b${o.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text.toLowerCase())))
+        .slice(0, 2)
+        .map((q) => ({ question: q.question.trim(), options: q.options.slice(0, 4) }));
+      return { items, questions };
     } catch (e) {
       lastError = e;
       // A bad key won't work on any model, so stop straight away.

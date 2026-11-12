@@ -13,8 +13,8 @@ export async function POST(req: Request) {
   if (!text?.trim()) return NextResponse.json({ error: "Type what you ate" }, { status: 400 });
   try {
     const [settings, myFoods] = await Promise.all([getSettings(uid), foodsForAI(uid)]);
-    const items = await parseMeal(text.slice(0, 2000), settings.homeUnits, myFoods);
-    return NextResponse.json({ items });
+    const { items, questions } = await parseMeal(text.slice(0, 2000), settings.homeUnits, myFoods);
+    return NextResponse.json({ items, questions });
   } catch (e) {
     console.error(e);
     if (!process.env.GEMINI_API_KEY || (e instanceof ApiError && (e.status === 401 || e.status === 403 || /api key/i.test(e.message)))) {

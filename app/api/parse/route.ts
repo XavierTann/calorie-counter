@@ -14,11 +14,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ items });
   } catch (e) {
     console.error(e);
-    if (!process.env.GEMINI_API_KEY || (e instanceof ApiError && (e.status === 401 || e.status === 403))) {
+    if (!process.env.GEMINI_API_KEY || (e instanceof ApiError && (e.status === 401 || e.status === 403 || /api key/i.test(e.message)))) {
       return NextResponse.json({ error: "Gemini API key is missing or invalid" }, { status: 500 });
     }
     if (e instanceof ApiError && e.status === 429) {
       return NextResponse.json({ error: "Hit the free-tier limit. Wait a minute and try again." }, { status: 429 });
+    }
+    if ((e instanceof ApiError && e.status >= 500) || (e instanceof Error && /abort|timeout/i.test(e.name + e.message))) {
+      return NextResponse.json({ error: "Gemini's free models are busy right now. Try again in a minute." }, { status: 503 });
     }
     return NextResponse.json({ error: e instanceof Error ? e.message : "Lookup failed" }, { status: 500 });
   }

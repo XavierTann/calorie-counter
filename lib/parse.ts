@@ -1,10 +1,18 @@
-import { GoogleGenAI } from "@google/genai";
+import { ApiError, GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { z } from "zod";
 import { FOODS, foodsAsPromptTable } from "./foods";
 import type { FoodItem, HomeUnit } from "./types";
 
 // Free tier: get a key at https://aistudio.google.com/apikey
-const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+// Tried in order. Free-tier models are sometimes overloaded (503) or rate
+// limited (429), so we fall back to the next one.
+const MODELS = [
+  ...(process.env.GEMINI_MODEL ? [process.env.GEMINI_MODEL] : []),
+  "gemini-3.6-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-3.8-flash",
+].filter((m, i, a) => a.indexOf(m) === i);
+const TIMEOUT_MS = 12_000;
 let ai: GoogleGenAI | null = null;
 function client() {
   if (!process.env.GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is not set");
@@ -91,18 +99,32 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], learned: Fo
       : "(none yet)",
   ].join("\n");
 
-  const response = await client().models.generateContent({
-    model: MODEL,
-    contents: `${dynamicContext}\n\nWhat I ate:\n${text}`,
-    config: {
-      systemInstruction: STATIC_SYSTEM,
-      responseMimeType: "application/json",
-      responseJsonSchema: RESULT_JSON_SCHEMA,
-      temperature: 0.2,
-    },
-  });
-  const out = response.text;
-  if (!out) throw new Error("No answer from Gemini. Try again.");
-  const parsed = ResultSchema.parse(JSON.parse(out));
-  return parsed.items.map((i) => ({ ...i, note: i.note || undefined }));
+  let lastError: unknown;
+  for (const model of MODELS) {
+    try {
+      const response = await client().models.generateContent({
+        model,
+        contents: `${dynamicContext}\n\nWhat I ate:\n${text}`,
+        config: {
+          systemInstruction: STATIC_SYSTEM,
+          responseMimeType: "application/json",
+          responseJsonSchema: RESULT_JSON_SCHEMA,
+          temperature: 0.2,
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+          abortSignal: AbortSignal.timeout(TIMEOUT_MS),
+        },
+      });
+      const out = response.text;
+      if (!out) throw new Error("Empty answer");
+      const parsed = ResultSchema.parse(JSON.parse(out));
+      console.log(`Gemini ${model} ok`);
+      return parsed.items.map((i) => ({ ...i, note: i.note || undefined }));
+    } catch (e) {
+      lastError = e;
+      // A bad key won't work on any model, so stop straight away.
+      if (e instanceof ApiError && (e.status === 401 || e.status === 403 || /api key/i.test(e.message))) throw e;
+      console.warn(`Gemini ${model} failed, trying next model:`, e instanceof Error ? e.message.slice(0, 200) : e);
+    }
+  }
+  throw lastError;
 }

@@ -62,4 +62,4 @@ Tap **Burned** on the dashboard and type the numbers from Garmin Connect.
 
 ## Notes
 - Every logged item shows its source (hawker DB, home scoop, a website, or estimate) and confidence (●●● / ●●○ / ●○○). You can edit calories before saving.
-- AI calls use the Gemini API free tier (`gemini-3.8-flash` by default; set `GEMINI_MODEL` to change it, e.g. `gemini-3.5-flash-lite` for higher free limits). Get a key at aistudio.google.com/apikey, no card needed. Google may use free-tier requests to improve its products. Google Search grounding isn't on the free tier, so foods outside the database are estimated from the model's own knowledge.
+- AI calls use the Gemini API free tier (tries `gemini-3.6-flash`, then `gemini-3.5-flash-lite`, then `gemini-3.8-flash` if a model is busy; set `GEMINI_MODEL` to try a specific one first). Get a key at aistudio.google.com/apikey, no card needed. Google may use free-tier requests to improve its products. Google Search grounding isn't on the free tier, so foods outside the database are estimated from the model's own knowledge.

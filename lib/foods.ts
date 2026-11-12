@@ -125,6 +125,7 @@ export const FOODS: Food[] = [
   { id: "teh", name: "Teh (tea + condensed milk)", serving: "1 cup", kcal: 117, protein: 2, carbs: 20, fat: 3 },
   { id: "teh-o", name: "Teh-O (tea + sugar)", serving: "1 cup", kcal: 59, protein: 0, carbs: 15, fat: 0 },
   { id: "teh-c", name: "Teh-C (evaporated milk + sugar)", serving: "1 cup", kcal: 100, protein: 2, carbs: 16, fat: 3 },
+  { id: "teh-c-kosong", name: "Teh-C kosong (evaporated milk, no sugar)", serving: "1 cup", kcal: 66, protein: 2, carbs: 5, fat: 3 },
   { id: "teh-tarik", name: "Teh tarik", serving: "1 cup", kcal: 140, protein: 3, carbs: 23, fat: 4 },
   { id: "milo", name: "Milo (kopitiam, hot or peng)", aliases: ["milo peng"], serving: "1 cup", kcal: 180, protein: 5, carbs: 30, fat: 4.5 },
   { id: "milo-dinosaur", name: "Milo dinosaur", serving: "1 cup", kcal: 300, protein: 8, carbs: 48, fat: 8 },

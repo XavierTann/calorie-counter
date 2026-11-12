@@ -88,6 +88,8 @@ How to find the numbers, in this order:
 3. MY FOODS (custom foods the user added, and numbers they corrected). These override the reference table for the same food. source = "my food".
 4. Otherwise estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
+Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai, half portion): take the smaller deduction, so the total stays on the high side. Fixed numbers from the tables and the modifier list below are used as given.
+
 Modifiers to apply:
 - "less rice" ≈ -80 kcal (-18g carbs); "more/extra rice" ≈ +100 kcal; "no rice" removes the rice portion.
 - Chicken rice "no skin" ≈ -100 kcal (-11g fat); "breast meat" is leaner.

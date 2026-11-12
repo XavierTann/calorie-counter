@@ -44,3 +44,5 @@ next-env.d.ts
 local.db*
 .env*.local
 !.env.example
+
+__pycache__/

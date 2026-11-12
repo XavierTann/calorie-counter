@@ -1,6 +1,7 @@
 import { ApiError, GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { z } from "zod";
 import { FOODS, foodsAsPromptTable } from "./foods";
+import type { Lookup } from "./ref";
 import type { FoodItem, HomeUnit } from "./types";
 
 // Free tier: get a key at https://aistudio.google.com/apikey
@@ -74,7 +75,7 @@ const RESULT_JSON_SCHEMA = {
           fat: { type: "number", description: "grams" },
           source: {
             type: "string",
-            description: "'db:<id>' for the reference table, 'home:<unit id>' for home units, 'my food' for MY FOODS, 'estimate' otherwise",
+            description: "'my food' for MY FOODS, 'home:<unit id>' for home units, the row id for SOURCE MATCHES (e.g. 'kr:…', 'in:…', 'fdc:…'), 'db:<id>' for the reference table, 'estimate' otherwise",
           },
           confidence: { type: "string", enum: ["high", "medium", "low"] },
           note: { type: "string", description: "One short line on adjustments made, or empty string" },
@@ -101,11 +102,12 @@ const STATIC_SYSTEM = `You are the food-logging engine of a calorie tracker for 
 
 The user types what they ate in casual language (Singlish and hawker terms are normal). Split it into separate food items and return calories and macros for exactly what they ate.
 
-How to find the numbers, in this order:
-1. The REFERENCE TABLE below (Singapore hawker servings, based on HPB data). Use it whenever a dish matches, even loosely (e.g. "ckt" = char kway teow, "bcm" = bak chor mee). Scale it for quantity and modifiers. source = "db:<id>", confidence high (or medium if you adjusted it a lot).
+How to find the numbers, in this order. Always prefer real data over your own estimate:
+1. MY FOODS (custom foods the user added, and numbers they corrected). These override everything else for the same food. source = "my food".
 2. HOME UNITS (the user's calibrated sizes for mum's cooking, mostly per tablespoon). Use them when the user talks about tablespoons/tbsp, bowls of rice or home food. A specific dish ("3 tbsp kailan", "2 tbsp curry chicken") maps to the closest unit type; multiply by the number of tablespoons. If they say "spoon" for home food, treat it as 1 tbsp; a "scoop" with a serving spoon ≈ 3 tbsp. source = "home:<unit id>".
-3. MY FOODS (custom foods the user added, and numbers they corrected). These override the reference table for the same food. source = "my food".
-4. Otherwise estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
+3. SOURCE MATCHES (rows from official national food databases, found for this meal: Korea's MFDS dish database, the Indian Nutrient Databank, or USDA FoodData Central). If a row is the same dish (or a close variant), use it: scale its serving to what the user ate, and if its serving size looks unrealistic for one portion, scale from its kcal per 100 g instead. source = the row's id (e.g. "kr:D306-…", "in:ASC122", "fdc:12345"), confidence high (medium if you adapted it a lot). Ignore rows that are a different dish. For Singapore hawker dishes, the REFERENCE TABLE comes before USDA rows.
+4. The REFERENCE TABLE below (Singapore hawker servings, based on HPB data). Use it whenever a dish matches, even loosely (e.g. "ckt" = char kway teow, "bcm" = bak chor mee). Scale it for quantity and modifiers. source = "db:<id>", confidence high (or medium if you adjusted it a lot).
+5. Only if none of the above has the food: estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
 Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai, half portion): take the smaller deduction, so the total stays on the high side. Fixed numbers from the tables and the modifier list below are used as given.
 
@@ -129,8 +131,17 @@ Round kcal to whole numbers and macros to 1 decimal place. One entry per distinc
 REFERENCE TABLE (id | name | serving | kcal | macros):
 ${foodsAsPromptTable(FOODS)}`;
 
-export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[]): Promise<ParseResult> {
+export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[], sources: Lookup): Promise<ParseResult> {
   const dynamicContext = [
+    `SOURCE MATCHES (detected cuisine: ${sources.cuisine}; id | dish | serving | kcal per serving | macros per serving | kcal per 100 g | notes):`,
+    sources.matches.length
+      ? sources.matches
+          .map((m) =>
+            [m.id, m.nameLocal ? `${m.name} (${m.nameLocal})` : m.name, m.serving, `${m.kcal} kcal`, `P${m.protein} C${m.carbs} F${m.fat}`, m.kcal100 !== null ? `${m.kcal100} kcal/100g` : "", m.note ?? ""].join(" | "),
+          )
+          .join("\n")
+      : "(none found)",
+    "",
     "HOME UNITS (id | label | kcal | macros per unit):",
     homeUnits.map((u) => `${u.id} | ${u.label} | ${u.kcal} kcal | P${u.protein} C${u.carbs} F${u.fat}`).join("\n"),
     "",

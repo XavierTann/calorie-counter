@@ -70,6 +70,23 @@ async function db(): Promise<Client> {
             updated_at TEXT NOT NULL DEFAULT (datetime('now')),
             PRIMARY KEY (user_id, date)
           )`,
+          // Official nutrition datasets (filled by scripts/ref/import.mjs), searched before the AI estimates.
+          `CREATE TABLE IF NOT EXISTS ref_foods (
+            id TEXT PRIMARY KEY,
+            source TEXT NOT NULL,
+            cuisine TEXT NOT NULL,
+            name TEXT NOT NULL,
+            name_local TEXT,
+            search TEXT NOT NULL DEFAULT '',
+            serving TEXT NOT NULL,
+            kcal REAL NOT NULL,
+            protein REAL NOT NULL DEFAULT 0,
+            carbs REAL NOT NULL DEFAULT 0,
+            fat REAL NOT NULL DEFAULT 0,
+            kcal_100 REAL,
+            note TEXT
+          )`,
+          `CREATE INDEX IF NOT EXISTS ref_foods_cuisine ON ref_foods(cuisine)`,
           // Browser push subscriptions (one per device) for the morning weigh-in reminder.
           `CREATE TABLE IF NOT EXISTS push_subs (
             endpoint TEXT PRIMARY KEY,
@@ -432,4 +449,42 @@ export async function pushSubsMissingWeight(date: string): Promise<PushSub[]> {
     args: [date],
   });
   return r.rows.map((row) => ({ endpoint: String(row.endpoint), userId: Number(row.user_id), p256dh: String(row.p256dh), auth: String(row.auth) }));
+}
+
+/* ---------------- Official nutrition datasets ---------------- */
+
+export type RefFood = {
+  id: string;
+  source: string;
+  cuisine: string;
+  name: string;
+  nameLocal: string | null;
+  search: string;
+  serving: string;
+  kcal: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  kcal100: number | null;
+  note: string | null;
+};
+
+export async function listRefFoods(cuisine: string): Promise<RefFood[]> {
+  const c = await db();
+  const r = await c.execute({ sql: "SELECT * FROM ref_foods WHERE cuisine = ?", args: [cuisine] });
+  return r.rows.map((row) => ({
+    id: String(row.id),
+    source: String(row.source),
+    cuisine: String(row.cuisine),
+    name: String(row.name),
+    nameLocal: row.name_local ? String(row.name_local) : null,
+    search: String(row.search),
+    serving: String(row.serving),
+    kcal: Number(row.kcal),
+    protein: Number(row.protein),
+    carbs: Number(row.carbs),
+    fat: Number(row.fat),
+    kcal100: row.kcal_100 === null ? null : Number(row.kcal_100),
+    note: row.note ? String(row.note) : null,
+  }));
 }

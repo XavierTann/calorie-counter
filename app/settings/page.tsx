@@ -102,6 +102,21 @@ export default function SettingsPage() {
 
       <AppleHealthSync origin={origin} />
 
+      <Card title="Where the calories come from">
+        <ol className="list-decimal space-y-1 pl-5 text-sm text-ink-2">
+          <li>Your Foods (your own numbers and corrections)</li>
+          <li>Your home tablespoon sizes</li>
+          <li>
+            Official databases for the cuisine: Korea MFDS dish database, Indian Nutrient Databank, USDA FoodData Central
+          </li>
+          <li>The Singapore hawker table (HPB-based)</li>
+          <li>An AI estimate, only if none of the above has it</li>
+        </ol>
+        <p className="mt-2 text-xs text-ink-3">
+          Data: Ministry of Food and Drug Safety (Korea), KOGL Type 1 · Indian Nutrient Databank, Vijayakumar et al. 2024 · USDA FoodData Central.
+        </p>
+      </Card>
+
       </div>
 
       <div className="fixed inset-x-0 bottom-0 border-t border-line bg-card/95 backdrop-blur" style={{ paddingBottom: "max(env(safe-area-inset-bottom), 12px)" }}>

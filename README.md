@@ -69,6 +69,21 @@ Menu → **Weight** to log weigh-ins, see the trend and set a goal. To get a mor
 3. Afterwards, type it: "1.5 bowl rice, 4 tbsp kailan, 3 tbsp braised pork".
 4. Oily or fatty dishes vary the most. If a dish looks oilier than usual, add a tablespoon.
 
+## Where the calories come from
+
+For each meal the app works out the cuisine from keywords (one cuisine per meal, Singapore by default) and looks up official data before the AI estimates anything:
+
+1. **Your Foods**: custom foods and numbers you corrected.
+2. **Home units**: your tablespoon/bowl sizes for home cooking.
+3. **Official datasets** (loaded into the `ref_foods` table):
+   - Korean: Korea Ministry of Food and Drug Safety, *통합식품영양성분정보(음식)* (KOGL Type 1), ~1,600 restaurant and home dishes.
+   - Indian: Indian Nutrient Databank (Vijayakumar et al., *Current Developments in Nutrition*, 2024), ~800 recipes. Deep-fried recipes are left out because the source counts all frying oil as eaten.
+   - Anything else not covered: USDA FoodData Central (live API, per 100 g). Set `FDC_API_KEY`.
+4. **Singapore hawker table** in `lib/foods.ts` (HPB-based approximations written by hand, not an official export).
+5. **AI estimate** as the last resort, marked low confidence.
+
+To rebuild the datasets: download the sources, then run `python3 scripts/ref/prepare_korea.py <csv>`, `python3 scripts/ref/prepare_india.py <INDB.xlsx> <recipes_servingsize.xlsx>` and `node scripts/ref/import.mjs` (add `--local` for `local.db`). The prepared files are in `data/ref/`.
+
 ## Notes
 - Every logged item shows its source (hawker database, home cooking, My foods or AI estimate) and confidence (●●● high / ●●○ medium / ●○○ low). You can edit calories before saving.
 - AI calls use the Gemini API free tier (tries `gemini-3.6-flash`, then `gemini-3.5-flash-lite`, then `gemini-3.8-flash` if a model is busy; set `GEMINI_MODEL` to try a specific one first). Get a key at aistudio.google.com/apikey, no card needed. Google may use free-tier requests to improve its products. Google Search grounding isn't on the free tier, so foods outside the database are estimated from the model's own knowledge.

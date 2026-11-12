@@ -329,6 +329,9 @@ function sourceLabel(s: string) {
   const edited = s.includes("(edited)") ? " (edited)" : "";
   const base = s.replace(/\s*\(edited\)/, "");
   if (base.startsWith("db:")) return "Hawker database" + edited;
+  if (base.startsWith("kr:")) return "Korea MFDS database" + edited;
+  if (base.startsWith("in:")) return "Indian Nutrient Databank" + edited;
+  if (base.startsWith("fdc:")) return "USDA FoodData Central" + edited;
   if (base.startsWith("home")) return "Home cooking" + edited;
   if (base.startsWith("web")) return base.replace(/^web:\s*/, "") + edited;
   if (base === "learned" || base === "my food") return "My foods" + edited;

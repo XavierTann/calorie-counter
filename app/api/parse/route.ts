@@ -2,6 +2,7 @@ import { ApiError } from "@google/genai";
 import { NextResponse } from "next/server";
 import { foodsForAI, getSettings } from "@/lib/db";
 import { parseMeal } from "@/lib/parse";
+import { findSources } from "@/lib/ref";
 import { currentUserId, unauthorized } from "@/lib/session";
 
 export const maxDuration = 60;
@@ -12,8 +13,17 @@ export async function POST(req: Request) {
   const { text } = (await req.json()) as { text?: string };
   if (!text?.trim()) return NextResponse.json({ error: "Type what you ate" }, { status: 400 });
   try {
-    const [settings, myFoods] = await Promise.all([getSettings(uid), foodsForAI(uid)]);
-    const { items, questions } = await parseMeal(text.slice(0, 2000), settings.homeUnits, myFoods);
+    const input = text.slice(0, 2000);
+    // Look up official data first (keyword-matched cuisine), so the AI only estimates what no source covers.
+    const [settings, myFoods, sources] = await Promise.all([
+      getSettings(uid),
+      foodsForAI(uid),
+      findSources(input).catch((e) => {
+        console.warn("source lookup failed", e);
+        return { cuisine: "singapore" as const, matches: [] };
+      }),
+    ]);
+    const { items, questions } = await parseMeal(input, settings.homeUnits, myFoods, sources);
     return NextResponse.json({ items, questions });
   } catch (e) {
     console.error(e);

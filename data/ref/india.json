@@ -1,0 +1,7942 @@
+[
+{
+"code": "OSR062",
+"name": "Afghani chicken",
+"kcal_100": 151.5,
+"serving": "1 plate (~190 g)",
+"kcal": 287,
+"protein": 29.7,
+"carbs": 3.7,
+"fat": 17.2
+},
+{
+"code": "ASC220",
+"name": "Al yakhani",
+"kcal_100": 147.5,
+"serving": "1 bowl (~232 g)",
+"kcal": 342,
+"protein": 6.6,
+"carbs": 10.8,
+"fat": 30.5
+},
+{
+"code": "BFP502",
+"name": "Almond biscuit (Badam ke biscuit)",
+"kcal_100": 407.7,
+"serving": "2 biscuit (~19 g)",
+"kcal": 76,
+"protein": 1.2,
+"carbs": 9.7,
+"fat": 3.7
+},
+{
+"code": "OSR126",
+"name": "Almond cardamom cake (Badam elaichi cake)",
+"kcal_100": 356.3,
+"serving": "1 slice (~68 g)",
+"kcal": 243,
+"protein": 4.9,
+"carbs": 23.5,
+"fat": 14.6
+},
+{
+"code": "BFP087",
+"name": "Almond soup (Badam ka soup)",
+"kcal_100": 78.7,
+"serving": "100 g",
+"kcal": 79,
+"protein": 10.1,
+"carbs": 3.7,
+"fat": 13.8
+},
+{
+"code": "OSR021",
+"name": "Amaranth ladoo (Rajgira ladoo)",
+"kcal_100": 454.1,
+"serving": "1 ladoo (~44 g)",
+"kcal": 199,
+"protein": 4.4,
+"carbs": 22.5,
+"fat": 10.0
+},
+{
+"code": "BFP153",
+"name": "Appam",
+"kcal_100": 267.7,
+"serving": "3 appam (~153 g)",
+"kcal": 409,
+"protein": 4.8,
+"carbs": 20.3,
+"fat": 34.6
+},
+{
+"code": "OSR004",
+"name": "Apple and honey sorbet (Seb aur shehad ka sharbat)",
+"kcal_100": 121.3,
+"serving": "1 cup (~162 g)",
+"kcal": 197,
+"protein": 0.2,
+"carbs": 49.9,
+"fat": 0.5
+},
+{
+"code": "BFP529",
+"name": "Apple banana pie",
+"kcal_100": 244.0,
+"serving": "0.5 pie (~389 g)",
+"kcal": 948,
+"protein": 12.2,
+"carbs": 124.8,
+"fat": 44.3
+},
+{
+"code": "ASC418",
+"name": "Apple cake (Seb ka cake)",
+"kcal_100": 290.1,
+"serving": "1 piece (~68 g)",
+"kcal": 197,
+"protein": 3.4,
+"carbs": 26.8,
+"fat": 8.8
+},
+{
+"code": "ASC403",
+"name": "Apple cinnamon pie",
+"kcal_100": 258.7,
+"serving": "1 slice (~177 g)",
+"kcal": 458,
+"protein": 5.9,
+"carbs": 59.7,
+"fat": 21.6
+},
+{
+"code": "BFP379",
+"name": "Apple crumb pudding",
+"kcal_100": 220.9,
+"serving": "1 small plate (~98 g)",
+"kcal": 217,
+"protein": 1.5,
+"carbs": 34.6,
+"fat": 8.7
+},
+{
+"code": "BFP338",
+"name": "Apple kheer (Seb ki kheer)",
+"kcal_100": 81.3,
+"serving": "1 bowl (~333 g)",
+"kcal": 270,
+"protein": 7.1,
+"carbs": 37.7,
+"fat": 10.6
+},
+{
+"code": "ASC314",
+"name": "Apple mousse",
+"kcal_100": 106.9,
+"serving": "1 bowl (~365 g)",
+"kcal": 390,
+"protein": 15.4,
+"carbs": 46.6,
+"fat": 15.6
+},
+{
+"code": "OSR007",
+"name": "Apple oats chia seed smoothie",
+"kcal_100": 85.6,
+"serving": "100 g",
+"kcal": 86,
+"protein": 3.5,
+"carbs": 13.1,
+"fat": 2.5
+},
+{
+"code": "OSR013",
+"name": "Apple sago payasam (Seb aur sabudana ki kheer)",
+"kcal_100": 136.5,
+"serving": "1 bowl (~331 g)",
+"kcal": 452,
+"protein": 10.4,
+"carbs": 47.7,
+"fat": 25.4
+},
+{
+"code": "ASC331",
+"name": "Apple snowballs",
+"kcal_100": 101.5,
+"serving": "1 piece (~260 g)",
+"kcal": 263,
+"protein": 2.2,
+"carbs": 63.8,
+"fat": 0.8
+},
+{
+"code": "BFP372",
+"name": "Apricot fool",
+"kcal_100": 240.8,
+"serving": "1 tall stemmed glass (~228 g)",
+"kcal": 550,
+"protein": 3.5,
+"carbs": 76.9,
+"fat": 25.9
+},
+{
+"code": "BFP172",
+"name": "Arhar with spinach (Arhar dal aur palak)",
+"kcal_100": 52.8,
+"serving": "1 curry bowl (~403 g)",
+"kcal": 213,
+"protein": 8.3,
+"carbs": 19.2,
+"fat": 11.1
+},
+{
+"code": "BFP483",
+"name": "Assorted pastry",
+"kcal_100": 230.7,
+"serving": "1 pastry (~80 g)",
+"kcal": 185,
+"protein": 5.4,
+"carbs": 25.7,
+"fat": 7.2
+},
+{
+"code": "BFP574",
+"name": "Atta dal burfi",
+"kcal_100": 298.8,
+"serving": "2 piece (~39 g)",
+"kcal": 116,
+"protein": 2.6,
+"carbs": 15.7,
+"fat": 4.8
+},
+{
+"code": "ASC219",
+"name": "Avial",
+"kcal_100": 124.6,
+"serving": "1 bowl (~335 g)",
+"kcal": 417,
+"protein": 8.2,
+"carbs": 28.4,
+"fat": 29.9
+},
+{
+"code": "BFP124",
+"name": "Bacon and mushroom pancake",
+"kcal_100": 157.7,
+"serving": "3 pancake (~122 g)",
+"kcal": 192,
+"protein": 8.3,
+"carbs": 10.3,
+"fat": 12.9
+},
+{
+"code": "ASC213",
+"name": "Baked brinjal in tomato sauce",
+"kcal_100": 38.6,
+"serving": "1 bowl (~431 g)",
+"kcal": 166,
+"protein": 6.8,
+"carbs": 17.8,
+"fat": 7.0
+},
+{
+"code": "ASC301",
+"name": "Baked custard",
+"kcal_100": 106.5,
+"serving": "1 bowl (~213 g)",
+"kcal": 227,
+"protein": 11.5,
+"carbs": 20.1,
+"fat": 11.3
+},
+{
+"code": "ASC060",
+"name": "Baked egg",
+"kcal_100": 218.8,
+"serving": "1 egg (~101 g)",
+"kcal": 221,
+"protein": 12.0,
+"carbs": 15.6,
+"fat": 12.8
+},
+{
+"code": "OSR069",
+"name": "Baked eggs in tomato sauce",
+"kcal_100": 80.0,
+"serving": "100 g",
+"kcal": 80,
+"protein": 4.9,
+"carbs": 3.8,
+"fat": 5.2
+},
+{
+"code": "ASC250",
+"name": "Baked fish with cheese sauce",
+"kcal_100": 114.0,
+"serving": "1 bowl (~354 g)",
+"kcal": 403,
+"protein": 30.6,
+"carbs": 14.4,
+"fat": 24.8
+},
+{
+"code": "OSR131",
+"name": "Baked potato soup",
+"kcal_100": 147.1,
+"serving": "100 g",
+"kcal": 147,
+"protein": 5.7,
+"carbs": 5.9,
+"fat": 11.2
+},
+{
+"code": "ASC211",
+"name": "Baked potato with skin",
+"kcal_100": 135.8,
+"serving": "2 bowl (~78 g)",
+"kcal": 106,
+"protein": 2.7,
+"carbs": 8.7,
+"fat": 6.7
+},
+{
+"code": "BFP231",
+"name": "Baked stuffed fish",
+"kcal_100": 122.0,
+"serving": "100 g",
+"kcal": 122,
+"protein": 16.1,
+"carbs": 2.1,
+"fat": 5.4
+},
+{
+"code": "ASC208",
+"name": "Baked vegetables",
+"kcal_100": 89.0,
+"serving": "1 bowl (~302 g)",
+"kcal": 269,
+"protein": 11.1,
+"carbs": 25.5,
+"fat": 13.4
+},
+{
+"code": "ASC210",
+"name": "Baked vegetables with spinach",
+"kcal_100": 77.8,
+"serving": "1 bowl (~424 g)",
+"kcal": 329,
+"protein": 13.6,
+"carbs": 29.3,
+"fat": 17.1
+},
+{
+"code": "ASC423",
+"name": "Banana cake (Kele ka cake)",
+"kcal_100": 389.5,
+"serving": "1 slice (~66 g)",
+"kcal": 258,
+"protein": 3.8,
+"carbs": 26.5,
+"fat": 15.5
+},
+{
+"code": "BFP553",
+"name": "Banana groundnut paste/puree",
+"kcal_100": 213.2,
+"serving": "1 serving (~100 g)",
+"kcal": 213,
+"protein": 4.3,
+"carbs": 36.2,
+"fat": 5.5
+},
+{
+"code": "ASC016",
+"name": "Banana milkshake (Kele milkshake)",
+"kcal_100": 65.3,
+"serving": "1 tall glass (~346 g)",
+"kcal": 226,
+"protein": 6.4,
+"carbs": 31.6,
+"fat": 8.2
+},
+{
+"code": "BFP015",
+"name": "Banana milkshake with ice cream (Kele ka milkshake ice cream ke saath)",
+"kcal_100": 76.4,
+"serving": "1 tall glass (~340 g)",
+"kcal": 260,
+"protein": 6.8,
+"carbs": 37.9,
+"fat": 9.4
+},
+{
+"code": "BFP326",
+"name": "Banana raita (Kele ka raita)",
+"kcal_100": 89.0,
+"serving": "1 bowl (~159 g)",
+"kcal": 141,
+"protein": 6.6,
+"carbs": 21.5,
+"fat": 3.3
+},
+{
+"code": "BFP259",
+"name": "Bathua bhujia",
+"kcal_100": 90.9,
+"serving": "1 bowl (~198 g)",
+"kcal": 180,
+"protein": 4.5,
+"carbs": 7.2,
+"fat": 14.5
+},
+{
+"code": "BFP322",
+"name": "Bathua raita",
+"kcal_100": 54.4,
+"serving": "1 bowl (~203 g)",
+"kcal": 111,
+"protein": 8.4,
+"carbs": 10.8,
+"fat": 3.6
+},
+{
+"code": "BFP154",
+"name": "Beans and macaroni",
+"kcal_100": 136.1,
+"serving": "1 plate (~254 g)",
+"kcal": 346,
+"protein": 11.7,
+"carbs": 36.2,
+"fat": 17.8
+},
+{
+"code": "BFP272",
+"name": "Beans foogath",
+"kcal_100": 105.1,
+"serving": "1 small bowl (~181 g)",
+"kcal": 190,
+"protein": 3.7,
+"carbs": 5.9,
+"fat": 16.7
+},
+{
+"code": "ASC179",
+"name": "Beans with coconut (Nariyal aur sem/phali; Beans thoran)",
+"kcal_100": 131.6,
+"serving": "1 bowl (~150 g)",
+"kcal": 197,
+"protein": 3.9,
+"carbs": 6.6,
+"fat": 17.0
+},
+{
+"code": "BFP299",
+"name": "Beetroot and egg salad (Chukandar aur ande ka salad)",
+"kcal_100": 84.9,
+"serving": "1 small bowl (~222 g)",
+"kcal": 189,
+"protein": 7.5,
+"carbs": 7.6,
+"fat": 14.4
+},
+{
+"code": "BFP223",
+"name": "Bengal fish curry (Bengali machli curry)",
+"kcal_100": 109.4,
+"serving": "1 bowl (~310 g)",
+"kcal": 340,
+"protein": 22.5,
+"carbs": 13.7,
+"fat": 21.8
+},
+{
+"code": "ASC106",
+"name": "Besan and spinach parantha/paratha (Besan aur palak ka parantha/paratha)",
+"kcal_100": 216.5,
+"serving": "3 parantha (~82 g)",
+"kcal": 178,
+"protein": 4.6,
+"carbs": 17.6,
+"fat": 9.9
+},
+{
+"code": "BFP570",
+"name": "Besan bathua chilla/cheela",
+"kcal_100": 373.8,
+"serving": "2 cheela (~30 g)",
+"kcal": 113,
+"protein": 3.5,
+"carbs": 12.2,
+"fat": 5.6
+},
+{
+"code": "BFP187",
+"name": "Besan gatte curry",
+"kcal_100": 189.4,
+"serving": "1 bowl (~256 g)",
+"kcal": 484,
+"protein": 19.8,
+"carbs": 41.6,
+"fat": 27.4
+},
+{
+"code": "ASC161",
+"name": "Black channa curry/Bengal gram curry (Kale chane ki curry)",
+"kcal_100": 140.7,
+"serving": "1 bowl (~120 g)",
+"kcal": 169,
+"protein": 6.8,
+"carbs": 16.9,
+"fat": 7.9
+},
+{
+"code": "BFP138",
+"name": "Black channa pulao/ Bengal gram pulao (Kale chane ka pulao)",
+"kcal_100": 125.5,
+"serving": "1 plate (~397 g)",
+"kcal": 498,
+"protein": 13.6,
+"carbs": 85.5,
+"fat": 10.2
+},
+{
+"code": "BFP485",
+"name": "Black forest gateau",
+"kcal_100": 217.8,
+"serving": "1 piece (~66 g)",
+"kcal": 143,
+"protein": 3.9,
+"carbs": 20.0,
+"fat": 5.6
+},
+{
+"code": "ASC431",
+"name": "Black forest pastry",
+"kcal_100": 233.5,
+"serving": "1 pastry (~93 g)",
+"kcal": 218,
+"protein": 5.7,
+"carbs": 32.1,
+"fat": 7.9
+},
+{
+"code": "OSR011",
+"name": "Black rice kheer (Chak-hao kheer)",
+"kcal_100": 147.9,
+"serving": "1 bowl (~208 g)",
+"kcal": 307,
+"protein": 9.1,
+"carbs": 47.6,
+"fat": 10.2
+},
+{
+"code": "ASC056",
+"name": "Boiled egg (Ubla anda)",
+"kcal_100": 45.4,
+"serving": "1 egg (~151 g)",
+"kcal": 68,
+"protein": 6.7,
+"carbs": 0.2,
+"fat": 4.6
+},
+{
+"code": "ASC113",
+"name": "Boiled rice (Uble chawal)",
+"kcal_100": 117.2,
+"serving": "1 plate (~300 g)",
+"kcal": 352,
+"protein": 7.8,
+"carbs": 77.2,
+"fat": 0.6
+},
+{
+"code": "BFP198",
+"name": "Boti kebab",
+"kcal_100": 132.9,
+"serving": "5 kebab (~55 g)",
+"kcal": 73,
+"protein": 5.0,
+"carbs": 1.7,
+"fat": 5.1
+},
+{
+"code": "ASC337",
+"name": "Bottle gourd burfi (Ghiya/Lauki burfi)",
+"kcal_100": 276.0,
+"serving": "2 burfi (~72 g)",
+"kcal": 199,
+"protein": 4.2,
+"carbs": 17.7,
+"fat": 12.8
+},
+{
+"code": "BFP334",
+"name": "Bottle gourd kheer (Ghiya/Lauki kheer)",
+"kcal_100": 84.1,
+"serving": "1 bowl (~268 g)",
+"kcal": 225,
+"protein": 7.2,
+"carbs": 26.8,
+"fat": 10.3
+},
+{
+"code": "ASC272",
+"name": "Bottle gourd raita (Ghiya/Lauki ka raita)",
+"kcal_100": 56.3,
+"serving": "1 bowl (~153 g)",
+"kcal": 86,
+"protein": 6.1,
+"carbs": 8.8,
+"fat": 3.2
+},
+{
+"code": "OSR130",
+"name": "Bottle gourd soup (Ghiya/Lauki soup)",
+"kcal_100": 23.0,
+"serving": "1 bowl (~295 g)",
+"kcal": 68,
+"protein": 1.3,
+"carbs": 3.4,
+"fat": 5.3
+},
+{
+"code": "ASC326",
+"name": "Bread and butter pudding",
+"kcal_100": 167.9,
+"serving": "1 plate (~123 g)",
+"kcal": 207,
+"protein": 6.9,
+"carbs": 24.2,
+"fat": 9.7
+},
+{
+"code": "BFP042",
+"name": "Bread upma",
+"kcal_100": 129.5,
+"serving": "1 bowl (~106 g)",
+"kcal": 138,
+"protein": 3.0,
+"carbs": 13.4,
+"fat": 8.2
+},
+{
+"code": "ASC177",
+"name": "Brinjal bhartha (Baingan ka bhartha)",
+"kcal_100": 65.1,
+"serving": "1 bowl (~326 g)",
+"kcal": 212,
+"protein": 4.5,
+"carbs": 14.3,
+"fat": 14.6
+},
+{
+"code": "BFP218",
+"name": "Broccoli chicken ala king",
+"kcal_100": 119.6,
+"serving": "1 bowl (~236 g)",
+"kcal": 282,
+"protein": 18.8,
+"carbs": 12.6,
+"fat": 17.9
+},
+{
+"code": "BFP279",
+"name": "Broccoli delight",
+"kcal_100": 40.7,
+"serving": "1 bowl (~200 g)",
+"kcal": 81,
+"protein": 5.0,
+"carbs": 4.7,
+"fat": 5.0
+},
+{
+"code": "ASC068",
+"name": "Brown stock",
+"kcal_100": 21.3,
+"serving": "100 g",
+"kcal": 21,
+"protein": 1.9,
+"carbs": 0.3,
+"fat": 1.4
+},
+{
+"code": "OSR106",
+"name": "Buckwheat pancake (Khura)",
+"kcal_100": 263.3,
+"serving": "1 pancake (~104 g)",
+"kcal": 275,
+"protein": 3.0,
+"carbs": 28.5,
+"fat": 17.2
+},
+{
+"code": "ASC242",
+"name": "Butter chicken",
+"kcal_100": 137.0,
+"serving": "1 large piece (~275 g)",
+"kcal": 377,
+"protein": 30.1,
+"carbs": 10.3,
+"fat": 23.9
+},
+{
+"code": "BFP499",
+"name": "Butter icing",
+"kcal_100": 500.7,
+"serving": "5 tablespoon (~16 g)",
+"kcal": 81,
+"protein": 0.0,
+"carbs": 11.6,
+"fat": 4.1
+},
+{
+"code": "BFP519",
+"name": "Butterfly biscuit",
+"kcal_100": 341.4,
+"serving": "4 biscuit (~12 g)",
+"kcal": 41,
+"protein": 1.2,
+"carbs": 3.1,
+"fat": 2.7
+},
+{
+"code": "OSR032",
+"name": "Buttermilk biscuit",
+"kcal_100": 322.5,
+"serving": "1 biscuit (~128 g)",
+"kcal": 414,
+"protein": 7.4,
+"carbs": 44.9,
+"fat": 22.5
+},
+{
+"code": "ASC173",
+"name": "Cabbage and peas (Pattagobhi aur matar)",
+"kcal_100": 63.9,
+"serving": "1 bowl (~166 g)",
+"kcal": 106,
+"protein": 5.4,
+"carbs": 10.4,
+"fat": 4.4
+},
+{
+"code": "ASC288",
+"name": "Cabbage kheer (Pattagobhi ki kheer)",
+"kcal_100": 83.5,
+"serving": "1 bowl (~254 g)",
+"kcal": 212,
+"protein": 7.3,
+"carbs": 24.8,
+"fat": 9.7
+},
+{
+"code": "OSR075",
+"name": "Cabbage manchurian (Pattagobhi manchurian)",
+"kcal_100": 224.3,
+"serving": "100 g",
+"kcal": 224,
+"protein": 0.6,
+"carbs": 4.8,
+"fat": 22.5
+},
+{
+"code": "OSR088",
+"name": "Cabbage raita (Pattagobhi raita)",
+"kcal_100": 84.8,
+"serving": "1 bowl (~232 g)",
+"kcal": 197,
+"protein": 7.5,
+"carbs": 12.2,
+"fat": 13.4
+},
+{
+"code": "BFP262",
+"name": "Cabbage rolls (curry) ((Pattagobhi rolls)(curry))",
+"kcal_100": 124.6,
+"serving": "2 roll (~146 g)",
+"kcal": 181,
+"protein": 8.4,
+"carbs": 10.2,
+"fat": 11.9
+},
+{
+"code": "BFP261",
+"name": "Cabbage rolls (dry) ((Pattagobhi rolls) (dry))",
+"kcal_100": 142.5,
+"serving": "2 roll (~83 g)",
+"kcal": 118,
+"protein": 6.8,
+"carbs": 5.1,
+"fat": 7.8
+},
+{
+"code": "OSR073",
+"name": "Cajun chicken",
+"kcal_100": 184.9,
+"serving": "1 chicken breast (~167 g)",
+"kcal": 310,
+"protein": 21.3,
+"carbs": 3.3,
+"fat": 23.4
+},
+{
+"code": "BFP029",
+"name": "Canjee",
+"kcal_100": 6.6,
+"serving": "1 glass (~170 g)",
+"kcal": 11,
+"protein": 0.4,
+"carbs": 0.7,
+"fat": 0.7
+},
+{
+"code": "BFP345",
+"name": "Caramel custard (baked)",
+"kcal_100": 122.7,
+"serving": "1 small bowl (~226 g)",
+"kcal": 277,
+"protein": 11.5,
+"carbs": 33.7,
+"fat": 11.3
+},
+{
+"code": "ASC300",
+"name": "Caramel custard (steamed)",
+"kcal_100": 121.6,
+"serving": "1 bowl (~232 g)",
+"kcal": 282,
+"protein": 11.5,
+"carbs": 34.8,
+"fat": 11.3
+},
+{
+"code": "ASC308",
+"name": "Caramel ice cream",
+"kcal_100": 173.5,
+"serving": "1 ice-cream cup (~271 g)",
+"kcal": 471,
+"protein": 11.7,
+"carbs": 40.2,
+"fat": 30.3
+},
+{
+"code": "OSR039",
+"name": "Cardamom cookies (Elaichi cookies)",
+"kcal_100": 400.5,
+"serving": "1 cookie (~219 g)",
+"kcal": 875,
+"protein": 11.1,
+"carbs": 118.0,
+"fat": 41.8
+},
+{
+"code": "ASC181",
+"name": "Carrot and cabbage with coconut (Nariyal ke saath pattagobhi aur gajar)",
+"kcal_100": 106.6,
+"serving": "1 bowl (~200 g)",
+"kcal": 213,
+"protein": 3.6,
+"carbs": 10.0,
+"fat": 17.2
+},
+{
+"code": "ASC174",
+"name": "Carrot and fenugreek leaves (Gajar methi)",
+"kcal_100": 61.9,
+"serving": "1 bowl (~191 g)",
+"kcal": 118,
+"protein": 4.0,
+"carbs": 8.0,
+"fat": 7.3
+},
+{
+"code": "ASC274",
+"name": "Carrot and spinach raita (Gajar aur palak ka raita)",
+"kcal_100": 56.8,
+"serving": "1 bowl (~178 g)",
+"kcal": 101,
+"protein": 7.1,
+"carbs": 10.4,
+"fat": 3.5
+},
+{
+"code": "ASC034",
+"name": "Carrot apple sandwich (Gajar aur seb ka sandwich)",
+"kcal_100": 214.1,
+"serving": "1 triangle (~97 g)",
+"kcal": 208,
+"protein": 5.2,
+"carbs": 28.2,
+"fat": 8.9
+},
+{
+"code": "OSR122",
+"name": "Carrot cake (Gajar ka cake)",
+"kcal_100": 255.6,
+"serving": "1 slice (~100 g)",
+"kcal": 255,
+"protein": 5.6,
+"carbs": 36.0,
+"fat": 10.3
+},
+{
+"code": "ASC295",
+"name": "Carrot halwa (Gajar ka halwa)",
+"kcal_100": 172.6,
+"serving": "1 bowl (~168 g)",
+"kcal": 290,
+"protein": 5.2,
+"carbs": 31.1,
+"fat": 16.3
+},
+{
+"code": "ASC289",
+"name": "Carrot kheer (Gajar ki kheer)",
+"kcal_100": 85.3,
+"serving": "1 bowl (~254 g)",
+"kcal": 217,
+"protein": 7.1,
+"carbs": 25.7,
+"fat": 9.8
+},
+{
+"code": "BFP316",
+"name": "Carrot raita (Gajar ka raita)",
+"kcal_100": 64.8,
+"serving": "1 bowl (~158 g)",
+"kcal": 102,
+"protein": 6.5,
+"carbs": 11.3,
+"fat": 3.4
+},
+{
+"code": "ASC339",
+"name": "Cashewnut burfi (Kaju burfi/Kaju katli)",
+"kcal_100": 421.7,
+"serving": "3 burfi (~29 g)",
+"kcal": 121,
+"protein": 1.6,
+"carbs": 10.9,
+"fat": 8.2
+},
+{
+"code": "BFP293",
+"name": "Cauliflower au gratin",
+"kcal_100": 145.9,
+"serving": "1 bowl (~336 g)",
+"kcal": 491,
+"protein": 15.0,
+"carbs": 30.7,
+"fat": 34.3
+},
+{
+"code": "BFP282",
+"name": "Cauliflower basket",
+"kcal_100": 90.9,
+"serving": "1 portion (~241 g)",
+"kcal": 220,
+"protein": 12.6,
+"carbs": 9.6,
+"fat": 14.2
+},
+{
+"code": "BFP030",
+"name": "Cauliflower canjee (Phoolgobhi ki canjee)",
+"kcal_100": 6.9,
+"serving": "1 glass (~179 g)",
+"kcal": 12,
+"protein": 0.7,
+"carbs": 0.6,
+"fat": 0.8
+},
+{
+"code": "ASC290",
+"name": "Cauliflower kheer (Phoolgobhi ki kheer)",
+"kcal_100": 82.0,
+"serving": "1 bowl (~304 g)",
+"kcal": 249,
+"protein": 9.2,
+"carbs": 26.7,
+"fat": 12.0
+},
+{
+"code": "ASC209",
+"name": "Cauliflower musallam (Phoolgobhi musallam)",
+"kcal_100": 58.8,
+"serving": "1 bowl (~216 g)",
+"kcal": 127,
+"protein": 4.1,
+"carbs": 9.7,
+"fat": 7.7
+},
+{
+"code": "ASC100",
+"name": "Cauliflower parantha/paratha (Phoolgobhi ka parantha/paratha)",
+"kcal_100": 178.1,
+"serving": "3 parantha (~102 g)",
+"kcal": 181,
+"protein": 3.8,
+"carbs": 19.2,
+"fat": 9.6
+},
+{
+"code": "BFP605",
+"name": "Cauliflower potato canjee",
+"kcal_100": 16.8,
+"serving": "1 glass (~212 g)",
+"kcal": 36,
+"protein": 1.2,
+"carbs": 5.6,
+"fat": 0.8
+},
+{
+"code": "ASC180",
+"name": "Cauliflower with coconut (Nariyal ke saath phoolgobhi)",
+"kcal_100": 132.1,
+"serving": "1 bowl (~150 g)",
+"kcal": 198,
+"protein": 3.9,
+"carbs": 6.0,
+"fat": 17.3
+},
+{
+"code": "BFP276",
+"name": "Cauliflower, pea and potato bhujia (Phoolgobhi, matar aur aloo bhujia)",
+"kcal_100": 95.7,
+"serving": "1 bowl (~191 g)",
+"kcal": 183,
+"protein": 5.3,
+"carbs": 15.7,
+"fat": 10.6
+},
+{
+"code": "BFP548",
+"name": "Cereal mix",
+"kcal_100": 120.8,
+"serving": "1 serving (~125 g)",
+"kcal": 151,
+"protein": 4.1,
+"carbs": 27.3,
+"fat": 2.5
+},
+{
+"code": "BFP552",
+"name": "Cereal pulse mix with amylase rice flour",
+"kcal_100": 151.6,
+"serving": "1 serving (~85 g)",
+"kcal": 129,
+"protein": 3.6,
+"carbs": 23.6,
+"fat": 2.3
+},
+{
+"code": "ASC096",
+"name": "Chapati/Roti",
+"kcal_100": 202.3,
+"serving": "4 chapati (~36 g)",
+"kcal": 73,
+"protein": 2.1,
+"carbs": 12.8,
+"fat": 1.3
+},
+{
+"code": "ASC318",
+"name": "Charlotte rousse",
+"kcal_100": 188.3,
+"serving": "1 bowl (~253 g)",
+"kcal": 476,
+"protein": 10.0,
+"carbs": 86.2,
+"fat": 12.1
+},
+{
+"code": "BFP467",
+"name": "Checker board sandwich",
+"kcal_100": 348.4,
+"serving": "3 square (~37 g)",
+"kcal": 128,
+"protein": 2.7,
+"carbs": 9.5,
+"fat": 9.1
+},
+{
+"code": "ASC023",
+"name": "Cheese and chilli sandwich",
+"kcal_100": 218.1,
+"serving": "2 triangle (~56 g)",
+"kcal": 122,
+"protein": 3.8,
+"carbs": 15.3,
+"fat": 5.5
+},
+{
+"code": "BFP057",
+"name": "Cheese and mushroom omelette/omlet",
+"kcal_100": 205.6,
+"serving": "1 egg (~128 g)",
+"kcal": 263,
+"protein": 12.4,
+"carbs": 2.2,
+"fat": 22.8
+},
+{
+"code": "ASC400",
+"name": "Cheese and mushroom tart",
+"kcal_100": 246.1,
+"serving": "2 tart (~67 g)",
+"kcal": 165,
+"protein": 3.7,
+"carbs": 14.4,
+"fat": 10.3
+},
+{
+"code": "ASC026",
+"name": "Cheese and pineapple sandwich (Cheese aur ananas ka sandwich)",
+"kcal_100": 257.7,
+"serving": "2 triangle (~56 g)",
+"kcal": 144,
+"protein": 4.6,
+"carbs": 16.2,
+"fat": 7.1
+},
+{
+"code": "BFP125",
+"name": "Cheese and tomato pancake",
+"kcal_100": 147.4,
+"serving": "3 pancake (~110 g)",
+"kcal": 162,
+"protein": 5.7,
+"carbs": 11.8,
+"fat": 10.2
+},
+{
+"code": "ASC027",
+"name": "Cheese and tomato sandwich (Cheese aur tamatar ke sandwich)",
+"kcal_100": 243.3,
+"serving": "2 triangle (~58 g)",
+"kcal": 142,
+"protein": 4.6,
+"carbs": 15.7,
+"fat": 7.1
+},
+{
+"code": "ASC040",
+"name": "Cheese and tomato sandwich (toasted) (Cheese aur tamatar ke sandwich (toasted))",
+"kcal_100": 224.6,
+"serving": "2 triangle (~76 g)",
+"kcal": 170,
+"protein": 5.2,
+"carbs": 16.2,
+"fat": 9.8
+},
+{
+"code": "ASC136",
+"name": "Cheese noodle ring",
+"kcal_100": 133.7,
+"serving": "1 plate (~397 g)",
+"kcal": 531,
+"protein": 24.7,
+"carbs": 55.5,
+"fat": 24.3
+},
+{
+"code": "BFP470",
+"name": "Cheese open sandwich",
+"kcal_100": 274.1,
+"serving": "2 sandwich (~55 g)",
+"kcal": 151,
+"protein": 5.4,
+"carbs": 15.6,
+"fat": 7.8
+},
+{
+"code": "ASC412",
+"name": "Cheese patties",
+"kcal_100": 324.0,
+"serving": "1 patty (~104 g)",
+"kcal": 337,
+"protein": 7.7,
+"carbs": 23.1,
+"fat": 23.6
+},
+{
+"code": "ASC376",
+"name": "Cheese pizza",
+"kcal_100": 249.5,
+"serving": "2 piece (~131 g)",
+"kcal": 327,
+"protein": 7.6,
+"carbs": 40.2,
+"fat": 16.3
+},
+{
+"code": "ASC324",
+"name": "Cheese pudding",
+"kcal_100": 285.0,
+"serving": "1 large slice (~121 g)",
+"kcal": 344,
+"protein": 13.6,
+"carbs": 23.2,
+"fat": 22.1
+},
+{
+"code": "BFP075",
+"name": "Cheese soup",
+"kcal_100": 41.1,
+"serving": "1 bowl (~445 g)",
+"kcal": 183,
+"protein": 55.1,
+"carbs": 8.3,
+"fat": 75.9
+},
+{
+"code": "BFP518",
+"name": "Cheese straws",
+"kcal_100": 382.0,
+"serving": "4 straw (~10 g)",
+"kcal": 37,
+"protein": 0.9,
+"carbs": 3.0,
+"fat": 2.3
+},
+{
+"code": "ASC345",
+"name": "Chenna murki",
+"kcal_100": 252.7,
+"serving": "1 bowl (~90 g)",
+"kcal": 228,
+"protein": 9.4,
+"carbs": 32.5,
+"fat": 7.4
+},
+{
+"code": "BFP517",
+"name": "Cherry and walnut cookies",
+"kcal_100": 422.6,
+"serving": "3 cookies (~18 g)",
+"kcal": 74,
+"protein": 1.0,
+"carbs": 10.4,
+"fat": 3.3
+},
+{
+"code": "OSR022",
+"name": "Chhena poda",
+"kcal_100": 344.6,
+"serving": "1 slice (~74 g)",
+"kcal": 256,
+"protein": 10.2,
+"carbs": 25.0,
+"fat": 13.3
+},
+{
+"code": "OSR095",
+"name": "Chicken and cheese souffle",
+"kcal_100": 182.4,
+"serving": "1 souffle dish (~196 g)",
+"kcal": 357,
+"protein": 17.7,
+"carbs": 6.8,
+"fat": 28.8
+},
+{
+"code": "BFP473",
+"name": "Chicken and corn open sandwich",
+"kcal_100": 188.2,
+"serving": "2 sandwich (~108 g)",
+"kcal": 204,
+"protein": 9.4,
+"carbs": 20.8,
+"fat": 9.6
+},
+{
+"code": "BFP305",
+"name": "Chicken and tomato towers",
+"kcal_100": 100.6,
+"serving": "1 stuffed tomato (~264 g)",
+"kcal": 266,
+"protein": 18.2,
+"carbs": 6.2,
+"fat": 18.5
+},
+{
+"code": "ASC135",
+"name": "Chicken chowmein",
+"kcal_100": 151.3,
+"serving": "1 plate (~344 g)",
+"kcal": 521,
+"protein": 21.8,
+"carbs": 45.8,
+"fat": 28.4
+},
+{
+"code": "ASC081",
+"name": "Chicken consomme (Clear chicken soup)",
+"kcal_100": 47.9,
+"serving": "1 soup bowl (~226 g)",
+"kcal": 108,
+"protein": 25.9,
+"carbs": 2.7,
+"fat": 27.2
+},
+{
+"code": "ASC240",
+"name": "Chicken curry",
+"kcal_100": 129.2,
+"serving": "1 bowl (~248 g)",
+"kcal": 320,
+"protein": 29.2,
+"carbs": 8.4,
+"fat": 18.8
+},
+{
+"code": "BFP222",
+"name": "Chicken korma",
+"kcal_100": 148.0,
+"serving": "1 bowl (~347 g)",
+"kcal": 513,
+"protein": 34.1,
+"carbs": 18.8,
+"fat": 33.6
+},
+{
+"code": "ASC140",
+"name": "Chicken lasagne",
+"kcal_100": 187.5,
+"serving": "100 g",
+"kcal": 187,
+"protein": 10.5,
+"carbs": 13.9,
+"fat": 10.4
+},
+{
+"code": "OSR065",
+"name": "Chicken manchurian",
+"kcal_100": 142.3,
+"serving": "1 plate (~445 g)",
+"kcal": 633,
+"protein": 42.4,
+"carbs": 27.0,
+"fat": 53.2
+},
+{
+"code": "BFP142",
+"name": "Chicken pulao",
+"kcal_100": 108.2,
+"serving": "100 g",
+"kcal": 108,
+"protein": 6.1,
+"carbs": 11.2,
+"fat": 8.5
+},
+{
+"code": "ASC028",
+"name": "Chicken sandwich",
+"kcal_100": 253.3,
+"serving": "2 triangle (~58 g)",
+"kcal": 148,
+"protein": 7.6,
+"carbs": 14.8,
+"fat": 6.8
+},
+{
+"code": "ASC043",
+"name": "Chicken sandwich (toasted)",
+"kcal_100": 167.4,
+"serving": "2 toasted triangle (~86 g)",
+"kcal": 143,
+"protein": 10.3,
+"carbs": 16.1,
+"fat": 4.5
+},
+{
+"code": "BFP090",
+"name": "Chicken stew",
+"kcal_100": 127.5,
+"serving": "1 bowl (~297 g)",
+"kcal": 379,
+"protein": 21.4,
+"carbs": 13.2,
+"fat": 26.5
+},
+{
+"code": "ASC070",
+"name": "Chicken stock",
+"kcal_100": 29.9,
+"serving": "1 cup (~376 g)",
+"kcal": 112,
+"protein": 13.9,
+"carbs": 1.4,
+"fat": 5.7
+},
+{
+"code": "ASC087",
+"name": "Chicken sweet corn soup",
+"kcal_100": 28.3,
+"serving": "1 soup bowl (~242 g)",
+"kcal": 68,
+"protein": 35.0,
+"carbs": 3.9,
+"fat": 30.4
+},
+{
+"code": "BFP461",
+"name": "Chicken walnut sandwich (Chicken aur akhrot ke sandwich)",
+"kcal_100": 285.8,
+"serving": "2 sandwich (~67 g)",
+"kcal": 190,
+"protein": 8.4,
+"carbs": 15.1,
+"fat": 11.2
+},
+{
+"code": "ASC233",
+"name": "Chicken yakhni",
+"kcal_100": 99.0,
+"serving": "1 bowl (~252 g)",
+"kcal": 250,
+"protein": 26.9,
+"carbs": 2.0,
+"fat": 15.4
+},
+{
+"code": "BFP563",
+"name": "Chickpea flour cookies (Sweet besan rounds/cookies)",
+"kcal_100": 207.0,
+"serving": "4 piece (~25 g)",
+"kcal": 52,
+"protein": 1.1,
+"carbs": 9.9,
+"fat": 0.9
+},
+{
+"code": "ASC162",
+"name": "Chickpeas curry (Safed channa curry)",
+"kcal_100": 163.4,
+"serving": "1 bowl (~120 g)",
+"kcal": 196,
+"protein": 7.3,
+"carbs": 24.0,
+"fat": 8.2
+},
+{
+"code": "ASC244",
+"name": "Chilli chicken",
+"kcal_100": 198.8,
+"serving": "1 bowl (~387 g)",
+"kcal": 769,
+"protein": 37.0,
+"carbs": 11.1,
+"fat": 64.1
+},
+{
+"code": "ASC129",
+"name": "Chinese fried rice",
+"kcal_100": 120.6,
+"serving": "1 plate (~351 g)",
+"kcal": 424,
+"protein": 14.2,
+"carbs": 47.1,
+"fat": 19.1
+},
+{
+"code": "BFP350",
+"name": "Chocochip ice cream",
+"kcal_100": 241.4,
+"serving": "1 ice cream cup (~199 g)",
+"kcal": 481,
+"protein": 8.4,
+"carbs": 33.4,
+"fat": 35.7
+},
+{
+"code": "ASC442",
+"name": "Chocolate biscuit",
+"kcal_100": 379.8,
+"serving": "3 biscuit (~15 g)",
+"kcal": 57,
+"protein": 0.9,
+"carbs": 7.8,
+"fat": 2.6
+},
+{
+"code": "ASC338",
+"name": "Chocolate burfi",
+"kcal_100": 339.3,
+"serving": "2 burfi (~33 g)",
+"kcal": 110,
+"protein": 4.2,
+"carbs": 10.8,
+"fat": 5.8
+},
+{
+"code": "BFP500",
+"name": "Chocolate butter icing",
+"kcal_100": 469.6,
+"serving": "5 tablespoon (~19 g)",
+"kcal": 91,
+"protein": 0.6,
+"carbs": 12.0,
+"fat": 4.8
+},
+{
+"code": "ASC420",
+"name": "Chocolate cake",
+"kcal_100": 335.6,
+"serving": "1 piece (~59 g)",
+"kcal": 198,
+"protein": 3.5,
+"carbs": 26.6,
+"fat": 8.9
+},
+{
+"code": "ASC424",
+"name": "Chocolate chiffon cake",
+"kcal_100": 311.7,
+"serving": "1 slice (~73 g)",
+"kcal": 227,
+"protein": 4.2,
+"carbs": 27.6,
+"fat": 11.5
+},
+{
+"code": "ASC440",
+"name": "Chocolate chip cookies",
+"kcal_100": 425.3,
+"serving": "2 cookie (~22 g)",
+"kcal": 93,
+"protein": 1.3,
+"carbs": 12.7,
+"fat": 4.2
+},
+{
+"code": "BFP513",
+"name": "Chocolate cream shells",
+"kcal_100": 427.2,
+"serving": "2 shell (~23 g)",
+"kcal": 98,
+"protein": 1.2,
+"carbs": 13.6,
+"fat": 4.4
+},
+{
+"code": "ASC408",
+"name": "Chocolate eclairs",
+"kcal_100": 239.4,
+"serving": "1 éclair (~169 g)",
+"kcal": 405,
+"protein": 7.2,
+"carbs": 44.4,
+"fat": 22.8
+},
+{
+"code": "BFP495",
+"name": "Chocolate eggless cake",
+"kcal_100": 312.0,
+"serving": "1 piece (~114 g)",
+"kcal": 357,
+"protein": 7.6,
+"carbs": 49.7,
+"fat": 15.1
+},
+{
+"code": "BFP498",
+"name": "Chocolate glace icing",
+"kcal_100": 436.3,
+"serving": "4 tablespoon (~24 g)",
+"kcal": 104,
+"protein": 0.8,
+"carbs": 14.9,
+"fat": 5.0
+},
+{
+"code": "ASC304",
+"name": "Chocolate ice cream",
+"kcal_100": 177.7,
+"serving": "1 ice-cream cup (~371 g)",
+"kcal": 659,
+"protein": 16.6,
+"carbs": 57.2,
+"fat": 41.7
+},
+{
+"code": "ASC405",
+"name": "Chocolate meringue pie",
+"kcal_100": 214.8,
+"serving": "1 slice (~184 g)",
+"kcal": 396,
+"protein": 9.2,
+"carbs": 53.1,
+"fat": 16.9
+},
+{
+"code": "BFP482",
+"name": "Chocolate pastry",
+"kcal_100": 243.4,
+"serving": "1 pastry (~87 g)",
+"kcal": 212,
+"protein": 6.1,
+"carbs": 28.1,
+"fat": 8.8
+},
+{
+"code": "ASC325",
+"name": "Chocolate pudding",
+"kcal_100": 212.0,
+"serving": "1 large slice (~166 g)",
+"kcal": 351,
+"protein": 5.9,
+"carbs": 49.0,
+"fat": 15.7
+},
+{
+"code": "BFP353",
+"name": "Chocolate sauce",
+"kcal_100": 263.2,
+"serving": "3 tablespoon (~17 g)",
+"kcal": 44,
+"protein": 0.3,
+"carbs": 7.2,
+"fat": 1.7
+},
+{
+"code": "ASC312",
+"name": "Chocolate souffle",
+"kcal_100": 189.3,
+"serving": "1 souffle cup (~220 g)",
+"kcal": 417,
+"protein": 17.3,
+"carbs": 32.4,
+"fat": 25.0
+},
+{
+"code": "BFP476",
+"name": "Chocolate sponge cake",
+"kcal_100": 239.9,
+"serving": "1 piece (~70 g)",
+"kcal": 169,
+"protein": 6.4,
+"carbs": 27.8,
+"fat": 3.9
+},
+{
+"code": "BFP478",
+"name": "Chocolate swiss roll",
+"kcal_100": 306.1,
+"serving": "2 swiss roll (~47 g)",
+"kcal": 145,
+"protein": 2.8,
+"carbs": 12.8,
+"fat": 9.4
+},
+{
+"code": "ASC439",
+"name": "Chocolate walnut cookies (Chocolate aur akhrot ke cookies)",
+"kcal_100": 424.8,
+"serving": "2 cookie (~26 g)",
+"kcal": 110,
+"protein": 1.7,
+"carbs": 12.2,
+"fat": 6.1
+},
+{
+"code": "BFP351",
+"name": "Choconut ice cream",
+"kcal_100": 274.0,
+"serving": "1 sundae glass (~240 g)",
+"kcal": 659,
+"protein": 12.1,
+"carbs": 55.6,
+"fat": 44.5
+},
+{
+"code": "BFP536",
+"name": "Choux swans",
+"kcal_100": 216.3,
+"serving": "1 swan (~171 g)",
+"kcal": 370,
+"protein": 7.5,
+"carbs": 25.5,
+"fat": 26.7
+},
+{
+"code": "BFP510",
+"name": "Christmas bell biscuit",
+"kcal_100": 404.8,
+"serving": "2 biscuit (~21 g)",
+"kcal": 84,
+"protein": 1.2,
+"carbs": 12.6,
+"fat": 3.3
+},
+{
+"code": "BFP508",
+"name": "Christmas biscuit",
+"kcal_100": 406.1,
+"serving": "2 biscuit (~21 g)",
+"kcal": 84,
+"protein": 1.2,
+"carbs": 12.6,
+"fat": 3.3
+},
+{
+"code": "ASC425",
+"name": "Christmas cake",
+"kcal_100": 372.9,
+"serving": "1 slice (~104 g)",
+"kcal": 389,
+"protein": 5.7,
+"carbs": 50.3,
+"fat": 17.6
+},
+{
+"code": "BFP511",
+"name": "Christmas star biscuit",
+"kcal_100": 392.0,
+"serving": "2 biscuit (~37 g)",
+"kcal": 146,
+"protein": 1.3,
+"carbs": 27.7,
+"fat": 3.7
+},
+{
+"code": "BFP512",
+"name": "Christmas tree biscuit",
+"kcal_100": 385.6,
+"serving": "2 biscuit (~22 g)",
+"kcal": 85,
+"protein": 1.2,
+"carbs": 12.8,
+"fat": 3.3
+},
+{
+"code": "BFP509",
+"name": "Christmas wreath biscuit",
+"kcal_100": 386.0,
+"serving": "2 biscuit (~22 g)",
+"kcal": 85,
+"protein": 1.2,
+"carbs": 12.8,
+"fat": 3.3
+},
+{
+"code": "BFP388",
+"name": "Chum chum",
+"kcal_100": 130.1,
+"serving": "1 piece (~312 g)",
+"kcal": 405,
+"protein": 4.7,
+"carbs": 88.1,
+"fat": 6.0
+},
+{
+"code": "ASC045",
+"name": "Classic club sandwich",
+"kcal_100": 200.8,
+"serving": "1 triangle (~224 g)",
+"kcal": 449,
+"protein": 15.1,
+"carbs": 41.3,
+"fat": 25.8
+},
+{
+"code": "OSR154",
+"name": "Classic seasoned black beans",
+"kcal_100": 28.8,
+"serving": "1 bowl (~176 g)",
+"kcal": 51,
+"protein": 14.1,
+"carbs": 13.5,
+"fat": 14.6
+},
+{
+"code": "ASC079",
+"name": "Clear tomato soup (Tamatar ka soup)",
+"kcal_100": 80.1,
+"serving": "1 soup bowl (~398 g)",
+"kcal": 318,
+"protein": 19.1,
+"carbs": 13.7,
+"fat": 48.6
+},
+{
+"code": "ASC031",
+"name": "Club sandwich",
+"kcal_100": 235.3,
+"serving": "2 triangle (~88 g)",
+"kcal": 207,
+"protein": 6.4,
+"carbs": 16.3,
+"fat": 13.3
+},
+{
+"code": "ASC011",
+"name": "Coco pine cooler",
+"kcal_100": 32.7,
+"serving": "1 tall glass (~432 g)",
+"kcal": 142,
+"protein": 2.4,
+"carbs": 24.7,
+"fat": 4.3
+},
+{
+"code": "ASC443",
+"name": "Coconut biscuit (Nariyal ke biscuit)",
+"kcal_100": 435.0,
+"serving": "3 biscuit (~19 g)",
+"kcal": 82,
+"protein": 1.1,
+"carbs": 8.0,
+"fat": 5.1
+},
+{
+"code": "ASC386",
+"name": "Coconut chutney (Nariyal ki chutney)",
+"kcal_100": 265.9,
+"serving": "1 tablespoon (~25 g)",
+"kcal": 67,
+"protein": 0.9,
+"carbs": 2.1,
+"fat": 6.3
+},
+{
+"code": "ASC432",
+"name": "Coconut finger",
+"kcal_100": 274.9,
+"serving": "1 finger (~72 g)",
+"kcal": 197,
+"protein": 5.1,
+"carbs": 30.4,
+"fat": 6.3
+},
+{
+"code": "OSR012",
+"name": "Coconut kheer (Nariyal ki kheer)",
+"kcal_100": 162.6,
+"serving": "100 g",
+"kcal": 163,
+"protein": 3.4,
+"carbs": 14.4,
+"fat": 10.5
+},
+{
+"code": "ASC453",
+"name": "Coffee biscuit",
+"kcal_100": 416.6,
+"serving": "3 biscuit (~17 g)",
+"kcal": 72,
+"protein": 1.2,
+"carbs": 8.0,
+"fat": 4.0
+},
+{
+"code": "BFP507",
+"name": "Coffee drops",
+"kcal_100": 443.1,
+"serving": "4 small (~12 g)",
+"kcal": 52,
+"protein": 0.9,
+"carbs": 5.1,
+"fat": 3.2
+},
+{
+"code": "BFP354",
+"name": "Coffee ice cream",
+"kcal_100": 150.6,
+"serving": "1 ice cream cup (~166 g)",
+"kcal": 250,
+"protein": 5.2,
+"carbs": 23.4,
+"fat": 15.6
+},
+{
+"code": "BFP355",
+"name": "Coffee pear alaska",
+"kcal_100": 204.0,
+"serving": "1 dish (~250 g)",
+"kcal": 511,
+"protein": 7.2,
+"carbs": 48.5,
+"fat": 33.1
+},
+{
+"code": "BFP370",
+"name": "Cold chocolate souffle",
+"kcal_100": 187.5,
+"serving": "1 souffle dish (~243 g)",
+"kcal": 456,
+"protein": 15.5,
+"carbs": 41.8,
+"fat": 26.4
+},
+{
+"code": "BFP013",
+"name": "Cold coffee (with cream)",
+"kcal_100": 82.8,
+"serving": "1 tall glass (~251 g)",
+"kcal": 207,
+"protein": 4.8,
+"carbs": 30.0,
+"fat": 8.2
+},
+{
+"code": "ASC015",
+"name": "Cold coffee with ice cream",
+"kcal_100": 67.8,
+"serving": "1 tall glass (~301 g)",
+"kcal": 205,
+"protein": 4.7,
+"carbs": 33.9,
+"fat": 6.4
+},
+{
+"code": "BFP088",
+"name": "Cold cucumber cream soup",
+"kcal_100": 11.9,
+"serving": "1 bowl (~383 g)",
+"kcal": 45,
+"protein": 1.3,
+"carbs": 6.7,
+"fat": 1.3
+},
+{
+"code": "ASC094",
+"name": "Cold cucumber soup (Thanda kheere ka soup)",
+"kcal_100": 48.0,
+"serving": "1 soup bowl (~188 g)",
+"kcal": 90,
+"protein": 5.6,
+"carbs": 8.6,
+"fat": 3.7
+},
+{
+"code": "BFP366",
+"name": "Cold lemon souffle",
+"kcal_100": 169.9,
+"serving": "1 souffle dish (~242 g)",
+"kcal": 412,
+"protein": 14.3,
+"carbs": 37.9,
+"fat": 23.7
+},
+{
+"code": "BFP367",
+"name": "Cold orange souffle",
+"kcal_100": 173.2,
+"serving": "1 souffle dish (~241 g)",
+"kcal": 418,
+"protein": 14.3,
+"carbs": 39.3,
+"fat": 23.7
+},
+{
+"code": "BFP368",
+"name": "Cold pineapple souffle",
+"kcal_100": 181.2,
+"serving": "1 souffle dish (~228 g)",
+"kcal": 413,
+"protein": 14.2,
+"carbs": 38.4,
+"fat": 23.7
+},
+{
+"code": "ASC095",
+"name": "Cold summer garden soup",
+"kcal_100": 49.2,
+"serving": "1 soup bowl (~307 g)",
+"kcal": 151,
+"protein": 26.3,
+"carbs": 8.1,
+"fat": 43.2
+},
+{
+"code": "BFP089",
+"name": "Cold tomato soup",
+"kcal_100": 16.9,
+"serving": "1 bowl (~275 g)",
+"kcal": 46,
+"protein": 0.3,
+"carbs": 1.6,
+"fat": 4.3
+},
+{
+"code": "BFP369",
+"name": "Cold vanilla souffle",
+"kcal_100": 179.5,
+"serving": "1 souffle dish (~236 g)",
+"kcal": 424,
+"protein": 14.7,
+"carbs": 38.4,
+"fat": 24.3
+},
+{
+"code": "ASC264",
+"name": "Coleslaw",
+"kcal_100": 76.7,
+"serving": "1 bowl (~153 g)",
+"kcal": 117,
+"protein": 1.9,
+"carbs": 8.5,
+"fat": 8.1
+},
+{
+"code": "BFP066",
+"name": "Consomme au julienne",
+"kcal_100": 27.8,
+"serving": "100 g",
+"kcal": 28,
+"protein": 12.5,
+"carbs": 1.5,
+"fat": 10.7
+},
+{
+"code": "BFP067",
+"name": "Consomme au vermicelli",
+"kcal_100": 29.9,
+"serving": "100 g",
+"kcal": 30,
+"protein": 15.2,
+"carbs": 1.3,
+"fat": 13.0
+},
+{
+"code": "BFP444",
+"name": "Coriander chutney (Hare dhaniye ki chutney)",
+"kcal_100": 42.9,
+"serving": "2 tablespoon (~19 g)",
+"kcal": 8,
+"protein": 0.3,
+"carbs": 1.5,
+"fat": 0.1
+},
+{
+"code": "OSR072",
+"name": "Corn omelette/omlet",
+"kcal_100": 166.9,
+"serving": "1 omelette (~194 g)",
+"kcal": 324,
+"protein": 22.1,
+"carbs": 3.1,
+"fat": 25.0
+},
+{
+"code": "ASC051",
+"name": "Cornflakes with milk",
+"kcal_100": 117.3,
+"serving": "1 bowl (~278 g)",
+"kcal": 326,
+"protein": 10.0,
+"carbs": 41.6,
+"fat": 14.2
+},
+{
+"code": "ASC401",
+"name": "Cottage cheese pie",
+"kcal_100": 239.0,
+"serving": "1 pie (~340 g)",
+"kcal": 813,
+"protein": 25.3,
+"carbs": 70.3,
+"fat": 47.1
+},
+{
+"code": "ASC047",
+"name": "Cracked wheat porridge (Meetha daliya)",
+"kcal_100": 81.6,
+"serving": "1 bowl (~403 g)",
+"kcal": 329,
+"protein": 10.6,
+"carbs": 35.8,
+"fat": 16.4
+},
+{
+"code": "OSR042",
+"name": "Cranberry cookies",
+"kcal_100": 272.5,
+"serving": "1 cookie (~186 g)",
+"kcal": 506,
+"protein": 7.3,
+"carbs": 67.6,
+"fat": 23.5
+},
+{
+"code": "BFP534",
+"name": "Cream buns",
+"kcal_100": 215.7,
+"serving": "2 bun (~83 g)",
+"kcal": 180,
+"protein": 3.7,
+"carbs": 11.8,
+"fat": 13.2
+},
+{
+"code": "BFP080",
+"name": "Cream of broccoli soup",
+"kcal_100": 56.1,
+"serving": "100 g",
+"kcal": 56,
+"protein": 9.0,
+"carbs": 3.7,
+"fat": 12.7
+},
+{
+"code": "BFP079",
+"name": "Cream of carrot soup",
+"kcal_100": 59.8,
+"serving": "100 g",
+"kcal": 60,
+"protein": 8.3,
+"carbs": 5.7,
+"fat": 12.4
+},
+{
+"code": "ASC083",
+"name": "Cream of green peas soup",
+"kcal_100": 127.8,
+"serving": "1 soup bowl (~409 g)",
+"kcal": 522,
+"protein": 29.1,
+"carbs": 27.6,
+"fat": 60.4
+},
+{
+"code": "ASC085",
+"name": "Cream of mixed vegetable soup",
+"kcal_100": 59.6,
+"serving": "1 soup bowl (~362 g)",
+"kcal": 216,
+"protein": 24.8,
+"carbs": 17.9,
+"fat": 32.8
+},
+{
+"code": "ASC086",
+"name": "Cream of mushroom soup",
+"kcal_100": 117.3,
+"serving": "1 soup bowl (~375 g)",
+"kcal": 440,
+"protein": 24.9,
+"carbs": 14.0,
+"fat": 58.1
+},
+{
+"code": "BFP082",
+"name": "Cream of potato soup",
+"kcal_100": 60.2,
+"serving": "100 g",
+"kcal": 60,
+"protein": 8.1,
+"carbs": 6.1,
+"fat": 12.0
+},
+{
+"code": "ASC084",
+"name": "Cream of spinach soup",
+"kcal_100": 100.5,
+"serving": "100 g",
+"kcal": 101,
+"protein": 5.2,
+"carbs": 3.4,
+"fat": 13.3
+},
+{
+"code": "ASC082",
+"name": "Cream of tomato soup",
+"kcal_100": 97.8,
+"serving": "100 g",
+"kcal": 98,
+"protein": 4.6,
+"carbs": 3.9,
+"fat": 13.1
+},
+{
+"code": "ASC407",
+"name": "Cream puffs",
+"kcal_100": 221.3,
+"serving": "2 puff (~72 g)",
+"kcal": 160,
+"protein": 3.4,
+"carbs": 11.6,
+"fat": 11.2
+},
+{
+"code": "BFP606",
+"name": "Creamed spinach",
+"kcal_100": 96.9,
+"serving": "1 small bowl (~386 g)",
+"kcal": 374,
+"protein": 20.0,
+"carbs": 17.1,
+"fat": 24.6
+},
+{
+"code": "BFP217",
+"name": "Creamy chicken",
+"kcal_100": 152.9,
+"serving": "1 bowl (~217 g)",
+"kcal": 332,
+"protein": 29.4,
+"carbs": 6.8,
+"fat": 20.8
+},
+{
+"code": "BFP365",
+"name": "Creamy chocolate mousse",
+"kcal_100": 230.5,
+"serving": "1 dish (~203 g)",
+"kcal": 467,
+"protein": 13.9,
+"carbs": 19.3,
+"fat": 36.8
+},
+{
+"code": "BFP233",
+"name": "Crispy baked fish",
+"kcal_100": 138.4,
+"serving": "1 casserole dish (~283 g)",
+"kcal": 392,
+"protein": 31.0,
+"carbs": 27.1,
+"fat": 18.1
+},
+{
+"code": "BFP356",
+"name": "Crunchy butterscotch",
+"kcal_100": 277.3,
+"serving": "1 cup (~187 g)",
+"kcal": 520,
+"protein": 5.8,
+"carbs": 37.3,
+"fat": 39.3
+},
+{
+"code": "BFP303",
+"name": "Cucumber and yogurt salad (Kheere aur dahi ka salad)",
+"kcal_100": 36.1,
+"serving": "1 small plate (~115 g)",
+"kcal": 42,
+"protein": 2.4,
+"carbs": 5.4,
+"fat": 1.1
+},
+{
+"code": "ASC273",
+"name": "Cucumber raita (Kheere ka raita)",
+"kcal_100": 59.1,
+"serving": "1 bowl (~153 g)",
+"kcal": 90,
+"protein": 6.2,
+"carbs": 9.7,
+"fat": 3.2
+},
+{
+"code": "ASC025",
+"name": "Cucumber sandwich (Kheere ka sandwich)",
+"kcal_100": 188.6,
+"serving": "2 triangle (~61 g)",
+"kcal": 115,
+"protein": 2.9,
+"carbs": 15.7,
+"fat": 4.9
+},
+{
+"code": "OSR006",
+"name": "Cucumber sharbat (Kheere ka sharbat)",
+"kcal_100": 27.3,
+"serving": "1 glass (~411 g)",
+"kcal": 112,
+"protein": 1.1,
+"carbs": 27.3,
+"fat": 0.2
+},
+{
+"code": "ASC010",
+"name": "Cumin infused water (Jeere/Zeere ka pani)",
+"kcal_100": 9.1,
+"serving": "1 glass (~339 g)",
+"kcal": 31,
+"protein": 0.6,
+"carbs": 6.3,
+"fat": 0.4
+},
+{
+"code": "BFP134",
+"name": "Cumin pulao (Jeera/Zeera pulao)",
+"kcal_100": 135.2,
+"serving": "1 plate (~271 g)",
+"kcal": 366,
+"protein": 6.7,
+"carbs": 63.9,
+"fat": 8.6
+},
+{
+"code": "BFP313",
+"name": "Curd dressing",
+"kcal_100": 78.8,
+"serving": "0.5 cup (~209 g)",
+"kcal": 165,
+"protein": 11.7,
+"carbs": 16.8,
+"fat": 6.1
+},
+{
+"code": "BFP451",
+"name": "Curd mint dip",
+"kcal_100": 76.1,
+"serving": "2 tablespoon (~33 g)",
+"kcal": 25,
+"protein": 1.6,
+"carbs": 3.0,
+"fat": 0.8
+},
+{
+"code": "ASC126",
+"name": "Curd rice (Dahi bhaat/Dahi chawal/ Perugu annam/Daddojanam/Thayir saadam)",
+"kcal_100": 195.7,
+"serving": "1 plate (~216 g)",
+"kcal": 423,
+"protein": 12.4,
+"carbs": 71.2,
+"fat": 9.3
+},
+{
+"code": "BFP452",
+"name": "Curd vegetable dip",
+"kcal_100": 56.2,
+"serving": "2 tablespoon (~28 g)",
+"kcal": 16,
+"protein": 1.1,
+"carbs": 1.7,
+"fat": 0.5
+},
+{
+"code": "BFP242",
+"name": "Curd with potatoes (Dahi aloo)",
+"kcal_100": 59.9,
+"serving": "1 bowl (~379 g)",
+"kcal": 227,
+"protein": 5.9,
+"carbs": 27.1,
+"fat": 10.3
+},
+{
+"code": "OSR135",
+"name": "Curried Cauliflower soup",
+"kcal_100": 37.3,
+"serving": "1 cup (~348 g)",
+"kcal": 130,
+"protein": 23.4,
+"carbs": 10.8,
+"fat": 34.0
+},
+{
+"code": "ASC395",
+"name": "Custard tart",
+"kcal_100": 225.6,
+"serving": "2 tart (~72 g)",
+"kcal": 162,
+"protein": 2.7,
+"carbs": 20.5,
+"fat": 7.7
+},
+{
+"code": "OSR145",
+"name": "Dal dhokli",
+"kcal_100": 68.7,
+"serving": "1 bowl (~337 g)",
+"kcal": 231,
+"protein": 10.0,
+"carbs": 28.8,
+"fat": 8.3
+},
+{
+"code": "OSR139",
+"name": "Dal makhani",
+"kcal_100": 74.0,
+"serving": "1 bowl (~353 g)",
+"kcal": 262,
+"protein": 11.7,
+"carbs": 28.1,
+"fat": 10.8
+},
+{
+"code": "ASC101",
+"name": "Dal parantha/paratha",
+"kcal_100": 268.2,
+"serving": "3 parantha (~77 g)",
+"kcal": 206,
+"protein": 5.2,
+"carbs": 23.0,
+"fat": 10.0
+},
+{
+"code": "OSR141",
+"name": "Dalma",
+"kcal_100": 118.9,
+"serving": "1 bowl (~264 g)",
+"kcal": 314,
+"protein": 12.9,
+"carbs": 39.7,
+"fat": 12.1
+},
+{
+"code": "BFP397",
+"name": "Danedar burfi",
+"kcal_100": 102.7,
+"serving": "2 piece (~140 g)",
+"kcal": 143,
+"protein": 4.5,
+"carbs": 17.2,
+"fat": 6.6
+},
+{
+"code": "ASC451",
+"name": "Danish cookies",
+"kcal_100": 475.3,
+"serving": "4 biscuit (~13 g)",
+"kcal": 60,
+"protein": 0.7,
+"carbs": 7.3,
+"fat": 3.1
+},
+{
+"code": "BFP472",
+"name": "Danish luncheon sandwich",
+"kcal_100": 193.8,
+"serving": "2 sandwich (~86 g)",
+"kcal": 167,
+"protein": 7.8,
+"carbs": 15.3,
+"fat": 8.7
+},
+{
+"code": "ASC329",
+"name": "Date and nut pie",
+"kcal_100": 322.4,
+"serving": "1 bowl (~226 g)",
+"kcal": 729,
+"protein": 8.9,
+"carbs": 105.9,
+"fat": 30.1
+},
+{
+"code": "OSR051",
+"name": "Date pickle (Khajoor ka achaar)",
+"kcal_100": 182.3,
+"serving": "1 small bowl (~138 g)",
+"kcal": 252,
+"protein": 2.3,
+"carbs": 47.9,
+"fat": 5.8
+},
+{
+"code": "OSR085",
+"name": "Dates chutney (Khajoor ki chutney)",
+"kcal_100": 103.6,
+"serving": "1 small bowl (~264 g)",
+"kcal": 273,
+"protein": 2.8,
+"carbs": 57.2,
+"fat": 3.0
+},
+{
+"code": "BFP450",
+"name": "Dessicated coconut chutney (Sookhe kase nariyal ki chutney)",
+"kcal_100": 346.4,
+"serving": "2 tablespoon (~11 g)",
+"kcal": 37,
+"protein": 1.4,
+"carbs": 4.0,
+"fat": 1.7
+},
+{
+"code": "ASC256",
+"name": "Deviled egg",
+"kcal_100": 98.6,
+"serving": "1 egg (~160 g)",
+"kcal": 157,
+"protein": 7.9,
+"carbs": 3.6,
+"fat": 12.3
+},
+{
+"code": "BFP280",
+"name": "Dhansak (vegetarian)",
+"kcal_100": 82.8,
+"serving": "1 bowl (~241 g)",
+"kcal": 200,
+"protein": 8.0,
+"carbs": 17.5,
+"fat": 10.1
+},
+{
+"code": "ASC474",
+"name": "Dhokla",
+"kcal_100": 216.5,
+"serving": "2 piece (~40 g)",
+"kcal": 87,
+"protein": 5.4,
+"carbs": 12.3,
+"fat": 2.1
+},
+{
+"code": "BFP389",
+"name": "Dil bahar",
+"kcal_100": 130.1,
+"serving": "1 piece (~312 g)",
+"kcal": 405,
+"protein": 4.7,
+"carbs": 88.1,
+"fat": 6.0
+},
+{
+"code": "BFP263",
+"name": "Dry arbi (Sookhi arbi)",
+"kcal_100": 134.9,
+"serving": "1 bowl (~201 g)",
+"kcal": 271,
+"protein": 4.2,
+"carbs": 22.3,
+"fat": 18.0
+},
+{
+"code": "ASC384",
+"name": "Dry mango chutney (Sookhe aam ki chutney)",
+"kcal_100": 298.1,
+"serving": "1 tablespoon (~28 g)",
+"kcal": 83,
+"protein": 0.7,
+"carbs": 19.2,
+"fat": 0.2
+},
+{
+"code": "BFP190",
+"name": "Dry masala chops",
+"kcal_100": 135.1,
+"serving": "2 chops (~148 g)",
+"kcal": 199,
+"protein": 13.4,
+"carbs": 4.9,
+"fat": 14.1
+},
+{
+"code": "ASC178",
+"name": "Dry potato (Sookhe aloo)",
+"kcal_100": 103.1,
+"serving": "1 bowl (~106 g)",
+"kcal": 109,
+"protein": 1.7,
+"carbs": 15.2,
+"fat": 4.4
+},
+{
+"code": "ASC154",
+"name": "Dry washed urad",
+"kcal_100": 124.7,
+"serving": "1 bowl (~143 g)",
+"kcal": 179,
+"protein": 9.8,
+"carbs": 22.4,
+"fat": 5.0
+},
+{
+"code": "BFP286",
+"name": "Ducheese potato",
+"kcal_100": 140.5,
+"serving": "4 potato (~43 g)",
+"kcal": 60,
+"protein": 1.5,
+"carbs": 4.7,
+"fat": 3.9
+},
+{
+"code": "BFP491",
+"name": "Dundee cake",
+"kcal_100": 396.6,
+"serving": "1 piece (~60 g)",
+"kcal": 239,
+"protein": 4.7,
+"carbs": 25.0,
+"fat": 13.7
+},
+{
+"code": "ASC037",
+"name": "Egg and tomato sandwich (Ande aur tamatar ka sandwich)",
+"kcal_100": 222.1,
+"serving": "2 triangle (~60 g)",
+"kcal": 132,
+"protein": 4.6,
+"carbs": 15.4,
+"fat": 6.3
+},
+{
+"code": "BFP240",
+"name": "Egg curry (Anda curry)",
+"kcal_100": 117.5,
+"serving": "1 bowl (~152 g)",
+"kcal": 178,
+"protein": 8.2,
+"carbs": 6.1,
+"fat": 13.4
+},
+{
+"code": "ASC089",
+"name": "Egg drop soup",
+"kcal_100": 26.6,
+"serving": "1 soup bowl (~318 g)",
+"kcal": 85,
+"protein": 41.1,
+"carbs": 3.5,
+"fat": 42.9
+},
+{
+"code": "ASC296",
+"name": "Egg halwa (Ande ka halwa)",
+"kcal_100": 299.7,
+"serving": "1 bowl (~97 g)",
+"kcal": 289,
+"protein": 7.6,
+"carbs": 38.2,
+"fat": 12.9
+},
+{
+"code": "OSR070",
+"name": "Egg in a pepper",
+"kcal_100": 128.8,
+"serving": "100 g",
+"kcal": 129,
+"protein": 12.6,
+"carbs": 0.2,
+"fat": 8.7
+},
+{
+"code": "ASC020",
+"name": "Egg nog",
+"kcal_100": 97.1,
+"serving": "1 tall glass (~304 g)",
+"kcal": 295,
+"protein": 14.5,
+"carbs": 24.7,
+"fat": 15.5
+},
+{
+"code": "ASC024",
+"name": "Egg sandwich (Ande ka sandwich)",
+"kcal_100": 286.0,
+"serving": "2 triangle (~51 g)",
+"kcal": 145,
+"protein": 4.4,
+"carbs": 14.8,
+"fat": 8.0
+},
+{
+"code": "ASC427",
+"name": "Eggless cake",
+"kcal_100": 318.1,
+"serving": "1 slice (~61 g)",
+"kcal": 194,
+"protein": 5.0,
+"carbs": 28.1,
+"fat": 7.2
+},
+{
+"code": "BFP132",
+"name": "Eggplant/Brinjal rice (Vangi bhat)",
+"kcal_100": 184.8,
+"serving": "1 plate (~291 g)",
+"kcal": 538,
+"protein": 15.4,
+"carbs": 92.4,
+"fat": 10.7
+},
+{
+"code": "ASC003",
+"name": "Espreso coffee",
+"kcal_100": 51.5,
+"serving": "1 tea cup (~159 g)",
+"kcal": 82,
+"protein": 2.8,
+"carbs": 10.5,
+"fat": 3.4
+},
+{
+"code": "OSR053",
+"name": "Fermented bamboo shoot pickle (Mesu pickle)",
+"kcal_100": 59.8,
+"serving": "1 jar (~136 g)",
+"kcal": 82,
+"protein": 2.2,
+"carbs": 2.4,
+"fat": 7.6
+},
+{
+"code": "ASC141",
+"name": "Fettuccine with spinach sauce",
+"kcal_100": 129.2,
+"serving": "1 plate (~355 g)",
+"kcal": 459,
+"protein": 11.0,
+"carbs": 43.3,
+"fat": 27.8
+},
+{
+"code": "OSR031",
+"name": "Finger millet biscuit (Ragi biscuit)",
+"kcal_100": 458.6,
+"serving": "1 biscuit (~75 g)",
+"kcal": 345,
+"protein": 3.0,
+"carbs": 39.7,
+"fat": 19.4
+},
+{
+"code": "OSR124",
+"name": "Finger millet cake (Ragi cake)",
+"kcal_100": 279.5,
+"serving": "1 slice (~99 g)",
+"kcal": 276,
+"protein": 3.9,
+"carbs": 38.4,
+"fat": 12.1
+},
+{
+"code": "ASC246",
+"name": "Fish curry (Machli curry)",
+"kcal_100": 111.1,
+"serving": "1 bowl (~254 g)",
+"kcal": 282,
+"protein": 22.3,
+"carbs": 9.6,
+"fat": 17.0
+},
+{
+"code": "BFP229",
+"name": "Fish in coconut milk (Nariyal ke doodh ke saath machli)",
+"kcal_100": 86.2,
+"serving": "1 dish (~326 g)",
+"kcal": 281,
+"protein": 28.2,
+"carbs": 8.9,
+"fat": 14.4
+},
+{
+"code": "BFP232",
+"name": "Fish pie",
+"kcal_100": 120.9,
+"serving": "1 pie (~306 g)",
+"kcal": 369,
+"protein": 28.3,
+"carbs": 23.7,
+"fat": 17.6
+},
+{
+"code": "OSR029",
+"name": "Fish sandwich",
+"kcal_100": 150.2,
+"serving": "1 sandwich (~261 g)",
+"kcal": 391,
+"protein": 12.3,
+"carbs": 26.3,
+"fat": 27.0
+},
+{
+"code": "BFP234",
+"name": "Fish souffle",
+"kcal_100": 139.7,
+"serving": "1 dish (~295 g)",
+"kcal": 413,
+"protein": 31.0,
+"carbs": 15.2,
+"fat": 25.2
+},
+{
+"code": "ASC251",
+"name": "Fish tikka",
+"kcal_100": 117.3,
+"serving": "4 piece (~35 g)",
+"kcal": 42,
+"protein": 5.7,
+"carbs": 1.4,
+"fat": 1.5
+},
+{
+"code": "BFP521",
+"name": "Flan pastry",
+"kcal_100": 445.8,
+"serving": "1 pastry (~52 g)",
+"kcal": 233,
+"protein": 3.5,
+"carbs": 25.0,
+"fat": 13.1
+},
+{
+"code": "BFP019",
+"name": "Flavoured milkshake",
+"kcal_100": 66.8,
+"serving": "1 tall glass (~285 g)",
+"kcal": 190,
+"protein": 5.9,
+"carbs": 24.6,
+"fat": 8.1
+},
+{
+"code": "BFP054",
+"name": "French omelette/omlet",
+"kcal_100": 211.0,
+"serving": "1 egg (~68 g)",
+"kcal": 144,
+"protein": 6.8,
+"carbs": 0.3,
+"fat": 12.8
+},
+{
+"code": "ASC091",
+"name": "French onion soup",
+"kcal_100": 55.6,
+"serving": "1 soup bowl (~352 g)",
+"kcal": 196,
+"protein": 40.1,
+"carbs": 15.0,
+"fat": 50.6
+},
+{
+"code": "BFP457",
+"name": "French sandwich (toasted)",
+"kcal_100": 186.7,
+"serving": "2 sandwich (~112 g)",
+"kcal": 208,
+"protein": 7.6,
+"carbs": 16.5,
+"fat": 12.8
+},
+{
+"code": "BFP292",
+"name": "Fricassee of Mushroom",
+"kcal_100": 106.7,
+"serving": "1 dish (~281 g)",
+"kcal": 300,
+"protein": 10.3,
+"carbs": 22.8,
+"fat": 18.6
+},
+{
+"code": "ASC245",
+"name": "Fried chicken with tomato sauce (Fried chicken tamatar ki chutney kay saath)",
+"kcal_100": 125.0,
+"serving": "2 piece (~124 g)",
+"kcal": 155,
+"protein": 14.2,
+"carbs": 3.1,
+"fat": 9.4
+},
+{
+"code": "ASC057",
+"name": "Fried Egg",
+"kcal_100": 223.7,
+"serving": "1 egg (~58 g)",
+"kcal": 129,
+"protein": 6.7,
+"carbs": 0.2,
+"fat": 11.3
+},
+{
+"code": "BFP308",
+"name": "Frozen frosty fruit salad (Phalon ka salaad)",
+"kcal_100": 103.5,
+"serving": "1 slice (~233 g)",
+"kcal": 241,
+"protein": 3.9,
+"carbs": 36.4,
+"fat": 9.7
+},
+{
+"code": "BFP364",
+"name": "Fruit delight",
+"kcal_100": 107.1,
+"serving": "0.5 small mould (~342 g)",
+"kcal": 366,
+"protein": 7.1,
+"carbs": 31.2,
+"fat": 24.3
+},
+{
+"code": "BFP522",
+"name": "Fruit flan",
+"kcal_100": 261.4,
+"serving": "100 g",
+"kcal": 261,
+"protein": 3.3,
+"carbs": 34.7,
+"fat": 12.5
+},
+{
+"code": "ASC307",
+"name": "Fruit Ice cream (Phalon ka Ice cream)",
+"kcal_100": 171.5,
+"serving": "1 ice-cream cup (~321 g)",
+"kcal": 551,
+"protein": 14.0,
+"carbs": 51.6,
+"fat": 33.3
+},
+{
+"code": "ASC422",
+"name": "Fruit Loaf",
+"kcal_100": 324.2,
+"serving": "1 slice (~56 g)",
+"kcal": 181,
+"protein": 3.0,
+"carbs": 26.0,
+"fat": 7.4
+},
+{
+"code": "ASC006",
+"name": "Fruit Punch (with fresh juices)",
+"kcal_100": 36.1,
+"serving": "100 g",
+"kcal": 36,
+"protein": 0.1,
+"carbs": 9.4,
+"fat": 0.0
+},
+{
+"code": "ASC007",
+"name": "Fruit Punch (with squashes)",
+"kcal_100": 23.1,
+"serving": "100 g",
+"kcal": 23,
+"protein": 0.1,
+"carbs": 6.0,
+"fat": 0.0
+},
+{
+"code": "BFP527",
+"name": "Fruit puree tart",
+"kcal_100": 286.5,
+"serving": "2 tart (~56 g)",
+"kcal": 159,
+"protein": 1.9,
+"carbs": 16.9,
+"fat": 9.4
+},
+{
+"code": "ASC265",
+"name": "Fruit salad (Phalon ka salaad)",
+"kcal_100": 78.1,
+"serving": "1 bowl (~304 g)",
+"kcal": 238,
+"protein": 2.8,
+"carbs": 48.5,
+"fat": 3.7
+},
+{
+"code": "OSR156",
+"name": "Garlic chickpea soup (Lahasun aur chane ka shoraba)",
+"kcal_100": 89.5,
+"serving": "1 soup bowl (~318 g)",
+"kcal": 285,
+"protein": 14.2,
+"carbs": 44.3,
+"fat": 6.4
+},
+{
+"code": "OSR080",
+"name": "Garlic chutney/Poondu chutney (Lahasun ki chutney)",
+"kcal_100": 255.5,
+"serving": "1 small bowl (~79 g)",
+"kcal": 203,
+"protein": 2.6,
+"carbs": 16.2,
+"fat": 13.9
+},
+{
+"code": "OSR138",
+"name": "Garlic soup",
+"kcal_100": 194.9,
+"serving": "1 bowl (~144 g)",
+"kcal": 281,
+"protein": 3.4,
+"carbs": 10.1,
+"fat": 25.4
+},
+{
+"code": "ASC455",
+"name": "Ginger biscuit (Adarak ke biscuit)",
+"kcal_100": 417.9,
+"serving": "3 biscuit (~13 g)",
+"kcal": 56,
+"protein": 0.8,
+"carbs": 7.9,
+"fat": 2.5
+},
+{
+"code": "ASC450",
+"name": "Ginger bread man",
+"kcal_100": 365.0,
+"serving": "2 biscuit (~30 g)",
+"kcal": 108,
+"protein": 2.0,
+"carbs": 17.9,
+"fat": 3.3
+},
+{
+"code": "BFP220",
+"name": "Ginger chicken",
+"kcal_100": 129.2,
+"serving": "1 bowl (~384 g)",
+"kcal": 496,
+"protein": 31.7,
+"carbs": 21.5,
+"fat": 31.6
+},
+{
+"code": "BFP506",
+"name": "Gingerman biscuit",
+"kcal_100": 357.4,
+"serving": "1 gingerman (~36 g)",
+"kcal": 127,
+"protein": 2.2,
+"carbs": 19.6,
+"fat": 4.5
+},
+{
+"code": "BFP026",
+"name": "Gingo",
+"kcal_100": 48.0,
+"serving": "1 tall glass (~291 g)",
+"kcal": 140,
+"protein": 0.4,
+"carbs": 36.1,
+"fat": 0.2
+},
+{
+"code": "OSR076",
+"name": "Gobi 65",
+"kcal_100": 278.3,
+"serving": "100 g",
+"kcal": 278,
+"protein": 0.6,
+"carbs": 3.6,
+"fat": 29.1
+},
+{
+"code": "BFP445",
+"name": "Gooseberry chutney (Amla chutney)",
+"kcal_100": 43.0,
+"serving": "2 tablespoon (~16 g)",
+"kcal": 7,
+"protein": 0.2,
+"carbs": 1.4,
+"fat": 0.1
+},
+{
+"code": "OSR049",
+"name": "Gooseberry pickle (Amla ka achaar)",
+"kcal_100": 278.6,
+"serving": "1 jar (~23 g)",
+"kcal": 65,
+"protein": 0.4,
+"carbs": 1.8,
+"fat": 6.4
+},
+{
+"code": "BFP573",
+"name": "Gram flour and semolina dhokla (Besan suji dhokla)",
+"kcal_100": 198.9,
+"serving": "2 piece (~99 g)",
+"kcal": 197,
+"protein": 8.4,
+"carbs": 25.6,
+"fat": 7.0
+},
+{
+"code": "ASC340",
+"name": "Gram flour burfi (Besan burfi)",
+"kcal_100": 421.8,
+"serving": "2 burfi (~38 g)",
+"kcal": 162,
+"protein": 4.3,
+"carbs": 17.8,
+"fat": 8.6
+},
+{
+"code": "OSR100",
+"name": "Gram flour chilla/cheela (Besan chilla/cheela)",
+"kcal_100": 135.9,
+"serving": "1 cheela (~52 g)",
+"kcal": 71,
+"protein": 4.1,
+"carbs": 11.0,
+"fat": 1.5
+},
+{
+"code": "OSR026",
+"name": "Gram flour halwa (Besan halwa)",
+"kcal_100": 276.8,
+"serving": "1 piece (~149 g)",
+"kcal": 411,
+"protein": 8.7,
+"carbs": 38.3,
+"fat": 25.7
+},
+{
+"code": "ASC343",
+"name": "Gram flour ladoo (Besan ladoo)",
+"kcal_100": 476.9,
+"serving": "2 ladoo (~35 g)",
+"kcal": 168,
+"protein": 3.1,
+"carbs": 22.1,
+"fat": 8.0
+},
+{
+"code": "BFP361",
+"name": "Grape and orange whip",
+"kcal_100": 57.4,
+"serving": "1 orange case (~121 g)",
+"kcal": 69,
+"protein": 1.7,
+"carbs": 8.1,
+"fat": 3.2
+},
+{
+"code": "BFP329",
+"name": "Grapes raita (Angoor ka raita)",
+"kcal_100": 72.6,
+"serving": "1 bowl (~159 g)",
+"kcal": 115,
+"protein": 6.3,
+"carbs": 15.3,
+"fat": 3.3
+},
+{
+"code": "ASC197",
+"name": "Gravy for kofta",
+"kcal_100": 125.6,
+"serving": "1 bowl (~139 g)",
+"kcal": 175,
+"protein": 2.4,
+"carbs": 8.8,
+"fat": 14.4
+},
+{
+"code": "ASC121",
+"name": "Green chickpeas pulao (Choliya pulao/Hare chane ka pulao)",
+"kcal_100": 173.4,
+"serving": "1 plate (~358 g)",
+"kcal": 621,
+"protein": 17.5,
+"carbs": 98.7,
+"fat": 17.3
+},
+{
+"code": "OSR091",
+"name": "Green chilli raita (Hari mirch ka raita)",
+"kcal_100": 77.1,
+"serving": "1 bowl (~103 g)",
+"kcal": 79,
+"protein": 5.7,
+"carbs": 7.9,
+"fat": 3.0
+},
+{
+"code": "OSR098",
+"name": "Green chutney",
+"kcal_100": 79.4,
+"serving": "1 glass jar (~24 g)",
+"kcal": 19,
+"protein": 1.3,
+"carbs": 2.4,
+"fat": 0.4
+},
+{
+"code": "BFP178",
+"name": "Green gram whole with baghar (Sabut moong dal with tadka)",
+"kcal_100": 63.4,
+"serving": "1 bowl (~226 g)",
+"kcal": 143,
+"protein": 7.3,
+"carbs": 15.3,
+"fat": 5.6
+},
+{
+"code": "BFP072",
+"name": "Green pea soup (Matar ka soup)",
+"kcal_100": 39.8,
+"serving": "100 g",
+"kcal": 40,
+"protein": 11.1,
+"carbs": 3.6,
+"fat": 12.9
+},
+{
+"code": "OSR057",
+"name": "Green tomato pickle (Haray tamatar ka achaar)",
+"kcal_100": 193.3,
+"serving": "1 jar (~64 g)",
+"kcal": 123,
+"protein": 0.8,
+"carbs": 1.8,
+"fat": 12.5
+},
+{
+"code": "OSR037",
+"name": "Greenpea cookies",
+"kcal_100": 159.4,
+"serving": "1 cookie (~76 g)",
+"kcal": 121,
+"protein": 5.0,
+"carbs": 17.5,
+"fat": 3.2
+},
+{
+"code": "BFP328",
+"name": "Guava raita (Amarood ka raita)",
+"kcal_100": 64.4,
+"serving": "1 bowl (~159 g)",
+"kcal": 102,
+"protein": 6.7,
+"carbs": 11.5,
+"fat": 3.3
+},
+{
+"code": "OSR146",
+"name": "Gujarati handvo",
+"kcal_100": 207.1,
+"serving": "100 g",
+"kcal": 207,
+"protein": 8.2,
+"carbs": 31.9,
+"fat": 4.8
+},
+{
+"code": "BFP448",
+"name": "Gun powder chutney",
+"kcal_100": 312.3,
+"serving": "1 tablespoon (~14 g)",
+"kcal": 43,
+"protein": 3.0,
+"carbs": 6.6,
+"fat": 0.4
+},
+{
+"code": "OSR128",
+"name": "Ham and Bean soup",
+"kcal_100": 96.0,
+"serving": "1 bowl (~151 g)",
+"kcal": 145,
+"protein": 16.0,
+"carbs": 6.3,
+"fat": 6.3
+},
+{
+"code": "OSR066",
+"name": "Handi chicken",
+"kcal_100": 166.0,
+"serving": "1 plate (~232 g)",
+"kcal": 385,
+"protein": 28.6,
+"carbs": 3.5,
+"fat": 28.9
+},
+{
+"code": "OSR064",
+"name": "Hariyali Fish Tikka",
+"kcal_100": 150.2,
+"serving": "1 kebab (~179 g)",
+"kcal": 268,
+"protein": 25.0,
+"carbs": 3.9,
+"fat": 16.8
+},
+{
+"code": "ASC257",
+"name": "Hawain salad",
+"kcal_100": 175.2,
+"serving": "1 bowl (~390 g)",
+"kcal": 683,
+"protein": 16.6,
+"carbs": 55.9,
+"fat": 44.3
+},
+{
+"code": "BFP165",
+"name": "Home made egg noodles",
+"kcal_100": 240.8,
+"serving": "1 curry bowl (~225 g)",
+"kcal": 542,
+"protein": 14.7,
+"carbs": 96.6,
+"fat": 9.8
+},
+{
+"code": "BFP362",
+"name": "Honey banana cream",
+"kcal_100": 125.5,
+"serving": "1 tall stemmed glass (~331 g)",
+"kcal": 415,
+"protein": 9.2,
+"carbs": 45.1,
+"fat": 22.1
+},
+{
+"code": "OSR125",
+"name": "Honey cake",
+"kcal_100": 333.6,
+"serving": "1 slice (~164 g)",
+"kcal": 546,
+"protein": 5.0,
+"carbs": 80.3,
+"fat": 24.1
+},
+{
+"code": "OSR143",
+"name": "Horsegram dal (Kulthi dal)",
+"kcal_100": 55.6,
+"serving": "1 bowl (~361 g)",
+"kcal": 201,
+"protein": 10.5,
+"carbs": 29.6,
+"fat": 4.1
+},
+{
+"code": "ASC092",
+"name": "Hot and sour soup",
+"kcal_100": 31.5,
+"serving": "1 soup bowl (~393 g)",
+"kcal": 124,
+"protein": 12.2,
+"carbs": 7.0,
+"fat": 5.2
+},
+{
+"code": "ASC413",
+"name": "Hot cheese souffle",
+"kcal_100": 177.1,
+"serving": "1 bowl (~297 g)",
+"kcal": 526,
+"protein": 27.2,
+"carbs": 16.0,
+"fat": 39.3
+},
+{
+"code": "BFP011",
+"name": "Hot chocolate",
+"kcal_100": 90.0,
+"serving": "1 tea cup (~190 g)",
+"kcal": 171,
+"protein": 6.5,
+"carbs": 17.2,
+"fat": 8.8
+},
+{
+"code": "ASC333",
+"name": "Hot chocolate souffle",
+"kcal_100": 226.1,
+"serving": "1 bowl (~142 g)",
+"kcal": 321,
+"protein": 9.5,
+"carbs": 37.2,
+"fat": 15.8
+},
+{
+"code": "ASC014",
+"name": "Hot cocoa",
+"kcal_100": 90.1,
+"serving": "1 cup (~191 g)",
+"kcal": 172,
+"protein": 6.4,
+"carbs": 17.6,
+"fat": 8.7
+},
+{
+"code": "ASC415",
+"name": "Hot fish souffle",
+"kcal_100": 142.9,
+"serving": "1 bowl (~367 g)",
+"kcal": 524,
+"protein": 41.2,
+"carbs": 13.5,
+"fat": 33.9
+},
+{
+"code": "BFP382",
+"name": "Hot lemon souffle",
+"kcal_100": 155.3,
+"serving": "1 bowl (~121 g)",
+"kcal": 189,
+"protein": 6.4,
+"carbs": 19.8,
+"fat": 9.6
+},
+{
+"code": "ASC332",
+"name": "Hot orange souffle",
+"kcal_100": 180.0,
+"serving": "1 bowl (~122 g)",
+"kcal": 220,
+"protein": 8.4,
+"carbs": 22.9,
+"fat": 10.9
+},
+{
+"code": "ASC414",
+"name": "Hot potato souffle",
+"kcal_100": 125.6,
+"serving": "1 bowl (~367 g)",
+"kcal": 461,
+"protein": 20.2,
+"carbs": 31.4,
+"fat": 28.0
+},
+{
+"code": "ASC416",
+"name": "Hot spinach souffle",
+"kcal_100": 104.2,
+"serving": "1 bowl (~397 g)",
+"kcal": 414,
+"protein": 21.6,
+"carbs": 16.6,
+"fat": 28.7
+},
+{
+"code": "ASC001",
+"name": "Hot tea (Garam Chai)",
+"kcal_100": 16.1,
+"serving": "1 tea cup (~211 g)",
+"kcal": 34,
+"protein": 0.8,
+"carbs": 5.4,
+"fat": 1.1
+},
+{
+"code": "ASC334",
+"name": "Hot vanilla souffle",
+"kcal_100": 192.9,
+"serving": "1 bowl (~128 g)",
+"kcal": 246,
+"protein": 8.8,
+"carbs": 27.8,
+"fat": 11.6
+},
+{
+"code": "ASC449",
+"name": "Ice box cookies",
+"kcal_100": 374.2,
+"serving": "3 cookie (~14 g)",
+"kcal": 52,
+"protein": 0.8,
+"carbs": 7.8,
+"fat": 2.0
+},
+{
+"code": "ASC004",
+"name": "Iced tea",
+"kcal_100": 10.3,
+"serving": "1 tall glass (~320 g)",
+"kcal": 33,
+"protein": 0.1,
+"carbs": 8.6,
+"fat": 0.0
+},
+{
+"code": "ASC144",
+"name": "Idli",
+"kcal_100": 137.5,
+"serving": "4 idli (~25 g)",
+"kcal": 34,
+"protein": 1.2,
+"carbs": 7.1,
+"fat": 0.1
+},
+{
+"code": "BFP052",
+"name": "Indian style egg bhujia (Anda bhujia (Indian style))",
+"kcal_100": 102.8,
+"serving": "1 small bowl (~126 g)",
+"kcal": 130,
+"protein": 7.7,
+"carbs": 4.7,
+"fat": 8.8
+},
+{
+"code": "ASC002",
+"name": "Instant coffee",
+"kcal_100": 23.2,
+"serving": "100 g",
+"kcal": 23,
+"protein": 0.6,
+"carbs": 3.7,
+"fat": 0.7
+},
+{
+"code": "BFP440",
+"name": "Instant dhokla",
+"kcal_100": 207.1,
+"serving": "3 dhokla (~42 g)",
+"kcal": 88,
+"protein": 3.3,
+"carbs": 10.2,
+"fat": 4.0
+},
+{
+"code": "BFP147",
+"name": "Instant idli (with semolina)",
+"kcal_100": 247.3,
+"serving": "3 idli (~35 g)",
+"kcal": 87,
+"protein": 3.2,
+"carbs": 15.3,
+"fat": 1.3
+},
+{
+"code": "BFP024",
+"name": "Jal jeera",
+"kcal_100": 30.2,
+"serving": "1 juice glass (~140 g)",
+"kcal": 42,
+"protein": 0.6,
+"carbs": 9.4,
+"fat": 0.4
+},
+{
+"code": "ASC066",
+"name": "Jam and fruit pancake",
+"kcal_100": 162.0,
+"serving": "4 pancake (~66 g)",
+"kcal": 107,
+"protein": 2.5,
+"carbs": 13.6,
+"fat": 4.6
+},
+{
+"code": "BFP480",
+"name": "Jam filling",
+"kcal_100": 184.6,
+"serving": "4 tablespoon (~16 g)",
+"kcal": 30,
+"protein": 0.0,
+"carbs": 7.5,
+"fat": 0.0
+},
+{
+"code": "ASC397",
+"name": "Jam tart",
+"kcal_100": 360.7,
+"serving": "2 tart (~36 g)",
+"kcal": 131,
+"protein": 1.6,
+"carbs": 16.7,
+"fat": 6.3
+},
+{
+"code": "BFP306",
+"name": "Jellied sunshine fruit salad",
+"kcal_100": 48.9,
+"serving": "1 small mould (~249 g)",
+"kcal": 121,
+"protein": 14.5,
+"carbs": 10.5,
+"fat": 2.1
+},
+{
+"code": "BFP516",
+"name": "Jelly biscuit",
+"kcal_100": 404.6,
+"serving": "2 biscuit (~18 g)",
+"kcal": 72,
+"protein": 0.8,
+"carbs": 9.9,
+"fat": 3.5
+},
+{
+"code": "OSR151",
+"name": "Jowar dosa",
+"kcal_100": 294.3,
+"serving": "1 dosa (~33 g)",
+"kcal": 97,
+"protein": 2.8,
+"carbs": 13.4,
+"fat": 3.4
+},
+{
+"code": "BFP185",
+"name": "Kabuli channa curry",
+"kcal_100": 68.6,
+"serving": "1 bowl (~356 g)",
+"kcal": 244,
+"protein": 10.4,
+"carbs": 27.1,
+"fat": 10.9
+},
+{
+"code": "ASC226",
+"name": "Kadhai Paneer",
+"kcal_100": 108.0,
+"serving": "1 bowl (~318 g)",
+"kcal": 344,
+"protein": 13.8,
+"carbs": 23.4,
+"fat": 21.7
+},
+{
+"code": "OSR092",
+"name": "Kale salad",
+"kcal_100": 177.7,
+"serving": "1 bowl (~54 g)",
+"kcal": 95,
+"protein": 2.6,
+"carbs": 2.7,
+"fat": 8.2
+},
+{
+"code": "BFP133",
+"name": "Kashmiri 'tahar'",
+"kcal_100": 98.2,
+"serving": "1 plate (~326 g)",
+"kcal": 320,
+"protein": 6.4,
+"carbs": 62.2,
+"fat": 4.4
+},
+{
+"code": "ASC231",
+"name": "Kashmiri mutton koftas (Gushtaba)",
+"kcal_100": 97.4,
+"serving": "1 gushtaba (~304 g)",
+"kcal": 296,
+"protein": 19.3,
+"carbs": 9.2,
+"fat": 20.6
+},
+{
+"code": "BFP007",
+"name": "Kashmiri tea (Kehwa)",
+"kcal_100": 24.9,
+"serving": "1 tea cup (~257 g)",
+"kcal": 64,
+"protein": 0.4,
+"carbs": 13.4,
+"fat": 1.3
+},
+{
+"code": "ASC230",
+"name": "Keema kofta curry",
+"kcal_100": 154.5,
+"serving": "4 kofta (~41 g)",
+"kcal": 64,
+"protein": 4.0,
+"carbs": 2.3,
+"fat": 4.3
+},
+{
+"code": "ASC064",
+"name": "Keema pancake",
+"kcal_100": 176.3,
+"serving": "4 pancake (~110 g)",
+"kcal": 195,
+"protein": 9.9,
+"carbs": 10.6,
+"fat": 12.4
+},
+{
+"code": "ASC104",
+"name": "Keema parantha/paratha",
+"kcal_100": 238.1,
+"serving": "3 parantha (~100 g)",
+"kcal": 238,
+"protein": 9.4,
+"carbs": 18.4,
+"fat": 13.9
+},
+{
+"code": "OSR014",
+"name": "Kesari bath",
+"kcal_100": 244.6,
+"serving": "1 bowl (~177 g)",
+"kcal": 432,
+"protein": 4.2,
+"carbs": 55.5,
+"fat": 22.2
+},
+{
+"code": "OSR102",
+"name": "Khakhra",
+"kcal_100": 178.5,
+"serving": "1 khakhra (~76 g)",
+"kcal": 135,
+"protein": 3.6,
+"carbs": 20.9,
+"fat": 4.0
+},
+{
+"code": "BFP439",
+"name": "Khaman (dhokla)",
+"kcal_100": 54.7,
+"serving": "3 dhokla (~119 g)",
+"kcal": 65,
+"protein": 2.3,
+"carbs": 6.4,
+"fat": 3.3
+},
+{
+"code": "ASC169",
+"name": "Khatta channa",
+"kcal_100": 202.6,
+"serving": "1 bowl (~157 g)",
+"kcal": 318,
+"protein": 9.9,
+"carbs": 33.2,
+"fat": 16.6
+},
+{
+"code": "ASC067",
+"name": "Khoa and coconut pancake",
+"kcal_100": 272.0,
+"serving": "4 pancake (~71 g)",
+"kcal": 194,
+"protein": 5.0,
+"carbs": 19.4,
+"fat": 10.9
+},
+{
+"code": "BFP396",
+"name": "Khoa coconut burfi",
+"kcal_100": 411.5,
+"serving": "2 piece (~50 g)",
+"kcal": 207,
+"protein": 5.0,
+"carbs": 18.4,
+"fat": 13.1
+},
+{
+"code": "BFP404",
+"name": "Khoa ladoo",
+"kcal_100": 396.0,
+"serving": "2 piece (~45 g)",
+"kcal": 178,
+"protein": 5.5,
+"carbs": 15.5,
+"fat": 10.8
+},
+{
+"code": "ASC165",
+"name": "Kidney bean curry (Rajmah curry)",
+"kcal_100": 143.7,
+"serving": "1 bowl (~120 g)",
+"kcal": 172,
+"protein": 7.1,
+"carbs": 19.6,
+"fat": 6.9
+},
+{
+"code": "OSR030",
+"name": "Kidney bean sandwich with cottage cheese",
+"kcal_100": 176.6,
+"serving": "1 triangle (~240 g)",
+"kcal": 423,
+"protein": 23.6,
+"carbs": 45.2,
+"fat": 16.4
+},
+{
+"code": "OSR018",
+"name": "Kiwi granola pudding",
+"kcal_100": 281.0,
+"serving": "100 g",
+"kcal": 281,
+"protein": 5.6,
+"carbs": 32.3,
+"fat": 15.4
+},
+{
+"code": "ASC321",
+"name": "Kulfi",
+"kcal_100": 98.4,
+"serving": "1 kulfi (~270 g)",
+"kcal": 266,
+"protein": 8.7,
+"carbs": 30.5,
+"fat": 12.7
+},
+{
+"code": "BFP161",
+"name": "Lasagne with meat sauce",
+"kcal_100": 63.4,
+"serving": "100 g",
+"kcal": 63,
+"protein": 2.9,
+"carbs": 5.4,
+"fat": 3.4
+},
+{
+"code": "BFP162",
+"name": "Lasagne with vegetables",
+"kcal_100": 49.2,
+"serving": "100 g",
+"kcal": 49,
+"protein": 1.7,
+"carbs": 5.9,
+"fat": 2.2
+},
+{
+"code": "ASC022",
+"name": "Lassi (salted)",
+"kcal_100": 18.8,
+"serving": "1 tall glass (~423 g)",
+"kcal": 80,
+"protein": 5.7,
+"carbs": 7.9,
+"fat": 3.0
+},
+{
+"code": "ASC009",
+"name": "Lem-o-gin",
+"kcal_100": 21.5,
+"serving": "1 glass (~357 g)",
+"kcal": 77,
+"protein": 0.3,
+"carbs": 19.8,
+"fat": 0.1
+},
+{
+"code": "OSR068",
+"name": "Lemon butter fish",
+"kcal_100": 160.2,
+"serving": "1 piece (~200 g)",
+"kcal": 320,
+"protein": 32.8,
+"carbs": 1.5,
+"fat": 20.5
+},
+{
+"code": "BFP489",
+"name": "Lemon cake",
+"kcal_100": 373.9,
+"serving": "1 piece (~61 g)",
+"kcal": 228,
+"protein": 3.2,
+"carbs": 26.3,
+"fat": 12.6
+},
+{
+"code": "OSR067",
+"name": "Lemon chicken",
+"kcal_100": 169.8,
+"serving": "1 plate (~287 g)",
+"kcal": 487,
+"protein": 57.9,
+"carbs": 1.6,
+"fat": 27.7
+},
+{
+"code": "BFP531",
+"name": "Lemon chiffon pie",
+"kcal_100": 259.3,
+"serving": "100 g",
+"kcal": 259,
+"protein": 4.9,
+"carbs": 27.6,
+"fat": 14.5
+},
+{
+"code": "OSR033",
+"name": "Lemon cookies",
+"kcal_100": 394.5,
+"serving": "1 cookie (~157 g)",
+"kcal": 617,
+"protein": 8.8,
+"carbs": 66.0,
+"fat": 36.0
+},
+{
+"code": "OSR137",
+"name": "Lemon coriander soup",
+"kcal_100": 108.1,
+"serving": "1 bowl (~49 g)",
+"kcal": 53,
+"protein": 1.1,
+"carbs": 5.0,
+"fat": 3.0
+},
+{
+"code": "BFP479",
+"name": "Lemon curd filling",
+"kcal_100": 225.6,
+"serving": "8 tablespoon (~25 g)",
+"kcal": 56,
+"protein": 0.9,
+"carbs": 6.6,
+"fat": 3.1
+},
+{
+"code": "ASC404",
+"name": "Lemon meringue pie",
+"kcal_100": 224.4,
+"serving": "1 slice (~157 g)",
+"kcal": 352,
+"protein": 6.1,
+"carbs": 55.1,
+"fat": 12.8
+},
+{
+"code": "ASC124",
+"name": "Lemon rice (Pulihora, Elumichai sadam, Chitranna)",
+"kcal_100": 176.3,
+"serving": "1 plate (~319 g)",
+"kcal": 563,
+"protein": 13.6,
+"carbs": 69.0,
+"fat": 25.1
+},
+{
+"code": "ASC309",
+"name": "Lemon souffle",
+"kcal_100": 168.5,
+"serving": "1 souffle cup (~237 g)",
+"kcal": 399,
+"protein": 16.5,
+"carbs": 31.8,
+"fat": 23.7
+},
+{
+"code": "ASC396",
+"name": "Lemon tart",
+"kcal_100": 303.4,
+"serving": "2 tart (~54 g)",
+"kcal": 165,
+"protein": 3.3,
+"carbs": 16.7,
+"fat": 9.5
+},
+{
+"code": "ASC008",
+"name": "Lemonade",
+"kcal_100": 20.8,
+"serving": "1 glass (~349 g)",
+"kcal": 73,
+"protein": 0.1,
+"carbs": 19.1,
+"fat": 0.0
+},
+{
+"code": "ASC080",
+"name": "Lentil soup",
+"kcal_100": 31.2,
+"serving": "1 soup bowl (~389 g)",
+"kcal": 121,
+"protein": 37.6,
+"carbs": 15.4,
+"fat": 45.5
+},
+{
+"code": "BFP555",
+"name": "Lentils and semolina porridge (Dal suji porridge/daliya)",
+"kcal_100": 117.3,
+"serving": "1 serving (~200 g)",
+"kcal": 235,
+"protein": 6.5,
+"carbs": 46.4,
+"fat": 2.1
+},
+{
+"code": "BFP558",
+"name": "Lentils and wheat porridge (Dal wheat porridge/daliya )",
+"kcal_100": 52.5,
+"serving": "1 serving (~170 g)",
+"kcal": 89,
+"protein": 4.6,
+"carbs": 14.2,
+"fat": 1.6
+},
+{
+"code": "ASC163",
+"name": "Lobia curry",
+"kcal_100": 149.0,
+"serving": "1 bowl (~120 g)",
+"kcal": 179,
+"protein": 7.3,
+"carbs": 21.4,
+"fat": 6.7
+},
+{
+"code": "OSR020",
+"name": "Lotus seed halwa (Kamal gattay ka halwa)",
+"kcal_100": 370.5,
+"serving": "1 piece (~362 g)",
+"kcal": 1343,
+"protein": 28.2,
+"carbs": 143.4,
+"fat": 75.0
+},
+{
+"code": "ASC196",
+"name": "Lotus stem curry (Kamal kakdi curry)",
+"kcal_100": 110.3,
+"serving": "1 bowl (~202 g)",
+"kcal": 223,
+"protein": 3.1,
+"carbs": 18.7,
+"fat": 14.7
+},
+{
+"code": "OSR050",
+"name": "Lotus stem pickle (Kamal kakdi ka achar)",
+"kcal_100": 102.7,
+"serving": "1 jar (~393 g)",
+"kcal": 404,
+"protein": 5.7,
+"carbs": 79.0,
+"fat": 6.3
+},
+{
+"code": "OSR155",
+"name": "Maa chaane ki dal",
+"kcal_100": 344.7,
+"serving": "1 bowl (~81 g)",
+"kcal": 279,
+"protein": 16.1,
+"carbs": 35.0,
+"fat": 7.7
+},
+{
+"code": "OSR087",
+"name": "Macaroni salad",
+"kcal_100": 262.2,
+"serving": "1 cup (~161 g)",
+"kcal": 422,
+"protein": 8.1,
+"carbs": 34.8,
+"fat": 28.6
+},
+{
+"code": "ASC133",
+"name": "Macroni cheese pie",
+"kcal_100": 170.6,
+"serving": "1 casserole dish (~240 g)",
+"kcal": 409,
+"protein": 14.0,
+"carbs": 50.5,
+"fat": 17.9
+},
+{
+"code": "BFP559",
+"name": "Maize porridge",
+"kcal_100": 89.6,
+"serving": "1 serving (~170 g)",
+"kcal": 152,
+"protein": 3.6,
+"carbs": 26.6,
+"fat": 3.2
+},
+{
+"code": "ASC283",
+"name": "Makhana kheer",
+"kcal_100": 107.8,
+"serving": "1 bowl (~278 g)",
+"kcal": 300,
+"protein": 9.2,
+"carbs": 35.8,
+"fat": 13.9
+},
+{
+"code": "ASC150",
+"name": "Makki ki roti",
+"kcal_100": 264.0,
+"serving": "2 roti (~85 g)",
+"kcal": 224,
+"protein": 3.0,
+"carbs": 20.6,
+"fat": 14.3
+},
+{
+"code": "OSR121",
+"name": "Mango cheesecake",
+"kcal_100": 152.5,
+"serving": "1 slice (~174 g)",
+"kcal": 266,
+"protein": 4.2,
+"carbs": 34.9,
+"fat": 12.7
+},
+{
+"code": "ASC305",
+"name": "Mango ice cream",
+"kcal_100": 125.7,
+"serving": "100 g",
+"kcal": 126,
+"protein": 3.4,
+"carbs": 11.1,
+"fat": 7.6
+},
+{
+"code": "ASC017",
+"name": "Mango milkshake (Aam milkshake)",
+"kcal_100": 56.9,
+"serving": "1 tall glass (~356 g)",
+"kcal": 202,
+"protein": 6.1,
+"carbs": 25.7,
+"fat": 8.3
+},
+{
+"code": "BFP607",
+"name": "Mango milkshake with ice cream (Aam milkshake ice cream ke saath)",
+"kcal_100": 68.4,
+"serving": "1 tall glass (~340 g)",
+"kcal": 232,
+"protein": 6.6,
+"carbs": 31.2,
+"fat": 9.5
+},
+{
+"code": "ASC316",
+"name": "Mango mousse",
+"kcal_100": 125.0,
+"serving": "1 cup (~279 g)",
+"kcal": 349,
+"protein": 8.9,
+"carbs": 25.5,
+"fat": 23.6
+},
+{
+"code": "OSR061",
+"name": "Mango murabba candy",
+"kcal_100": 293.3,
+"serving": "1 candy (~76 g)",
+"kcal": 223,
+"protein": 0.2,
+"carbs": 58.8,
+"fat": 0.0
+},
+{
+"code": "BFP327",
+"name": "Mango raita (Aam ka raita)",
+"kcal_100": 67.4,
+"serving": "1 bowl (~159 g)",
+"kcal": 107,
+"protein": 6.2,
+"carbs": 13.1,
+"fat": 3.4
+},
+{
+"code": "OSR017",
+"name": "Mango vanilla custard",
+"kcal_100": 147.6,
+"serving": "1 glass (~203 g)",
+"kcal": 300,
+"protein": 7.0,
+"carbs": 37.4,
+"fat": 14.3
+},
+{
+"code": "ASC419",
+"name": "Marble cake",
+"kcal_100": 354.1,
+"serving": "1 piece (~54 g)",
+"kcal": 190,
+"protein": 3.4,
+"carbs": 25.1,
+"fat": 8.7
+},
+{
+"code": "BFP264",
+"name": "Masala arbi",
+"kcal_100": 185.4,
+"serving": "1 bowl (~116 g)",
+"kcal": 215,
+"protein": 3.5,
+"carbs": 18.8,
+"fat": 13.8
+},
+{
+"code": "ASC448",
+"name": "Masala biscuit",
+"kcal_100": 393.6,
+"serving": "2 biscuit (~16 g)",
+"kcal": 64,
+"protein": 1.0,
+"carbs": 7.3,
+"fat": 3.4
+},
+{
+"code": "ASC146",
+"name": "Masala dosa",
+"kcal_100": 164.6,
+"serving": "1 dosa (~210 g)",
+"kcal": 345,
+"protein": 6.9,
+"carbs": 41.0,
+"fat": 16.4
+},
+{
+"code": "BFP150",
+"name": "Masala dosa mixed vegetable fillings",
+"kcal_100": 144.5,
+"serving": "1 dosa (~277 g)",
+"kcal": 401,
+"protein": 13.4,
+"carbs": 63.8,
+"fat": 9.0
+},
+{
+"code": "BFP151",
+"name": "Masala dosa paneer fillings",
+"kcal_100": 243.1,
+"serving": "1 dosa (~197 g)",
+"kcal": 480,
+"protein": 20.3,
+"carbs": 58.7,
+"fat": 17.5
+},
+{
+"code": "OSR094",
+"name": "Masala souffle",
+"kcal_100": 123.5,
+"serving": "100 g",
+"kcal": 124,
+"protein": 6.4,
+"carbs": 8.0,
+"fat": 7.4
+},
+{
+"code": "BFP453",
+"name": "Mayonnaise vegetable dip",
+"kcal_100": 241.3,
+"serving": "2 tablespoon (~43 g)",
+"kcal": 103,
+"protein": 1.3,
+"carbs": 2.1,
+"fat": 10.0
+},
+{
+"code": "BFP157",
+"name": "Meat and macaroni casserole",
+"kcal_100": 161.5,
+"serving": "1 small casserole dish (~400 g)",
+"kcal": 647,
+"protein": 36.6,
+"carbs": 64.6,
+"fat": 40.7
+},
+{
+"code": "BFP065",
+"name": "Meat consomme (with mutton)",
+"kcal_100": 29.8,
+"serving": "100 g",
+"kcal": 30,
+"protein": 14.9,
+"carbs": 0.5,
+"fat": 13.7
+},
+{
+"code": "BFP060",
+"name": "Meat stock",
+"kcal_100": 24.5,
+"serving": "100 g",
+"kcal": 24,
+"protein": 2.1,
+"carbs": 0.0,
+"fat": 1.8
+},
+{
+"code": "ASC454",
+"name": "Melting moments",
+"kcal_100": 437.9,
+"serving": "3 biscuit (~17 g)",
+"kcal": 73,
+"protein": 1.0,
+"carbs": 9.3,
+"fat": 3.6
+},
+{
+"code": "ASC323",
+"name": "Meringue and rice pudding",
+"kcal_100": 112.9,
+"serving": "1 bowl (~224 g)",
+"kcal": 253,
+"protein": 10.8,
+"carbs": 32.7,
+"fat": 9.1
+},
+{
+"code": "ASC223",
+"name": "Methi malai paneer",
+"kcal_100": 195.0,
+"serving": "1 bowl (~193 g)",
+"kcal": 377,
+"protein": 14.2,
+"carbs": 15.8,
+"fat": 28.5
+},
+{
+"code": "BFP110",
+"name": "Methi parantha/paratha",
+"kcal_100": 148.4,
+"serving": "3 parantha (~91 g)",
+"kcal": 135,
+"protein": 3.9,
+"carbs": 20.2,
+"fat": 4.0
+},
+{
+"code": "OSR104",
+"name": "Methi thepla",
+"kcal_100": 346.2,
+"serving": "1 thepla (~36 g)",
+"kcal": 126,
+"protein": 3.3,
+"carbs": 15.1,
+"fat": 5.8
+},
+{
+"code": "BFP143",
+"name": "Mexican rice",
+"kcal_100": 120.6,
+"serving": "100 g",
+"kcal": 121,
+"protein": 4.6,
+"carbs": 14.2,
+"fat": 4.9
+},
+{
+"code": "ASC346",
+"name": "Milk cake",
+"kcal_100": 127.4,
+"serving": "1 slice (~287 g)",
+"kcal": 366,
+"protein": 8.7,
+"carbs": 26.2,
+"fat": 25.6
+},
+{
+"code": "OSR041",
+"name": "Milk cookies",
+"kcal_100": 459.4,
+"serving": "1 cookie (~125 g)",
+"kcal": 574,
+"protein": 13.1,
+"carbs": 60.5,
+"fat": 31.2
+},
+{
+"code": "OSR136",
+"name": "Millet soup",
+"kcal_100": 56.0,
+"serving": "1 bowl (~232 g)",
+"kcal": 130,
+"protein": 26.1,
+"carbs": 19.0,
+"fat": 29.1
+},
+{
+"code": "BFP197",
+"name": "Minced meat ball curry",
+"kcal_100": 109.8,
+"serving": "1 bowl (~373 g)",
+"kcal": 410,
+"protein": 25.4,
+"carbs": 10.7,
+"fat": 29.3
+},
+{
+"code": "BFP127",
+"name": "Minced meat pancake (with chicken)",
+"kcal_100": 116.0,
+"serving": "3 pancake (~134 g)",
+"kcal": 156,
+"protein": 16.1,
+"carbs": 11.0,
+"fat": 14.1
+},
+{
+"code": "ASC411",
+"name": "Minced meat patties",
+"kcal_100": 265.7,
+"serving": "1 patty (~130 g)",
+"kcal": 345,
+"protein": 8.9,
+"carbs": 19.8,
+"fat": 25.4
+},
+{
+"code": "ASC402",
+"name": "Minced meat pie",
+"kcal_100": 221.6,
+"serving": "1 pie (~354 g)",
+"kcal": 784,
+"protein": 26.1,
+"carbs": 64.1,
+"fat": 46.1
+},
+{
+"code": "ASC088",
+"name": "Minestrone soup",
+"kcal_100": 42.7,
+"serving": "1 soup bowl (~230 g)",
+"kcal": 98,
+"protein": 21.4,
+"carbs": 8.5,
+"fat": 25.5
+},
+{
+"code": "ASC387",
+"name": "Mint and coriander chutney (Pudinay aur dhaniye ki chutney)",
+"kcal_100": 102.6,
+"serving": "1 tablespoon (~26 g)",
+"kcal": 27,
+"protein": 0.7,
+"carbs": 5.6,
+"fat": 0.1
+},
+{
+"code": "BFP320",
+"name": "Mint and peanut raita (Pudinay aur moongfali ka raita)",
+"kcal_100": 112.0,
+"serving": "1 bowl (~133 g)",
+"kcal": 149,
+"protein": 9.4,
+"carbs": 9.7,
+"fat": 8.2
+},
+{
+"code": "BFP459",
+"name": "Mint and peanut sandwich",
+"kcal_100": 273.6,
+"serving": "2 sandwich (~49 g)",
+"kcal": 134,
+"protein": 3.5,
+"carbs": 15.6,
+"fat": 6.8
+},
+{
+"code": "ASC275",
+"name": "Mint raita (Pudinay ka raita)",
+"kcal_100": 77.6,
+"serving": "1 bowl (~105 g)",
+"kcal": 81,
+"protein": 5.9,
+"carbs": 8.0,
+"fat": 3.1
+},
+{
+"code": "BFP443",
+"name": "Mint tomato chutney (Pudinay aur tamatar ki chutney)",
+"kcal_100": 43.7,
+"serving": "2 tablespoon (~19 g)",
+"kcal": 8,
+"protein": 0.3,
+"carbs": 1.6,
+"fat": 0.1
+},
+{
+"code": "BFP027",
+"name": "Mintade",
+"kcal_100": 40.3,
+"serving": "100 g",
+"kcal": 40,
+"protein": 0.0,
+"carbs": 10.6,
+"fat": 0.0
+},
+{
+"code": "ASC155",
+"name": "Mixed dal",
+"kcal_100": 61.9,
+"serving": "1 bowl (~298 g)",
+"kcal": 184,
+"protein": 7.5,
+"carbs": 17.3,
+"fat": 9.2
+},
+{
+"code": "ASC258",
+"name": "Mixed pulse and vegetable salad",
+"kcal_100": 83.1,
+"serving": "1 bowl (~170 g)",
+"kcal": 141,
+"protein": 8.0,
+"carbs": 23.7,
+"fat": 1.4
+},
+{
+"code": "BFP059",
+"name": "Mixed stock",
+"kcal_100": 25.2,
+"serving": "100 g",
+"kcal": 25,
+"protein": 2.1,
+"carbs": 0.3,
+"fat": 1.7
+},
+{
+"code": "ASC115",
+"name": "Mixed vegetable pulao",
+"kcal_100": 113.0,
+"serving": "1 plate (~438 g)",
+"kcal": 496,
+"protein": 11.9,
+"carbs": 76.7,
+"fat": 14.6
+},
+{
+"code": "ASC261",
+"name": "Mixed vegetable salad with curd sauce",
+"kcal_100": 60.3,
+"serving": "1 bowl (~215 g)",
+"kcal": 130,
+"protein": 9.1,
+"carbs": 15.2,
+"fat": 3.2
+},
+{
+"code": "BFP074",
+"name": "Mixed vegetable soup",
+"kcal_100": 35.7,
+"serving": "1 bowl (~441 g)",
+"kcal": 157,
+"protein": 36.2,
+"carbs": 13.0,
+"fat": 51.4
+},
+{
+"code": "BFP258",
+"name": "Mooli bhujia",
+"kcal_100": 91.2,
+"serving": "1 bowl (~198 g)",
+"kcal": 181,
+"protein": 3.3,
+"carbs": 9.4,
+"fat": 14.4
+},
+{
+"code": "OSR103",
+"name": "Moong bean dosa (Pesarattu)",
+"kcal_100": 286.0,
+"serving": "1 pesarattu (~27 g)",
+"kcal": 76,
+"protein": 3.3,
+"carbs": 8.5,
+"fat": 3.1
+},
+{
+"code": "ASC299",
+"name": "Moong dal halwa",
+"kcal_100": 349.8,
+"serving": "1 bowl (~95 g)",
+"kcal": 334,
+"protein": 8.0,
+"carbs": 38.4,
+"fat": 16.9
+},
+{
+"code": "ASC291",
+"name": "Moong dal kheer",
+"kcal_100": 77.2,
+"serving": "1 bowl (~405 g)",
+"kcal": 313,
+"protein": 12.0,
+"carbs": 40.1,
+"fat": 12.1
+},
+{
+"code": "BFP046",
+"name": "Moong dal stuffed cheela/chilla (Moong dal ka cheela/chilla)",
+"kcal_100": 154.9,
+"serving": "1 cheela (~227 g)",
+"kcal": 352,
+"protein": 15.9,
+"carbs": 44.2,
+"fat": 11.6
+},
+{
+"code": "BFP174",
+"name": "Moong dal with vadi",
+"kcal_100": 24.1,
+"serving": "1 curry bowl (~362 g)",
+"kcal": 87,
+"protein": 1.4,
+"carbs": 3.6,
+"fat": 7.4
+},
+{
+"code": "ASC160",
+"name": "Moti mahal dal (Urad rajmah mix dal)",
+"kcal_100": 103.1,
+"serving": "1 bowl (~287 g)",
+"kcal": 296,
+"protein": 11.3,
+"carbs": 25.1,
+"fat": 16.2
+},
+{
+"code": "BFP076",
+"name": "Mulligatawny soup",
+"kcal_100": 54.4,
+"serving": "1 bowl (~349 g)",
+"kcal": 190,
+"protein": 39.3,
+"carbs": 28.7,
+"fat": 46.3
+},
+{
+"code": "ASC054",
+"name": "Murmura (Puffed rice)",
+"kcal_100": 113.3,
+"serving": "1 bowl (~278 g)",
+"kcal": 315,
+"protein": 10.1,
+"carbs": 43.6,
+"fat": 11.2
+},
+{
+"code": "BFP413",
+"name": "Murmura chikki",
+"kcal_100": 253.8,
+"serving": "2 piece (~26 g)",
+"kcal": 67,
+"protein": 0.6,
+"carbs": 15.6,
+"fat": 0.1
+},
+{
+"code": "ASC039",
+"name": "Mushroom and cheese sandwich (toasted)",
+"kcal_100": 227.4,
+"serving": "2 triangle (~76 g)",
+"kcal": 172,
+"protein": 5.9,
+"carbs": 15.9,
+"fat": 9.9
+},
+{
+"code": "BFP205",
+"name": "Mushroom matar",
+"kcal_100": 70.8,
+"serving": "1 bowl (~263 g)",
+"kcal": 186,
+"protein": 7.3,
+"carbs": 14.0,
+"fat": 10.8
+},
+{
+"code": "ASC116",
+"name": "Mushroom pulao",
+"kcal_100": 124.3,
+"serving": "1 plate (~358 g)",
+"kcal": 445,
+"protein": 9.0,
+"carbs": 68.2,
+"fat": 14.4
+},
+{
+"code": "ASC122",
+"name": "Mutton biryani/biriyani",
+"kcal_100": 190.8,
+"serving": "1 plate (~208 g)",
+"kcal": 396,
+"protein": 15.3,
+"carbs": 46.7,
+"fat": 16.1
+},
+{
+"code": "ASC234",
+"name": "Mutton do piaza",
+"kcal_100": 183.3,
+"serving": "1 bowl (~329 g)",
+"kcal": 603,
+"protein": 30.9,
+"carbs": 13.6,
+"fat": 47.4
+},
+{
+"code": "BFP194",
+"name": "Mutton korma",
+"kcal_100": 115.6,
+"serving": "1 bowl (~366 g)",
+"kcal": 424,
+"protein": 26.0,
+"carbs": 9.3,
+"fat": 31.3
+},
+{
+"code": "BFP141",
+"name": "Mutton pulao",
+"kcal_100": 130.8,
+"serving": "100 g",
+"kcal": 131,
+"protein": 6.5,
+"carbs": 11.3,
+"fat": 10.8
+},
+{
+"code": "BFP199",
+"name": "Mutton seekh kebab",
+"kcal_100": 133.9,
+"serving": "4 kebab (~45 g)",
+"kcal": 60,
+"protein": 5.1,
+"carbs": 1.4,
+"fat": 3.8
+},
+{
+"code": "ASC232",
+"name": "Mutton yakhni",
+"kcal_100": 104.1,
+"serving": "1 bowl (~232 g)",
+"kcal": 242,
+"protein": 19.2,
+"carbs": 2.0,
+"fat": 17.9
+},
+{
+"code": "ASC142",
+"name": "Naan",
+"kcal_100": 286.4,
+"serving": "3 naan (~53 g)",
+"kcal": 152,
+"protein": 4.3,
+"carbs": 27.5,
+"fat": 2.7
+},
+{
+"code": "BFP577",
+"name": "Namkeen daliya",
+"kcal_100": 295.1,
+"serving": "1 plate (~117 g)",
+"kcal": 346,
+"protein": 9.7,
+"carbs": 57.8,
+"fat": 9.4
+},
+{
+"code": "OSR008",
+"name": "Nannari sharbat",
+"kcal_100": 88.8,
+"serving": "100 g",
+"kcal": 89,
+"protein": 0.0,
+"carbs": 23.6,
+"fat": 0.0
+},
+{
+"code": "ASC120",
+"name": "Navratan pulao",
+"kcal_100": 261.7,
+"serving": "1 plate (~183 g)",
+"kcal": 479,
+"protein": 11.3,
+"carbs": 67.7,
+"fat": 17.3
+},
+{
+"code": "ASC050",
+"name": "Oatmeal Porridge",
+"kcal_100": 72.9,
+"serving": "1 bowl (~398 g)",
+"kcal": 290,
+"protein": 10.3,
+"carbs": 34.9,
+"fat": 12.8
+},
+{
+"code": "OSR019",
+"name": "Oats burfi",
+"kcal_100": 425.2,
+"serving": "1 piece (~60 g)",
+"kcal": 256,
+"protein": 5.4,
+"carbs": 37.6,
+"fat": 10.4
+},
+{
+"code": "BFP269",
+"name": "Okra/Lady's fingers fry (Bhindi sabzi/sabji/subji)",
+"kcal_100": 110.8,
+"serving": "1 bowl (~166 g)",
+"kcal": 184,
+"protein": 3.0,
+"carbs": 7.5,
+"fat": 15.4
+},
+{
+"code": "OSR043",
+"name": "Olive biscuit",
+"kcal_100": 438.3,
+"serving": "1 biscuit (~47 g)",
+"kcal": 207,
+"protein": 1.5,
+"carbs": 26.0,
+"fat": 11.2
+},
+{
+"code": "OSR083",
+"name": "Onion chutney (Pyaaz ki chutney/Vengaya chutney)",
+"kcal_100": 143.9,
+"serving": "0.5 cup (~52 g)",
+"kcal": 76,
+"protein": 1.6,
+"carbs": 7.1,
+"fat": 4.4
+},
+{
+"code": "OSR090",
+"name": "Onion raita (Pyaaz ka raita)",
+"kcal_100": 71.6,
+"serving": "1 bowl (~157 g)",
+"kcal": 112,
+"protein": 7.6,
+"carbs": 12.3,
+"fat": 3.8
+},
+{
+"code": "BFP108",
+"name": "Onion-green chilli parantha/paratha (Pyaaz aur hari mirch ka parantha/paratha)",
+"kcal_100": 191.3,
+"serving": "3 parantha (~76 g)",
+"kcal": 146,
+"protein": 3.3,
+"carbs": 20.2,
+"fat": 5.6
+},
+{
+"code": "ASC317",
+"name": "Orange and pineapple cream",
+"kcal_100": 101.2,
+"serving": "1 bowl (~89 g)",
+"kcal": 90,
+"protein": 1.3,
+"carbs": 10.7,
+"fat": 4.8
+},
+{
+"code": "BFP505",
+"name": "Orange biscuit",
+"kcal_100": 354.8,
+"serving": "1 biscuit (~61 g)",
+"kcal": 215,
+"protein": 2.2,
+"carbs": 37.6,
+"fat": 6.7
+},
+{
+"code": "ASC421",
+"name": "Orange cake",
+"kcal_100": 357.6,
+"serving": "1 piece (~52 g)",
+"kcal": 186,
+"protein": 3.2,
+"carbs": 25.1,
+"fat": 8.4
+},
+{
+"code": "BFP532",
+"name": "Orange chiffon pie",
+"kcal_100": 207.6,
+"serving": "100 g",
+"kcal": 208,
+"protein": 3.9,
+"carbs": 23.1,
+"fat": 11.2
+},
+{
+"code": "BFP523",
+"name": "Orange cream flan",
+"kcal_100": 280.3,
+"serving": "0.25 flan (~404 g)",
+"kcal": 1133,
+"protein": 19.1,
+"carbs": 146.1,
+"fat": 54.9
+},
+{
+"code": "ASC398",
+"name": "Orange cream tart",
+"kcal_100": 197.2,
+"serving": "2 tart (~72 g)",
+"kcal": 142,
+"protein": 1.9,
+"carbs": 19.8,
+"fat": 6.3
+},
+{
+"code": "BFP496",
+"name": "Orange eggless cake",
+"kcal_100": 355.6,
+"serving": "1 piece (~99 g)",
+"kcal": 353,
+"protein": 7.1,
+"carbs": 52.2,
+"fat": 13.7
+},
+{
+"code": "BFP484",
+"name": "Orange gateau",
+"kcal_100": 178.0,
+"serving": "1 piece (~80 g)",
+"kcal": 142,
+"protein": 3.8,
+"carbs": 21.6,
+"fat": 4.8
+},
+{
+"code": "ASC019",
+"name": "Orange milkshake (Narangi milkshake)",
+"kcal_100": 57.4,
+"serving": "1 tall glass (~319 g)",
+"kcal": 183,
+"protein": 6.0,
+"carbs": 22.7,
+"fat": 8.1
+},
+{
+"code": "BFP609",
+"name": "Orange milkshake with ice cream (Narangi milkshake ice cream ke saath)",
+"kcal_100": 67.8,
+"serving": "1 tall glass (~340 g)",
+"kcal": 231,
+"protein": 6.6,
+"carbs": 31.1,
+"fat": 9.3
+},
+{
+"code": "BFP056",
+"name": "Orange omelette/omlet",
+"kcal_100": 194.7,
+"serving": "1 egg (~76 g)",
+"kcal": 148,
+"protein": 6.8,
+"carbs": 1.3,
+"fat": 12.8
+},
+{
+"code": "ASC310",
+"name": "Orange souffle",
+"kcal_100": 168.3,
+"serving": "1 souffle cup (~244 g)",
+"kcal": 411,
+"protein": 16.6,
+"carbs": 34.6,
+"fat": 23.7
+},
+{
+"code": "OSR074",
+"name": "Paaner do pyaza",
+"kcal_100": 127.7,
+"serving": "1 bowl (~232 g)",
+"kcal": 296,
+"protein": 9.8,
+"carbs": 7.9,
+"fat": 25.2
+},
+{
+"code": "ASC063",
+"name": "Pancake",
+"kcal_100": 203.4,
+"serving": "4 pancake (~42 g)",
+"kcal": 86,
+"protein": 2.4,
+"carbs": 8.7,
+"fat": 4.6
+},
+{
+"code": "OSR144",
+"name": "Panchmel dal",
+"kcal_100": 111.2,
+"serving": "1 bowl (~301 g)",
+"kcal": 335,
+"protein": 13.9,
+"carbs": 32.2,
+"fat": 16.1
+},
+{
+"code": "ASC195",
+"name": "Paneer curry",
+"kcal_100": 176.5,
+"serving": "1 bowl (~202 g)",
+"kcal": 357,
+"protein": 15.8,
+"carbs": 17.0,
+"fat": 25.1
+},
+{
+"code": "ASC222",
+"name": "Paneer in butter sauce",
+"kcal_100": 145.6,
+"serving": "1 bowl (~157 g)",
+"kcal": 228,
+"protein": 11.0,
+"carbs": 15.2,
+"fat": 13.8
+},
+{
+"code": "ASC149",
+"name": "Paneer kaathi roll",
+"kcal_100": 285.9,
+"serving": "1 kaathi roll (~148 g)",
+"kcal": 424,
+"protein": 10.3,
+"carbs": 29.8,
+"fat": 29.0
+},
+{
+"code": "ASC287",
+"name": "Paneer kheer",
+"kcal_100": 105.3,
+"serving": "1 bowl (~289 g)",
+"kcal": 305,
+"protein": 13.1,
+"carbs": 29.0,
+"fat": 15.5
+},
+{
+"code": "OSR077",
+"name": "Paneer lababdar",
+"kcal_100": 105.5,
+"serving": "1 bowl (~382 g)",
+"kcal": 403,
+"protein": 15.2,
+"carbs": 12.9,
+"fat": 32.4
+},
+{
+"code": "ASC105",
+"name": "Paneer parantha/paratha",
+"kcal_100": 263.0,
+"serving": "3 parantha (~85 g)",
+"kcal": 224,
+"protein": 6.8,
+"carbs": 20.7,
+"fat": 12.4
+},
+{
+"code": "BFP544",
+"name": "Paneer patties",
+"kcal_100": 338.6,
+"serving": "1 patty (~101 g)",
+"kcal": 341,
+"protein": 7.7,
+"carbs": 23.0,
+"fat": 24.1
+},
+{
+"code": "ASC042",
+"name": "Paneer pea sandwich (toasted) (Paneer matar ka sandwich)",
+"kcal_100": 249.6,
+"serving": "2 toasted triangle (~89 g)",
+"kcal": 222,
+"protein": 11.0,
+"carbs": 21.4,
+"fat": 10.6
+},
+{
+"code": "ASC381",
+"name": "Paneer shaslik/tikka",
+"kcal_100": 93.8,
+"serving": "1 plate (~439 g)",
+"kcal": 412,
+"protein": 22.4,
+"carbs": 35.0,
+"fat": 19.7
+},
+{
+"code": "OSR134",
+"name": "Paneer soup",
+"kcal_100": 47.9,
+"serving": "100 g",
+"kcal": 48,
+"protein": 3.2,
+"carbs": 2.4,
+"fat": 2.8
+},
+{
+"code": "BFP047",
+"name": "Paneer stuffed cheela/chilla",
+"kcal_100": 205.2,
+"serving": "1 cheela (~212 g)",
+"kcal": 436,
+"protein": 24.3,
+"carbs": 40.7,
+"fat": 18.9
+},
+{
+"code": "ASC253",
+"name": "Paneer, apple and pineapple salad",
+"kcal_100": 95.1,
+"serving": "1 bowl (~258 g)",
+"kcal": 245,
+"protein": 10.0,
+"carbs": 21.5,
+"fat": 13.1
+},
+{
+"code": "BFP290",
+"name": "Parsley potato",
+"kcal_100": 119.5,
+"serving": "1 bowl (~108 g)",
+"kcal": 130,
+"protein": 1.6,
+"carbs": 15.0,
+"fat": 6.8
+},
+{
+"code": "ASC139",
+"name": "Pasta hot pot",
+"kcal_100": 125.2,
+"serving": "100 g",
+"kcal": 125,
+"protein": 5.8,
+"carbs": 11.6,
+"fat": 6.5
+},
+{
+"code": "ASC255",
+"name": "Pasta salad",
+"kcal_100": 190.4,
+"serving": "1 bowl (~216 g)",
+"kcal": 411,
+"protein": 9.0,
+"carbs": 27.4,
+"fat": 30.0
+},
+{
+"code": "ASC471",
+"name": "Paushtik ladoo",
+"kcal_100": 485.9,
+"serving": "2 ladoo (~35 g)",
+"kcal": 170,
+"protein": 2.7,
+"carbs": 21.1,
+"fat": 8.7
+},
+{
+"code": "ASC472",
+"name": "Paushtik roti",
+"kcal_100": 149.3,
+"serving": "3 roti (~43 g)",
+"kcal": 64,
+"protein": 3.1,
+"carbs": 11.4,
+"fat": 0.6
+},
+{
+"code": "OSR112",
+"name": "Pav bhaji",
+"kcal_100": 96.5,
+"serving": "100 g",
+"kcal": 97,
+"protein": 2.7,
+"carbs": 12.0,
+"fat": 4.3
+},
+{
+"code": "OSR097",
+"name": "Pav bhaji masala",
+"kcal_100": 230.5,
+"serving": "10 gm (~1 g)",
+"kcal": 3,
+"protein": 0.1,
+"carbs": 0.3,
+"fat": 0.1
+},
+{
+"code": "BFP373",
+"name": "Pavlova",
+"kcal_100": 200.6,
+"serving": "0.5 meringue (~362 g)",
+"kcal": 725,
+"protein": 6.7,
+"carbs": 79.0,
+"fat": 44.4
+},
+{
+"code": "ASC193",
+"name": "Pea curry (Matar ki sabzi)",
+"kcal_100": 103.0,
+"serving": "1 bowl (~277 g)",
+"kcal": 286,
+"protein": 12.5,
+"carbs": 25.5,
+"fat": 14.2
+},
+{
+"code": "ASC229",
+"name": "Pea keema curry (Matar keema ki sabzi)",
+"kcal_100": 133.0,
+"serving": "1 bowl (~344 g)",
+"kcal": 457,
+"protein": 29.0,
+"carbs": 21.5,
+"fat": 28.0
+},
+{
+"code": "ASC044",
+"name": "Pea keema sandwich (toasted) (Matar aur keema ka sandwich)",
+"kcal_100": 171.8,
+"serving": "2 toasted triangle (~85 g)",
+"kcal": 145,
+"protein": 9.4,
+"carbs": 17.1,
+"fat": 4.7
+},
+{
+"code": "ASC192",
+"name": "Pea mushroom curry (Matar mushroom)",
+"kcal_100": 93.3,
+"serving": "1 bowl (~277 g)",
+"kcal": 259,
+"protein": 10.7,
+"carbs": 20.6,
+"fat": 14.3
+},
+{
+"code": "ASC191",
+"name": "Pea paneer curry (Matar paneer)",
+"kcal_100": 134.8,
+"serving": "1 bowl (~277 g)",
+"kcal": 374,
+"protein": 18.3,
+"carbs": 25.8,
+"fat": 21.5
+},
+{
+"code": "ASC103",
+"name": "Pea parantha/paratha (Matar ka parantha/paratha)",
+"kcal_100": 190.7,
+"serving": "3 parantha (~108 g)",
+"kcal": 207,
+"protein": 6.1,
+"carbs": 23.3,
+"fat": 9.5
+},
+{
+"code": "ASC190",
+"name": "Pea potato curry (Aloo matar)",
+"kcal_100": 100.9,
+"serving": "1 bowl (~277 g)",
+"kcal": 280,
+"protein": 9.7,
+"carbs": 27.0,
+"fat": 14.2
+},
+{
+"code": "ASC041",
+"name": "Pea potato sandwich (toasted) (Matar aloo ka sandwich)",
+"kcal_100": 164.9,
+"serving": "2 toasted triangle (~89 g)",
+"kcal": 147,
+"protein": 4.1,
+"carbs": 22.4,
+"fat": 4.8
+},
+{
+"code": "ASC194",
+"name": "Pea vadi curry",
+"kcal_100": 101.9,
+"serving": "1 bowl (~287 g)",
+"kcal": 293,
+"protein": 13.3,
+"carbs": 25.6,
+"fat": 14.6
+},
+{
+"code": "OSR046",
+"name": "Peach blueberry preserves",
+"kcal_100": 177.4,
+"serving": "1 half-pints (~386 g)",
+"kcal": 686,
+"protein": 2.0,
+"carbs": 176.9,
+"fat": 0.8
+},
+{
+"code": "BFP358",
+"name": "Peach melba ice cream",
+"kcal_100": 200.8,
+"serving": "1 sundae glass (~229 g)",
+"kcal": 460,
+"protein": 4.7,
+"carbs": 37.4,
+"fat": 33.2
+},
+{
+"code": "ASC029",
+"name": "Peanut and tomato sandwich (Moongfali aur tamatar ka sandwich)",
+"kcal_100": 291.4,
+"serving": "2 triangle (~61 g)",
+"kcal": 177,
+"protein": 5.8,
+"carbs": 17.3,
+"fat": 9.8
+},
+{
+"code": "ASC445",
+"name": "Peanut biscuit",
+"kcal_100": 401.0,
+"serving": "3 biscuit (~18 g)",
+"kcal": 71,
+"protein": 1.5,
+"carbs": 8.3,
+"fat": 3.6
+},
+{
+"code": "ASC382",
+"name": "Peanut brittle (Moongfali ki chikki)",
+"kcal_100": 320.5,
+"serving": "4 piece (~25 g)",
+"kcal": 79,
+"protein": 1.7,
+"carbs": 11.7,
+"fat": 2.7
+},
+{
+"code": "BFP458",
+"name": "Peanut butter cucumber sandwich",
+"kcal_100": 243.3,
+"serving": "2 sandwich (~55 g)",
+"kcal": 134,
+"protein": 5.0,
+"carbs": 16.4,
+"fat": 5.8
+},
+{
+"code": "ASC385",
+"name": "Peanut chutney (Mungfali ki chutney)",
+"kcal_100": 258.4,
+"serving": "1 tablespoon (~21 g)",
+"kcal": 54,
+"protein": 2.5,
+"carbs": 2.1,
+"fat": 4.0
+},
+{
+"code": "ASC119",
+"name": "Peanut pulao",
+"kcal_100": 193.3,
+"serving": "1 plate (~358 g)",
+"kcal": 692,
+"protein": 19.0,
+"carbs": 75.8,
+"fat": 34.0
+},
+{
+"code": "ASC270",
+"name": "Peanut raita (Mungfali ka raita)",
+"kcal_100": 150.4,
+"serving": "1 bowl (~123 g)",
+"kcal": 184,
+"protein": 10.5,
+"carbs": 11.4,
+"fat": 11.0
+},
+{
+"code": "BFP352",
+"name": "Pear chocholate sunday",
+"kcal_100": 183.5,
+"serving": "1 sundae glass (~244 g)",
+"kcal": 447,
+"protein": 5.1,
+"carbs": 36.6,
+"fat": 32.0
+},
+{
+"code": "OSR047",
+"name": "Pear preserves (Naashpati ka murabba)",
+"kcal_100": 101.2,
+"serving": "100 g",
+"kcal": 101,
+"protein": 0.3,
+"carbs": 25.7,
+"fat": 0.2
+},
+{
+"code": "BFP546",
+"name": "Pearl millet infant food (Bajra shishu aahaar)",
+"kcal_100": 362.4,
+"serving": "1 serving (~50 g)",
+"kcal": 181,
+"protein": 6.0,
+"carbs": 31.0,
+"fat": 3.3
+},
+{
+"code": "ASC470",
+"name": "Pearl millet ladoo (Bajra ladoo)",
+"kcal_100": 319.7,
+"serving": "2 ladoo (~47 g)",
+"kcal": 152,
+"protein": 4.6,
+"carbs": 24.2,
+"fat": 3.8
+},
+{
+"code": "BFP266",
+"name": "Peas brinjal bhartha (Matar baingan bhartha)",
+"kcal_100": 84.5,
+"serving": "1 small bowl (~262 g)",
+"kcal": 221,
+"protein": 5.4,
+"carbs": 13.1,
+"fat": 15.8
+},
+{
+"code": "BFP136",
+"name": "Peas pulao (Matar pulao)",
+"kcal_100": 108.9,
+"serving": "100 g",
+"kcal": 109,
+"protein": 3.9,
+"carbs": 18.4,
+"fat": 1.9
+},
+{
+"code": "ASC138",
+"name": "Penne platter",
+"kcal_100": 177.4,
+"serving": "1 plate (~261 g)",
+"kcal": 464,
+"protein": 13.2,
+"carbs": 54.6,
+"fat": 22.8
+},
+{
+"code": "ASC292",
+"name": "Phirni",
+"kcal_100": 116.1,
+"serving": "1 bowl (~290 g)",
+"kcal": 337,
+"protein": 10.1,
+"carbs": 46.7,
+"fat": 12.6
+},
+{
+"code": "OSR058",
+"name": "Pickled cabbage",
+"kcal_100": 13.7,
+"serving": "1 jar (~259 g)",
+"kcal": 36,
+"protein": 1.0,
+"carbs": 6.6,
+"fat": 0.4
+},
+{
+"code": "OSR055",
+"name": "Pickled mustard greens",
+"kcal_100": 13.1,
+"serving": "100 g",
+"kcal": 13,
+"protein": 1.5,
+"carbs": 1.1,
+"fat": 0.2
+},
+{
+"code": "ASC446",
+"name": "Pin wheel biscuit",
+"kcal_100": 404.6,
+"serving": "2 biscuit (~20 g)",
+"kcal": 80,
+"protein": 1.1,
+"carbs": 10.8,
+"fat": 3.7
+},
+{
+"code": "ASC033",
+"name": "Pin wheel sandwich",
+"kcal_100": 311.5,
+"serving": "2 triangle (~28 g)",
+"kcal": 87,
+"protein": 2.4,
+"carbs": 3.9,
+"fat": 7.0
+},
+{
+"code": "ASC433",
+"name": "Pineapple cake",
+"kcal_100": 195.6,
+"serving": "100 g",
+"kcal": 196,
+"protein": 5.0,
+"carbs": 23.5,
+"fat": 9.3
+},
+{
+"code": "ASC018",
+"name": "Pineapple milkshake (Ananas milkshake)",
+"kcal_100": 55.7,
+"serving": "1 tall glass (~365 g)",
+"kcal": 203,
+"protein": 6.0,
+"carbs": 27.8,
+"fat": 8.1
+},
+{
+"code": "BFP608",
+"name": "Pineapple milkshake with ice cream (Ananas milkshake ice cream ke saath)",
+"kcal_100": 68.5,
+"serving": "1 tall glass (~340 g)",
+"kcal": 233,
+"protein": 6.6,
+"carbs": 31.7,
+"fat": 9.4
+},
+{
+"code": "ASC430",
+"name": "Pineapple pastry",
+"kcal_100": 208.2,
+"serving": "1 pastry (~91 g)",
+"kcal": 190,
+"protein": 5.5,
+"carbs": 26.5,
+"fat": 7.2
+},
+{
+"code": "BFP325",
+"name": "Pineapple raita (Ananas ka raita)",
+"kcal_100": 67.7,
+"serving": "1 bowl (~159 g)",
+"kcal": 108,
+"protein": 6.2,
+"carbs": 13.7,
+"fat": 3.2
+},
+{
+"code": "ASC313",
+"name": "Pineapple souffle",
+"kcal_100": 196.1,
+"serving": "1 souffle cup (~202 g)",
+"kcal": 396,
+"protein": 16.3,
+"carbs": 31.3,
+"fat": 23.7
+},
+{
+"code": "ASC399",
+"name": "Pineapple tart",
+"kcal_100": 195.4,
+"serving": "2 tart (~77 g)",
+"kcal": 151,
+"protein": 1.8,
+"carbs": 22.1,
+"fat": 6.3
+},
+{
+"code": "ASC328",
+"name": "Pineapple upside down pudding",
+"kcal_100": 257.7,
+"serving": "1 large slice (~134 g)",
+"kcal": 344,
+"protein": 4.2,
+"carbs": 47.7,
+"fat": 15.9
+},
+{
+"code": "BFP122",
+"name": "Pizza",
+"kcal_100": 146.8,
+"serving": "1 slice (~297 g)",
+"kcal": 436,
+"protein": 20.4,
+"carbs": 29.6,
+"fat": 25.9
+},
+{
+"code": "ASC335",
+"name": "Plain burfi (Burfi)",
+"kcal_100": 408.3,
+"serving": "2 burfi (~44 g)",
+"kcal": 178,
+"protein": 4.3,
+"carbs": 13.5,
+"fat": 12.2
+},
+{
+"code": "ASC417",
+"name": "Plain cream cake",
+"kcal_100": 353.9,
+"serving": "1 piece (~53 g)",
+"kcal": 188,
+"protein": 3.3,
+"carbs": 25.1,
+"fat": 8.6
+},
+{
+"code": "BFP148",
+"name": "Plain dosa",
+"kcal_100": 380.9,
+"serving": "2 dosa (~36 g)",
+"kcal": 138,
+"protein": 3.7,
+"carbs": 23.1,
+"fat": 3.0
+},
+{
+"code": "BFP144",
+"name": "Plain khitchdi (Plain khichri/khichdi)",
+"kcal_100": 57.0,
+"serving": "100 g",
+"kcal": 57,
+"protein": 1.7,
+"carbs": 10.0,
+"fat": 1.0
+},
+{
+"code": "ASC061",
+"name": "Plain omelette/omlet",
+"kcal_100": 272.4,
+"serving": "1 omelette (~143 g)",
+"kcal": 390,
+"protein": 13.8,
+"carbs": 0.9,
+"fat": 36.8
+},
+{
+"code": "ASC097",
+"name": "Plain parantha/paratha",
+"kcal_100": 298.3,
+"serving": "3 parantha (~56 g)",
+"kcal": 166,
+"protein": 2.8,
+"carbs": 17.1,
+"fat": 9.4
+},
+{
+"code": "ASC114",
+"name": "Plain pulao",
+"kcal_100": 140.2,
+"serving": "1 plate (~308 g)",
+"kcal": 432,
+"protein": 7.2,
+"carbs": 67.2,
+"fat": 14.2
+},
+{
+"code": "ASC058",
+"name": "Poached egg",
+"kcal_100": 123.9,
+"serving": "1 egg (~56 g)",
+"kcal": 69,
+"protein": 6.7,
+"carbs": 0.2,
+"fat": 4.6
+},
+{
+"code": "BFP044",
+"name": "Poha",
+"kcal_100": 294.5,
+"serving": "1 bowl (~55 g)",
+"kcal": 161,
+"protein": 3.3,
+"carbs": 19.1,
+"fat": 7.7
+},
+{
+"code": "OSR089",
+"name": "Pomegranate raita (Anaar ka raita)",
+"kcal_100": 72.6,
+"serving": "1 bowl (~144 g)",
+"kcal": 105,
+"protein": 5.8,
+"carbs": 10.3,
+"fat": 4.7
+},
+{
+"code": "BFP580",
+"name": "Poshtik chilla/cheela",
+"kcal_100": 159.5,
+"serving": "3 cheela (~72 g)",
+"kcal": 115,
+"protein": 3.5,
+"carbs": 19.9,
+"fat": 2.2
+},
+{
+"code": "BFP576",
+"name": "Poshtik khichdi/khichri",
+"kcal_100": 93.4,
+"serving": "1 plate (~360 g)",
+"kcal": 336,
+"protein": 11.0,
+"carbs": 56.3,
+"fat": 6.8
+},
+{
+"code": "BFP031",
+"name": "Potato canjee (Aloo canjee)",
+"kcal_100": 16.3,
+"serving": "1 glass (~195 g)",
+"kcal": 32,
+"protein": 0.8,
+"carbs": 5.2,
+"fat": 0.8
+},
+{
+"code": "ASC172",
+"name": "Potato capsicum (Shimla mirch aloo)",
+"kcal_100": 125.5,
+"serving": "1 bowl (~151 g)",
+"kcal": 189,
+"protein": 2.1,
+"carbs": 13.1,
+"fat": 14.1
+},
+{
+"code": "ASC171",
+"name": "Potato cauliflower (Aloo gobhi)",
+"kcal_100": 106.2,
+"serving": "1 bowl (~176 g)",
+"kcal": 187,
+"protein": 3.3,
+"carbs": 10.5,
+"fat": 14.3
+},
+{
+"code": "BFP239",
+"name": "Potato curry (Aloo ki sabzi)",
+"kcal_100": 89.6,
+"serving": "1 bowl (~202 g)",
+"kcal": 181,
+"protein": 3.1,
+"carbs": 21.0,
+"fat": 9.0
+},
+{
+"code": "ASC175",
+"name": "Potato fenugreek (Aloo methi)",
+"kcal_100": 135.1,
+"serving": "1 bowl (~204 g)",
+"kcal": 276,
+"protein": 4.6,
+"carbs": 17.3,
+"fat": 20.5
+},
+{
+"code": "ASC297",
+"name": "Potato halwa (Aloo ka halwa)",
+"kcal_100": 151.7,
+"serving": "1 bowl (~158 g)",
+"kcal": 240,
+"protein": 2.4,
+"carbs": 46.1,
+"fat": 5.5
+},
+{
+"code": "BFP289",
+"name": "Potato nests",
+"kcal_100": 111.6,
+"serving": "2 nest (~191 g)",
+"kcal": 214,
+"protein": 10.9,
+"carbs": 21.2,
+"fat": 9.1
+},
+{
+"code": "ASC098",
+"name": "Potato parantha/paratha (Aloo ka parantha/paratha)",
+"kcal_100": 205.0,
+"serving": "3 parantha (~93 g)",
+"kcal": 191,
+"protein": 3.5,
+"carbs": 22.3,
+"fat": 9.5
+},
+{
+"code": "ASC276",
+"name": "Potato raita (Aloo ka raita)",
+"kcal_100": 75.4,
+"serving": "1 bowl (~158 g)",
+"kcal": 119,
+"protein": 6.7,
+"carbs": 16.1,
+"fat": 3.2
+},
+{
+"code": "ASC262",
+"name": "Potato salad (Aloo ka salaad)",
+"kcal_100": 89.9,
+"serving": "1 bowl (~236 g)",
+"kcal": 212,
+"protein": 3.3,
+"carbs": 26.4,
+"fat": 10.4
+},
+{
+"code": "BFP230",
+"name": "Prawn curry (with coconut) (Jhinga curry)",
+"kcal_100": 109.5,
+"serving": "1 bowl (~286 g)",
+"kcal": 313,
+"protein": 24.4,
+"carbs": 8.9,
+"fat": 19.8
+},
+{
+"code": "OSR027",
+"name": "Prawn sandwich",
+"kcal_100": 169.6,
+"serving": "1 sandwich (~228 g)",
+"kcal": 387,
+"protein": 23.6,
+"carbs": 27.1,
+"fat": 21.1
+},
+{
+"code": "ASC055",
+"name": "Puffed wheat (Murmure/Moori)",
+"kcal_100": 113.3,
+"serving": "1 bowl (~278 g)",
+"kcal": 315,
+"protein": 10.1,
+"carbs": 43.6,
+"fat": 11.2
+},
+{
+"code": "BFP055",
+"name": "Puffy omelette/omlet",
+"kcal_100": 188.1,
+"serving": "1 egg (~76 g)",
+"kcal": 143,
+"protein": 6.7,
+"carbs": 0.1,
+"fat": 12.8
+},
+{
+"code": "BFP549",
+"name": "Pulse mix",
+"kcal_100": 83.3,
+"serving": "1 serving (~133 g)",
+"kcal": 111,
+"protein": 4.2,
+"carbs": 21.3,
+"fat": 0.7
+},
+{
+"code": "BFP403",
+"name": "Pumpkin coconut burfi (Kaddu aur nariyal ki burfi)",
+"kcal_100": 186.2,
+"serving": "2 piece (~60 g)",
+"kcal": 112,
+"protein": 1.1,
+"carbs": 10.2,
+"fat": 7.6
+},
+{
+"code": "OSR036",
+"name": "Pumpkin cookies",
+"kcal_100": 218.4,
+"serving": "1 cookie (~85 g)",
+"kcal": 187,
+"protein": 2.1,
+"carbs": 38.2,
+"fat": 3.4
+},
+{
+"code": "ASC298",
+"name": "Pumpkin halwa (Kaddu ka halwa)",
+"kcal_100": 190.3,
+"serving": "1 bowl (~155 g)",
+"kcal": 295,
+"protein": 2.1,
+"carbs": 42.8,
+"fat": 13.7
+},
+{
+"code": "BFP336",
+"name": "Pumpkin kheer (Kaddu ki kheer)",
+"kcal_100": 86.4,
+"serving": "1 bowl (~268 g)",
+"kcal": 231,
+"protein": 7.4,
+"carbs": 27.9,
+"fat": 10.3
+},
+{
+"code": "BFP318",
+"name": "Pumpkin raita (Kaddu ka raita)",
+"kcal_100": 55.6,
+"serving": "1 bowl (~170 g)",
+"kcal": 95,
+"protein": 6.3,
+"carbs": 10.2,
+"fat": 3.2
+},
+{
+"code": "OSR132",
+"name": "Pumpkin soup",
+"kcal_100": 40.0,
+"serving": "1 bowl (~318 g)",
+"kcal": 128,
+"protein": 1.5,
+"carbs": 6.6,
+"fat": 10.2
+},
+{
+"code": "OSR015",
+"name": "Putharekulu",
+"kcal_100": 318.3,
+"serving": "1 roll (~54 g)",
+"kcal": 170,
+"protein": 2.0,
+"carbs": 31.9,
+"fat": 4.0
+},
+{
+"code": "ASC327",
+"name": "Queen of pudding",
+"kcal_100": 132.9,
+"serving": "1 large slice (~326 g)",
+"kcal": 433,
+"protein": 17.9,
+"carbs": 53.3,
+"fat": 17.5
+},
+{
+"code": "OSR107",
+"name": "Quinoa khichdi/khichri",
+"kcal_100": 64.0,
+"serving": "1 bowl (~318 g)",
+"kcal": 204,
+"protein": 10.1,
+"carbs": 28.1,
+"fat": 5.1
+},
+{
+"code": "ASC099",
+"name": "Radish parantha/paratha (Mooli ka parantha/paratha)",
+"kcal_100": 183.5,
+"serving": "3 parantha (~100 g)",
+"kcal": 184,
+"protein": 3.3,
+"carbs": 20.5,
+"fat": 9.5
+},
+{
+"code": "ASC030",
+"name": "Rainbow sandwich",
+"kcal_100": 272.8,
+"serving": "2 triangle (~48 g)",
+"kcal": 130,
+"protein": 3.7,
+"carbs": 16.4,
+"fat": 6.0
+},
+{
+"code": "BFP391",
+"name": "Rajbogh",
+"kcal_100": 133.7,
+"serving": "1 piece (~315 g)",
+"kcal": 421,
+"protein": 5.4,
+"carbs": 88.6,
+"fat": 7.2
+},
+{
+"code": "BFP177",
+"name": "Rasam with lemon (Nimmakaya rasam/Nimmakaya charu/Elumichai rasam/Nimbe hannina saaru)",
+"kcal_100": 24.4,
+"serving": "1 curry bowl (~394 g)",
+"kcal": 96,
+"protein": 4.4,
+"carbs": 11.2,
+"fat": 3.4
+},
+{
+"code": "BFP176",
+"name": "Rasam with tamarind (Puli rasam/ Chintapandu rasam/ Charu/Saaru)",
+"kcal_100": 26.7,
+"serving": "1 curry bowl (~390 g)",
+"kcal": 104,
+"protein": 4.4,
+"carbs": 13.1,
+"fat": 3.4
+},
+{
+"code": "BFP390",
+"name": "Rasbhari",
+"kcal_100": 130.1,
+"serving": "1 piece (~312 g)",
+"kcal": 405,
+"protein": 4.7,
+"carbs": 88.1,
+"fat": 6.0
+},
+{
+"code": "BFP392",
+"name": "Rasgulla",
+"kcal_100": 118.6,
+"serving": "1 piece (~342 g)",
+"kcal": 405,
+"protein": 4.7,
+"carbs": 88.1,
+"fat": 6.0
+},
+{
+"code": "BFP393",
+"name": "Rasmalai",
+"kcal_100": 135.5,
+"serving": "1 piece (~317 g)",
+"kcal": 430,
+"protein": 5.1,
+"carbs": 92.6,
+"fat": 6.7
+},
+{
+"code": "BFP363",
+"name": "Raspberry bavarian cream",
+"kcal_100": 150.1,
+"serving": "1 small mould (~237 g)",
+"kcal": 356,
+"protein": 7.9,
+"carbs": 42.2,
+"fat": 18.7
+},
+{
+"code": "OSR035",
+"name": "Raspberry shortbread cookies",
+"kcal_100": 441.1,
+"serving": "1 cookie (~37 g)",
+"kcal": 163,
+"protein": 1.1,
+"carbs": 22.7,
+"fat": 7.9
+},
+{
+"code": "ASC005",
+"name": "Raw mango drink (Aam panna)",
+"kcal_100": 35.9,
+"serving": "1 tall glass (~268 g)",
+"kcal": 96,
+"protein": 0.4,
+"carbs": 24.3,
+"fat": 0.1
+},
+{
+"code": "ASC183",
+"name": "Raw papaya with coconut (Papaya thoran)",
+"kcal_100": 132.8,
+"serving": "1 bowl (~150 g)",
+"kcal": 199,
+"protein": 2.3,
+"carbs": 8.3,
+"fat": 17.1
+},
+{
+"code": "ASC182",
+"name": "Raw turnip with coconut",
+"kcal_100": 132.1,
+"serving": "1 bowl (~150 g)",
+"kcal": 198,
+"protein": 2.7,
+"carbs": 8.6,
+"fat": 17.1
+},
+{
+"code": "BFP466",
+"name": "Ribbon sandwich",
+"kcal_100": 239.3,
+"serving": "3 ribbon (~43 g)",
+"kcal": 102,
+"protein": 2.7,
+"carbs": 10.6,
+"fat": 5.7
+},
+{
+"code": "BFP554",
+"name": "Rice dal porridge (Chawal dal ki khichdi/khichri)",
+"kcal_100": 383.3,
+"serving": "1 serving (~33 g)",
+"kcal": 128,
+"protein": 3.6,
+"carbs": 21.7,
+"fat": 2.8
+},
+{
+"code": "ASC052",
+"name": "Rice flakes (Chiwda/Aval)",
+"kcal_100": 112.4,
+"serving": "1 bowl (~278 g)",
+"kcal": 313,
+"protein": 10.1,
+"carbs": 43.3,
+"fat": 11.1
+},
+{
+"code": "ASC282",
+"name": "Rice kheer (Chawal ki kheer)",
+"kcal_100": 75.0,
+"serving": "1 bowl (~401 g)",
+"kcal": 301,
+"protein": 9.2,
+"carbs": 40.3,
+"fat": 11.9
+},
+{
+"code": "OSR105",
+"name": "Rice puttu (Ari puttu)",
+"kcal_100": 82.0,
+"serving": "1 puttu (~420 g)",
+"kcal": 344,
+"protein": 5.3,
+"carbs": 49.7,
+"fat": 13.1
+},
+{
+"code": "BFP041",
+"name": "Rice upma",
+"kcal_100": 151.3,
+"serving": "1 bowl (~106 g)",
+"kcal": 161,
+"protein": 2.8,
+"carbs": 19.1,
+"fat": 7.9
+},
+{
+"code": "ASC315",
+"name": "Rich chocolate mousse",
+"kcal_100": 188.3,
+"serving": "1 cup (~210 g)",
+"kcal": 396,
+"protein": 16.8,
+"carbs": 22.8,
+"fat": 25.6
+},
+{
+"code": "BFP212",
+"name": "Roast chicken",
+"kcal_100": 199.9,
+"serving": "1 joint (~133 g)",
+"kcal": 267,
+"protein": 27.3,
+"carbs": 0.1,
+"fat": 17.4
+},
+{
+"code": "BFP287",
+"name": "Roast potatoes",
+"kcal_100": 87.3,
+"serving": "2 potato (~77 g)",
+"kcal": 67,
+"protein": 1.2,
+"carbs": 11.2,
+"fat": 1.8
+},
+{
+"code": "OSR078",
+"name": "Roasted cauliflower steak",
+"kcal_100": 78.7,
+"serving": "1 cauliflower steak (~107 g)",
+"kcal": 84,
+"protein": 2.2,
+"carbs": 2.2,
+"fat": 7.2
+},
+{
+"code": "ASC227",
+"name": "Roghan josh",
+"kcal_100": 139.6,
+"serving": "1 bowl (~236 g)",
+"kcal": 329,
+"protein": 22.6,
+"carbs": 11.6,
+"fat": 21.3
+},
+{
+"code": "BFP463",
+"name": "Rolled sandwich",
+"kcal_100": 293.1,
+"serving": "2 sandwich (~22 g)",
+"kcal": 64,
+"protein": 1.4,
+"carbs": 7.6,
+"fat": 3.4
+},
+{
+"code": "ASC254",
+"name": "Russian salad",
+"kcal_100": 114.8,
+"serving": "1 bowl (~316 g)",
+"kcal": 363,
+"protein": 13.5,
+"carbs": 20.6,
+"fat": 24.8
+},
+{
+"code": "ASC447",
+"name": "Saffron biscuit (Kesar biscuit)",
+"kcal_100": 458.6,
+"serving": "3 biscuit (~11 g)",
+"kcal": 51,
+"protein": 0.7,
+"carbs": 6.6,
+"fat": 2.4
+},
+{
+"code": "OSR010",
+"name": "Saffron milk (Kesariya doodh)",
+"kcal_100": 102.2,
+"serving": "1 glass (~263 g)",
+"kcal": 268,
+"protein": 8.3,
+"carbs": 33.2,
+"fat": 12.0
+},
+{
+"code": "OSR099",
+"name": "Sago khitchdi/khichri (Sabudana khitchdi/khichri)",
+"kcal_100": 187.2,
+"serving": "1 bowl (~271 g)",
+"kcal": 508,
+"protein": 7.4,
+"carbs": 60.8,
+"fat": 27.4
+},
+{
+"code": "BFP547",
+"name": "Sajina",
+"kcal_100": 345.3,
+"serving": "1 serving (~50 g)",
+"kcal": 173,
+"protein": 5.4,
+"carbs": 33.4,
+"fat": 1.5
+},
+{
+"code": "ASC035",
+"name": "Salami sandwich",
+"kcal_100": 255.6,
+"serving": "2 triangle (~74 g)",
+"kcal": 190,
+"protein": 6.5,
+"carbs": 16.0,
+"fat": 11.5
+},
+{
+"code": "ASC167",
+"name": "Sambar",
+"kcal_100": 96.9,
+"serving": "1 bowl (~257 g)",
+"kcal": 249,
+"protein": 8.6,
+"carbs": 27.2,
+"fat": 11.3
+},
+{
+"code": "ASC217",
+"name": "Sarson ka saag",
+"kcal_100": 87.8,
+"serving": "1 bowl (~141 g)",
+"kcal": 124,
+"protein": 4.3,
+"carbs": 7.5,
+"fat": 8.3
+},
+{
+"code": "OSR002",
+"name": "Sattu drink",
+"kcal_100": 23.4,
+"serving": "100 g",
+"kcal": 23,
+"protein": 0.6,
+"carbs": 5.2,
+"fat": 0.1
+},
+{
+"code": "BFP447",
+"name": "Saunth/Sonth chutney with ginger",
+"kcal_100": 84.2,
+"serving": "1 tablespoon (~33 g)",
+"kcal": 28,
+"protein": 0.1,
+"carbs": 6.8,
+"fat": 0.0
+},
+{
+"code": "ASC281",
+"name": "Saunth/Sonth chutney with tamarind/imli",
+"kcal_100": 141.5,
+"serving": "10 teaspoon (~18 g)",
+"kcal": 25,
+"protein": 0.2,
+"carbs": 5.9,
+"fat": 0.0
+},
+{
+"code": "OSR079",
+"name": "Sauteed radishes with green beans",
+"kcal_100": 94.3,
+"serving": "1 plate (~97 g)",
+"kcal": 91,
+"protein": 2.3,
+"carbs": 5.8,
+"fat": 6.4
+},
+{
+"code": "BFP542",
+"name": "Savoury cheese horns",
+"kcal_100": 295.1,
+"serving": "1 horn (~74 g)",
+"kcal": 218,
+"protein": 4.2,
+"carbs": 15.8,
+"fat": 15.3
+},
+{
+"code": "BFP535",
+"name": "Savoury puffs",
+"kcal_100": 190.8,
+"serving": "2 puff (~138 g)",
+"kcal": 264,
+"protein": 13.2,
+"carbs": 14.9,
+"fat": 21.1
+},
+{
+"code": "OSR081",
+"name": "Schezwan chutney",
+"kcal_100": 205.2,
+"serving": "100 g",
+"kcal": 205,
+"protein": 3.3,
+"carbs": 10.8,
+"fat": 17.7
+},
+{
+"code": "ASC059",
+"name": "Scrambled egg (Ande ki bhurji)",
+"kcal_100": 156.0,
+"serving": "1 egg (~70 g)",
+"kcal": 109,
+"protein": 7.2,
+"carbs": 0.9,
+"fat": 8.5
+},
+{
+"code": "BFP401",
+"name": "Semolina burfi (Suji/Rava burfi)",
+"kcal_100": 348.7,
+"serving": "2 piece (~47 g)",
+"kcal": 163,
+"protein": 1.6,
+"carbs": 22.1,
+"fat": 7.9
+},
+{
+"code": "OSR123",
+"name": "Semolina cake (Suji/Rava cake)",
+"kcal_100": 374.1,
+"serving": "1 square (~59 g)",
+"kcal": 221,
+"protein": 3.9,
+"carbs": 18.5,
+"fat": 14.9
+},
+{
+"code": "OSR115",
+"name": "Semolina dhokla (Suji/Rava dhokla)",
+"kcal_100": 194.9,
+"serving": "1 plate (~100 g)",
+"kcal": 195,
+"protein": 5.4,
+"carbs": 30.9,
+"fat": 5.2
+},
+{
+"code": "ASC147",
+"name": "Semolina dosa (Suji/Rava dosa)",
+"kcal_100": 227.1,
+"serving": "1 dosa (~73 g)",
+"kcal": 167,
+"protein": 5.4,
+"carbs": 24.1,
+"fat": 5.2
+},
+{
+"code": "ASC293",
+"name": "Semolina halwa (Suji ka halwa)",
+"kcal_100": 225.6,
+"serving": "1 bowl (~160 g)",
+"kcal": 360,
+"protein": 3.5,
+"carbs": 39.4,
+"fat": 21.4
+},
+{
+"code": "BFP579",
+"name": "Semolina idli (Suji/Rava idli)",
+"kcal_100": 206.4,
+"serving": "4 idli (~30 g)",
+"kcal": 61,
+"protein": 2.8,
+"carbs": 10.0,
+"fat": 1.0
+},
+{
+"code": "ASC286",
+"name": "Semolina kheer (Suji/Rava kheer)",
+"kcal_100": 113.2,
+"serving": "1 bowl (~230 g)",
+"kcal": 261,
+"protein": 7.9,
+"carbs": 36.6,
+"fat": 9.7
+},
+{
+"code": "ASC342",
+"name": "Semolina ladoo with coconut (Suji/Rava aur nariyal ke ladoo )",
+"kcal_100": 464.4,
+"serving": "2 ladoo (~36 g)",
+"kcal": 169,
+"protein": 2.1,
+"carbs": 18.5,
+"fat": 9.8
+},
+{
+"code": "ASC341",
+"name": "Semolina ladoo with khoya (Suji/Rava aur khoye ke ladoo )",
+"kcal_100": 428.7,
+"serving": "2 ladoo (~29 g)",
+"kcal": 126,
+"protein": 2.0,
+"carbs": 15.5,
+"fat": 6.4
+},
+{
+"code": "BFP407",
+"name": "Semolina ladoo with nuts (Suji/Rava ladoo with nuts)",
+"kcal_100": 441.8,
+"serving": "2 piece (~31 g)",
+"kcal": 139,
+"protein": 1.7,
+"carbs": 15.1,
+"fat": 8.0
+},
+{
+"code": "OSR009",
+"name": "Semolina milk drink (Thari kanji)",
+"kcal_100": 44.2,
+"serving": "1 cup (~263 g)",
+"kcal": 116,
+"protein": 2.6,
+"carbs": 18.2,
+"fat": 3.6
+},
+{
+"code": "ASC048",
+"name": "Semolina porridge (Suji/Rava daliya)",
+"kcal_100": 100.9,
+"serving": "1 bowl (~278 g)",
+"kcal": 280,
+"protein": 10.4,
+"carbs": 34.4,
+"fat": 11.3
+},
+{
+"code": "BFP039",
+"name": "Semolina upma (Suji/Rava upma)",
+"kcal_100": 147.9,
+"serving": "1 bowl (~106 g)",
+"kcal": 157,
+"protein": 3.5,
+"carbs": 17.3,
+"fat": 8.0
+},
+{
+"code": "BFP565",
+"name": "Sesame biscuit (Til ke biscuit)",
+"kcal_100": 424.0,
+"serving": "3 biscuit (~15 g)",
+"kcal": 62,
+"protein": 1.2,
+"carbs": 7.8,
+"fat": 2.8
+},
+{
+"code": "BFP412",
+"name": "Sesame chickpeas brittle (Til aur channe ki chikki)",
+"kcal_100": 282.7,
+"serving": "2 piece (~35 g)",
+"kcal": 99,
+"protein": 3.0,
+"carbs": 17.7,
+"fat": 1.6
+},
+{
+"code": "ASC344",
+"name": "Sesame ladoo (Til ke ladoo)",
+"kcal_100": 397.0,
+"serving": "2 ladoo (~28 g)",
+"kcal": 109,
+"protein": 2.9,
+"carbs": 12.0,
+"fat": 5.4
+},
+{
+"code": "BFP214",
+"name": "Shahi chicken masala",
+"kcal_100": 163.7,
+"serving": "1 bowl (~349 g)",
+"kcal": 572,
+"protein": 34.3,
+"carbs": 14.2,
+"fat": 42.0
+},
+{
+"code": "ASC221",
+"name": "Shahi paneer",
+"kcal_100": 156.5,
+"serving": "1 bowl (~259 g)",
+"kcal": 406,
+"protein": 13.1,
+"carbs": 17.2,
+"fat": 32.0
+},
+{
+"code": "ASC294",
+"name": "Shahi suji halwa",
+"kcal_100": 382.3,
+"serving": "1 bowl (~98 g)",
+"kcal": 376,
+"protein": 3.4,
+"carbs": 43.7,
+"fat": 21.4
+},
+{
+"code": "ASC350",
+"name": "Shahi tukre",
+"kcal_100": 189.8,
+"serving": "2 tukra (~102 g)",
+"kcal": 193,
+"protein": 2.8,
+"carbs": 42.2,
+"fat": 2.6
+},
+{
+"code": "ASC212",
+"name": "Shepherd's pie (vegetarian)",
+"kcal_100": 135.6,
+"serving": "1 bowl (~271 g)",
+"kcal": 367,
+"protein": 13.6,
+"carbs": 32.6,
+"fat": 19.8
+},
+{
+"code": "ASC239",
+"name": "Shepherd's pie (with minced meat)",
+"kcal_100": 142.8,
+"serving": "1 dish (~188 g)",
+"kcal": 268,
+"protein": 14.0,
+"carbs": 15.1,
+"fat": 16.7
+},
+{
+"code": "BFP550",
+"name": "Shishu ahar",
+"kcal_100": 93.4,
+"serving": "1 serving (~133 g)",
+"kcal": 124,
+"protein": 3.5,
+"carbs": 23.2,
+"fat": 1.9
+},
+{
+"code": "ASC452",
+"name": "Short bread cookies",
+"kcal_100": 443.1,
+"serving": "4 biscuit (~18 g)",
+"kcal": 78,
+"protein": 1.1,
+"carbs": 11.4,
+"fat": 3.2
+},
+{
+"code": "OSR056",
+"name": "Small onion pickle",
+"kcal_100": 16.9,
+"serving": "1 bowl (~112 g)",
+"kcal": 19,
+"protein": 1.8,
+"carbs": 3.1,
+"fat": 0.7
+},
+{
+"code": "ASC320",
+"name": "Snow flakes pudding",
+"kcal_100": 95.2,
+"serving": "1 bowl (~318 g)",
+"kcal": 303,
+"protein": 14.9,
+"carbs": 25.7,
+"fat": 15.8
+},
+{
+"code": "ASC302",
+"name": "Soft Custard (stirred)",
+"kcal_100": 109.2,
+"serving": "1 bowl (~250 g)",
+"kcal": 272,
+"protein": 12.5,
+"carbs": 27.9,
+"fat": 12.6
+},
+{
+"code": "BFP300",
+"name": "Sour cream potato salad",
+"kcal_100": 121.9,
+"serving": "1 small bowl (~227 g)",
+"kcal": 277,
+"protein": 6.6,
+"carbs": 20.5,
+"fat": 18.4
+},
+{
+"code": "BFP170",
+"name": "Sour lentils (Khatti dal)",
+"kcal_100": 34.8,
+"serving": "1 curry bowl (~363 g)",
+"kcal": 126,
+"protein": 8.0,
+"carbs": 21.9,
+"fat": 0.5
+},
+{
+"code": "BFP569",
+"name": "Soya chikki",
+"kcal_100": 423.7,
+"serving": "1 piece (~75 g)",
+"kcal": 319,
+"protein": 5.4,
+"carbs": 47.3,
+"fat": 11.7
+},
+{
+"code": "BFP206",
+"name": "Soya chunks and peas (Nutrinugget matar)",
+"kcal_100": 82.6,
+"serving": "1 bowl (~223 g)",
+"kcal": 184,
+"protein": 6.8,
+"carbs": 13.0,
+"fat": 11.4
+},
+{
+"code": "BFP204",
+"name": "Soya chunks korma (Nutrinugget korma)",
+"kcal_100": 131.4,
+"serving": "1 bowl (~249 g)",
+"kcal": 327,
+"protein": 9.6,
+"carbs": 19.1,
+"fat": 23.6
+},
+{
+"code": "BFP575",
+"name": "Soya roti",
+"kcal_100": 284.0,
+"serving": "3 roti (~50 g)",
+"kcal": 143,
+"protein": 4.6,
+"carbs": 20.1,
+"fat": 4.6
+},
+{
+"code": "OSR153",
+"name": "Soya seekh kebab",
+"kcal_100": 115.0,
+"serving": "1 kabab (~57 g)",
+"kcal": 66,
+"protein": 3.1,
+"carbs": 5.7,
+"fat": 3.4
+},
+{
+"code": "ASC164",
+"name": "Soyabean curry",
+"kcal_100": 163.3,
+"serving": "1 bowl (~120 g)",
+"kcal": 196,
+"protein": 12.5,
+"carbs": 8.1,
+"fat": 12.2
+},
+{
+"code": "BFP155",
+"name": "Spaghetti bolognese",
+"kcal_100": 97.4,
+"serving": "1 shallow dish (~374 g)",
+"kcal": 365,
+"protein": 35.0,
+"carbs": 37.6,
+"fat": 35.6
+},
+{
+"code": "BFP158",
+"name": "Spaghetti with meat balls and tomato sauce",
+"kcal_100": 158.1,
+"serving": "100 g",
+"kcal": 158,
+"protein": 5.6,
+"carbs": 10.5,
+"fat": 10.6
+},
+{
+"code": "BFP159",
+"name": "Spaghetti with paneer balls and tomato sauce",
+"kcal_100": 158.5,
+"serving": "100 g",
+"kcal": 159,
+"protein": 4.0,
+"carbs": 12.7,
+"fat": 10.4
+},
+{
+"code": "BFP058",
+"name": "Spanish omelette/omlet",
+"kcal_100": 157.4,
+"serving": "1 egg (~152 g)",
+"kcal": 239,
+"protein": 12.5,
+"carbs": 7.8,
+"fat": 17.4
+},
+{
+"code": "ASC128",
+"name": "Spanish rice",
+"kcal_100": 164.2,
+"serving": "1 plate (~217 g)",
+"kcal": 357,
+"protein": 9.1,
+"carbs": 67.6,
+"fat": 4.9
+},
+{
+"code": "BFP460",
+"name": "Spicy chutney sandwich",
+"kcal_100": 249.6,
+"serving": "2 sandwich (~58 g)",
+"kcal": 144,
+"protein": 5.0,
+"carbs": 19.6,
+"fat": 5.5
+},
+{
+"code": "OSR093",
+"name": "Spinach and paneer souffle",
+"kcal_100": 186.2,
+"serving": "100 g",
+"kcal": 186,
+"protein": 7.6,
+"carbs": 9.6,
+"fat": 13.5
+},
+{
+"code": "BFP257",
+"name": "Spinach and potato (Palak aloo)",
+"kcal_100": 57.2,
+"serving": "1 bowl (~335 g)",
+"kcal": 192,
+"protein": 5.5,
+"carbs": 19.8,
+"fat": 9.4
+},
+{
+"code": "ASC466",
+"name": "Spinach burfi (Palak burfi)",
+"kcal_100": 121.2,
+"serving": "2 piece (~87 g)",
+"kcal": 106,
+"protein": 2.4,
+"carbs": 11.1,
+"fat": 5.9
+},
+{
+"code": "BFP556",
+"name": "Spinach khichri (Palak khichri/khichdi)",
+"kcal_100": 102.2,
+"serving": "1 serving (~150 g)",
+"kcal": 154,
+"protein": 5.2,
+"carbs": 26.1,
+"fat": 2.9
+},
+{
+"code": "BFP208",
+"name": "Spinach mushroom (Palak mushroom)",
+"kcal_100": 47.6,
+"serving": "1 bowl (~295 g)",
+"kcal": 141,
+"protein": 5.7,
+"carbs": 8.7,
+"fat": 8.7
+},
+{
+"code": "OSR071",
+"name": "Spinach mushroom scrambled egg (Palak mushroom bhurji)",
+"kcal_100": 158.8,
+"serving": "1 plate (~116 g)",
+"kcal": 185,
+"protein": 15.5,
+"carbs": 0.7,
+"fat": 13.4
+},
+{
+"code": "ASC228",
+"name": "Spinach mutton (Palak mutton)",
+"kcal_100": 80.3,
+"serving": "100 g",
+"kcal": 80,
+"protein": 5.7,
+"carbs": 3.4,
+"fat": 4.7
+},
+{
+"code": "ASC215",
+"name": "Spinach paneer (Palak paneer)",
+"kcal_100": 77.7,
+"serving": "1 bowl (~296 g)",
+"kcal": 230,
+"protein": 11.9,
+"carbs": 13.1,
+"fat": 14.1
+},
+{
+"code": "BFP560",
+"name": "Spinach peanut burfi (Palak aur mungfali ki burfi)",
+"kcal_100": 105.4,
+"serving": "1 serving (~240 g)",
+"kcal": 253,
+"protein": 8.1,
+"carbs": 32.6,
+"fat": 10.5
+},
+{
+"code": "BFP321",
+"name": "Spinach raita (Palak ka raita)",
+"kcal_100": 52.8,
+"serving": "1 bowl (~203 g)",
+"kcal": 107,
+"protein": 8.0,
+"carbs": 10.3,
+"fat": 3.8
+},
+{
+"code": "BFP296",
+"name": "Spinach souffle",
+"kcal_100": 150.2,
+"serving": "1 small bowl (~200 g)",
+"kcal": 301,
+"protein": 14.7,
+"carbs": 12.6,
+"fat": 21.1
+},
+{
+"code": "BFP073",
+"name": "Spinach soup (Palak ka soup)",
+"kcal_100": 32.6,
+"serving": "100 g",
+"kcal": 33,
+"protein": 10.5,
+"carbs": 3.0,
+"fat": 14.3
+},
+{
+"code": "BFP561",
+"name": "Split bengal gram burfi/fudge (Channa dal burfi)",
+"kcal_100": 287.4,
+"serving": "4 piece (~61 g)",
+"kcal": 176,
+"protein": 2.8,
+"carbs": 33.5,
+"fat": 4.3
+},
+{
+"code": "OSR142",
+"name": "Split bengal gram dal (Channa dal)",
+"kcal_100": 99.7,
+"serving": "1 bowl (~292 g)",
+"kcal": 291,
+"protein": 12.1,
+"carbs": 29.2,
+"fat": 13.5
+},
+{
+"code": "BFP137",
+"name": "Split bengal gram dal and vegetable pulao (Channa dal and vegetable pulao)",
+"kcal_100": 116.5,
+"serving": "1 plate (~442 g)",
+"kcal": 515,
+"protein": 15.9,
+"carbs": 87.1,
+"fat": 10.1
+},
+{
+"code": "ASC463",
+"name": "Split bengal gram sweet rice (Channa dal sweet rice)",
+"kcal_100": 190.2,
+"serving": "1 plate (~220 g)",
+"kcal": 418,
+"protein": 9.1,
+"carbs": 90.4,
+"fat": 1.4
+},
+{
+"code": "ASC153",
+"name": "Split bengal gram with bottle gourd (Channa dal with ghiya/lauki)",
+"kcal_100": 73.3,
+"serving": "1 bowl (~279 g)",
+"kcal": 204,
+"protein": 7.8,
+"carbs": 19.8,
+"fat": 10.0
+},
+{
+"code": "BFP302",
+"name": "Spring basket salad",
+"kcal_100": 160.5,
+"serving": "1 basket (~210 g)",
+"kcal": 337,
+"protein": 7.1,
+"carbs": 24.4,
+"fat": 23.7
+},
+{
+"code": "ASC170",
+"name": "Sprouted moong dal chat",
+"kcal_100": 32.5,
+"serving": "1 plate (~257 g)",
+"kcal": 83,
+"protein": 3.5,
+"carbs": 15.4,
+"fat": 0.8
+},
+{
+"code": "ASC468",
+"name": "Sprouted moong daliya",
+"kcal_100": 111.6,
+"serving": "1 plate (~316 g)",
+"kcal": 353,
+"protein": 8.9,
+"carbs": 46.7,
+"fat": 14.9
+},
+{
+"code": "ASC102",
+"name": "Sprouted moong parantha/paratha",
+"kcal_100": 228.6,
+"serving": "3 parantha (~77 g)",
+"kcal": 175,
+"protein": 3.3,
+"carbs": 18.6,
+"fat": 9.5
+},
+{
+"code": "ASC469",
+"name": "Sprouted moong poha",
+"kcal_100": 192.6,
+"serving": "1 plate (~191 g)",
+"kcal": 369,
+"protein": 10.7,
+"carbs": 50.9,
+"fat": 13.2
+},
+{
+"code": "ASC117",
+"name": "Sprouted moong pulao",
+"kcal_100": 113.0,
+"serving": "1 plate (~408 g)",
+"kcal": 461,
+"protein": 8.9,
+"carbs": 71.3,
+"fat": 14.7
+},
+{
+"code": "ASC271",
+"name": "Sprouted moong raita",
+"kcal_100": 60.9,
+"serving": "1 bowl (~153 g)",
+"kcal": 93,
+"protein": 7.1,
+"carbs": 9.4,
+"fat": 3.3
+},
+{
+"code": "ASC259",
+"name": "Sprouted moong salad",
+"kcal_100": 37.8,
+"serving": "1 bowl (~204 g)",
+"kcal": 77,
+"protein": 4.7,
+"carbs": 11.2,
+"fat": 1.5
+},
+{
+"code": "BFP578",
+"name": "Sprouts upma",
+"kcal_100": 316.2,
+"serving": "1 plate (~95 g)",
+"kcal": 301,
+"protein": 9.1,
+"carbs": 42.9,
+"fat": 10.0
+},
+{
+"code": "OSR048",
+"name": "Starfruit preserves",
+"kcal_100": 128.9,
+"serving": "1 jar (~162 g)",
+"kcal": 210,
+"protein": 0.4,
+"carbs": 54.6,
+"fat": 0.2
+},
+{
+"code": "BFP380",
+"name": "Steamed cake with chocolate sauce",
+"kcal_100": 301.9,
+"serving": "0.5 small mould (~238 g)",
+"kcal": 719,
+"protein": 10.7,
+"carbs": 69.2,
+"fat": 45.3
+},
+{
+"code": "ASC322",
+"name": "Steamed orange pudding",
+"kcal_100": 278.0,
+"serving": "1 large slice (~107 g)",
+"kcal": 299,
+"protein": 2.5,
+"carbs": 44.6,
+"fat": 12.9
+},
+{
+"code": "BFP008",
+"name": "Steeped hot coffee",
+"kcal_100": 15.9,
+"serving": "1 tea cup (~202 g)",
+"kcal": 32,
+"protein": 0.8,
+"carbs": 6.1,
+"fat": 0.7
+},
+{
+"code": "ASC330",
+"name": "Stewed apple with custard",
+"kcal_100": 92.9,
+"serving": "1 piece (~283 g)",
+"kcal": 263,
+"protein": 3.6,
+"carbs": 52.0,
+"fat": 5.2
+},
+{
+"code": "BFP371",
+"name": "Stewed fruit (with pear)",
+"kcal_100": 74.3,
+"serving": "1 bowl (~121 g)",
+"kcal": 90,
+"protein": 0.3,
+"carbs": 22.0,
+"fat": 0.4
+},
+{
+"code": "ASC426",
+"name": "Strawberry and vanilla cake with butter icing",
+"kcal_100": 370.5,
+"serving": "1 slice (~117 g)",
+"kcal": 432,
+"protein": 4.5,
+"carbs": 51.6,
+"fat": 23.8
+},
+{
+"code": "BFP348",
+"name": "Strawberry ice cream",
+"kcal_100": 215.6,
+"serving": "1 ice cream cup (~182 g)",
+"kcal": 392,
+"protein": 7.5,
+"carbs": 22.3,
+"fat": 30.8
+},
+{
+"code": "BFP288",
+"name": "Stuffed baked potatoes",
+"kcal_100": 100.2,
+"serving": "2 potato (~104 g)",
+"kcal": 104,
+"protein": 4.0,
+"carbs": 11.5,
+"fat": 4.6
+},
+{
+"code": "BFP604",
+"name": "Stuffed bittergourd (dry) (Bharwa karela)",
+"kcal_100": 217.6,
+"serving": "1 bowl (~106 g)",
+"kcal": 231,
+"protein": 1.4,
+"carbs": 2.6,
+"fat": 23.7
+},
+{
+"code": "BFP273",
+"name": "Stuffed bittergourd (wet) (Bharwa karele)",
+"kcal_100": 162.4,
+"serving": "1 bowl (~156 g)",
+"kcal": 254,
+"protein": 2.1,
+"carbs": 7.3,
+"fat": 23.9
+},
+{
+"code": "BFP284",
+"name": "Stuffed bottle gourd (Stuffed ghiya/lauki)",
+"kcal_100": 93.2,
+"serving": "1 portion (~355 g)",
+"kcal": 331,
+"protein": 20.7,
+"carbs": 15.5,
+"fat": 20.6
+},
+{
+"code": "ASC187",
+"name": "Stuffed brinjal (Bharwa baingan)",
+"kcal_100": 93.0,
+"serving": "2 brinjal (~55 g)",
+"kcal": 51,
+"protein": 0.8,
+"carbs": 2.2,
+"fat": 4.3
+},
+{
+"code": "ASC186",
+"name": "Stuffed capsicum (Bharwa shimla mirch)",
+"kcal_100": 90.9,
+"serving": "1 capsicum (~125 g)",
+"kcal": 114,
+"protein": 1.7,
+"carbs": 10.4,
+"fat": 7.2
+},
+{
+"code": "ASC062",
+"name": "Stuffed egg omelette/omlet",
+"kcal_100": 203.5,
+"serving": "1 omelette (~262 g)",
+"kcal": 533,
+"protein": 22.5,
+"carbs": 6.0,
+"fat": 46.6
+},
+{
+"code": "ASC184",
+"name": "Stuffed okra (Bharwa bhindi)",
+"kcal_100": 94.3,
+"serving": "1 bowl (~111 g)",
+"kcal": 104,
+"protein": 2.3,
+"carbs": 4.3,
+"fat": 8.5
+},
+{
+"code": "ASC185",
+"name": "Stuffed round gourd (Bharwa tinde)",
+"kcal_100": 72.8,
+"serving": "1 bowl (~248 g)",
+"kcal": 181,
+"protein": 2.7,
+"carbs": 10.0,
+"fat": 14.3
+},
+{
+"code": "ASC189",
+"name": "Stuffed tomatoes (Bharwa tamatar)",
+"kcal_100": 93.3,
+"serving": "2 tomato (~135 g)",
+"kcal": 126,
+"protein": 4.4,
+"carbs": 8.4,
+"fat": 8.2
+},
+{
+"code": "BFP468",
+"name": "Submarine sandwich",
+"kcal_100": 216.9,
+"serving": "1 hot dog bun (~194 g)",
+"kcal": 422,
+"protein": 11.8,
+"carbs": 26.4,
+"fat": 29.8
+},
+{
+"code": "ASC012",
+"name": "Summer cooler",
+"kcal_100": 22.4,
+"serving": "100 g",
+"kcal": 22,
+"protein": 0.4,
+"carbs": 5.4,
+"fat": 0.0
+},
+{
+"code": "BFP471",
+"name": "Sunset and sunrise open sandwich",
+"kcal_100": 241.3,
+"serving": "2 sandwich (~83 g)",
+"kcal": 200,
+"protein": 7.1,
+"carbs": 15.6,
+"fat": 12.5
+},
+{
+"code": "ASC444",
+"name": "Sweet and salty biscuit (Meethay aur namkeen biscuit)",
+"kcal_100": 408.0,
+"serving": "3 biscuit (~11 g)",
+"kcal": 44,
+"protein": 0.7,
+"carbs": 4.8,
+"fat": 2.4
+},
+{
+"code": "OSR133",
+"name": "Sweet corn soup",
+"kcal_100": 32.2,
+"serving": "1 bowl (~392 g)",
+"kcal": 126,
+"protein": 3.9,
+"carbs": 14.0,
+"fat": 6.4
+},
+{
+"code": "OSR023",
+"name": "Sweet couscous dessert",
+"kcal_100": 196.2,
+"serving": "1 bowl (~230 g)",
+"kcal": 452,
+"protein": 8.8,
+"carbs": 68.4,
+"fat": 17.7
+},
+{
+"code": "ASC021",
+"name": "Sweet Lassi (Meethi lassi)",
+"kcal_100": 35.7,
+"serving": "1 tall glass (~442 g)",
+"kcal": 158,
+"protein": 5.7,
+"carbs": 28.8,
+"fat": 3.0
+},
+{
+"code": "ASC038",
+"name": "Sweet open sandwich",
+"kcal_100": 244.2,
+"serving": "2 triangle (~59 g)",
+"kcal": 144,
+"protein": 2.9,
+"carbs": 23.2,
+"fat": 4.8
+},
+{
+"code": "OSR054",
+"name": "Sweet peach pickle (Aadoo ka achaar)",
+"kcal_100": 144.6,
+"serving": "1 jar (~242 g)",
+"kcal": 349,
+"protein": 1.1,
+"carbs": 89.4,
+"fat": 0.5
+},
+{
+"code": "ASC441",
+"name": "Sweet plain biscuit",
+"kcal_100": 380.8,
+"serving": "3 biscuit (~14 g)",
+"kcal": 54,
+"protein": 0.8,
+"carbs": 7.2,
+"fat": 2.5
+},
+{
+"code": "OSR034",
+"name": "Sweet potato biscuit (Shakarkand ke biscuit)",
+"kcal_100": 296.4,
+"serving": "1 biscuit (~151 g)",
+"kcal": 447,
+"protein": 7.8,
+"carbs": 57.5,
+"fat": 20.1
+},
+{
+"code": "ASC278",
+"name": "Sweet raita (Meetha raita)",
+"kcal_100": 99.2,
+"serving": "1 bowl (~192 g)",
+"kcal": 191,
+"protein": 6.2,
+"carbs": 34.4,
+"fat": 3.4
+},
+{
+"code": "ASC125",
+"name": "Sweet rice (Meethe chawal)",
+"kcal_100": 215.4,
+"serving": "1 plate (~348 g)",
+"kcal": 749,
+"protein": 7.3,
+"carbs": 148.1,
+"fat": 15.9
+},
+{
+"code": "ASC467",
+"name": "Sweet split chickpea roti (Sweet channa dal roti/Puranpoli)",
+"kcal_100": 366.6,
+"serving": "2 roti (~53 g)",
+"kcal": 196,
+"protein": 5.1,
+"carbs": 33.4,
+"fat": 4.2
+},
+{
+"code": "OSR024",
+"name": "Sweetened yogurt (Shrikhand)",
+"kcal_100": 107.2,
+"serving": "1 bowl (~305 g)",
+"kcal": 327,
+"protein": 16.1,
+"carbs": 48.8,
+"fat": 8.8
+},
+{
+"code": "ASC429",
+"name": "Swiss roll",
+"kcal_100": 251.9,
+"serving": "1 swiss roll (~63 g)",
+"kcal": 159,
+"protein": 4.6,
+"carbs": 30.6,
+"fat": 2.4
+},
+{
+"code": "ASC093",
+"name": "Talaumein soup",
+"kcal_100": 35.6,
+"serving": "1 soup bowl (~369 g)",
+"kcal": 131,
+"protein": 37.4,
+"carbs": 15.4,
+"fat": 47.2
+},
+{
+"code": "OSR096",
+"name": "Tamarind chutney (Chintapandu pachadi/Puli chutney)",
+"kcal_100": 109.1,
+"serving": "10 ml (~4 g)",
+"kcal": 4,
+"protein": 0.0,
+"carbs": 0.9,
+"fat": 0.0
+},
+{
+"code": "ASC127",
+"name": "Tamarind rice (Chintapandu pulihora/Puliyodharai/Puli sadam/Huli anna)",
+"kcal_100": 373.0,
+"serving": "1 plate (~128 g)",
+"kcal": 477,
+"protein": 9.5,
+"carbs": 83.2,
+"fat": 10.9
+},
+{
+"code": "ASC241",
+"name": "Tandoori chicken",
+"kcal_100": 145.2,
+"serving": "100 g",
+"kcal": 145,
+"protein": 16.3,
+"carbs": 2.3,
+"fat": 7.9
+},
+{
+"code": "ASC252",
+"name": "Tandoori fish",
+"kcal_100": 96.0,
+"serving": "1 piece (~234 g)",
+"kcal": 224,
+"protein": 26.1,
+"carbs": 5.5,
+"fat": 10.8
+},
+{
+"code": "ASC112",
+"name": "Tandoori parantha/paratha",
+"kcal_100": 295.4,
+"serving": "3 parantha (~56 g)",
+"kcal": 164,
+"protein": 2.8,
+"carbs": 17.1,
+"fat": 9.2
+},
+{
+"code": "OSR005",
+"name": "Thandai",
+"kcal_100": 101.2,
+"serving": "1 glass (~253 g)",
+"kcal": 256,
+"protein": 9.1,
+"carbs": 23.1,
+"fat": 14.9
+},
+{
+"code": "OSR025",
+"name": "Thickened sweetened milk (Rabri)",
+"kcal_100": 102.8,
+"serving": "1 bowl (~220 g)",
+"kcal": 226,
+"protein": 7.7,
+"carbs": 23.2,
+"fat": 11.8
+},
+{
+"code": "BFP455",
+"name": "Tomato and cucumber sandwich (Tamatar aur kheere ka sandwich)",
+"kcal_100": 150.7,
+"serving": "2 sandwich (~79 g)",
+"kcal": 119,
+"protein": 3.2,
+"carbs": 16.1,
+"fat": 5.0
+},
+{
+"code": "BFP307",
+"name": "Tomato aspic",
+"kcal_100": 50.4,
+"serving": "1 small mould (~213 g)",
+"kcal": 107,
+"protein": 14.6,
+"carbs": 10.7,
+"fat": 0.6
+},
+{
+"code": "BFP216",
+"name": "Tomato chicken",
+"kcal_100": 111.7,
+"serving": "1 bowl (~176 g)",
+"kcal": 197,
+"protein": 18.6,
+"carbs": 3.8,
+"fat": 11.8
+},
+{
+"code": "BFP442",
+"name": "Tomato ginger chutney (Tamatar adarak ki chutney)",
+"kcal_100": 44.7,
+"serving": "2 tablespoon (~16 g)",
+"kcal": 7,
+"protein": 0.2,
+"carbs": 1.5,
+"fat": 0.1
+},
+{
+"code": "ASC269",
+"name": "Tomato onion raita (Tamatar aur pyaaz ka raita)",
+"kcal_100": 59.0,
+"serving": "1 bowl (~178 g)",
+"kcal": 105,
+"protein": 6.6,
+"carbs": 12.6,
+"fat": 3.3
+},
+{
+"code": "BFP456",
+"name": "Tomato sandwich (grilled)",
+"kcal_100": 189.9,
+"serving": "2 sandwich (~77 g)",
+"kcal": 146,
+"protein": 4.8,
+"carbs": 16.3,
+"fat": 7.2
+},
+{
+"code": "BFP301",
+"name": "Tossed green salad",
+"kcal_100": 49.9,
+"serving": "1 small bowl (~218 g)",
+"kcal": 109,
+"protein": 2.9,
+"carbs": 8.3,
+"fat": 7.1
+},
+{
+"code": "ASC260",
+"name": "Tossed salad",
+"kcal_100": 63.0,
+"serving": "1 bowl (~341 g)",
+"kcal": 215,
+"protein": 3.5,
+"carbs": 16.9,
+"fat": 14.4
+},
+{
+"code": "ASC319",
+"name": "Triffle pudding",
+"kcal_100": 117.0,
+"serving": "1 bowl (~292 g)",
+"kcal": 342,
+"protein": 8.6,
+"carbs": 53.3,
+"fat": 11.5
+},
+{
+"code": "OSR045",
+"name": "Tutti fruitti biscuit",
+"kcal_100": 420.8,
+"serving": "1 biscuit (~109 g)",
+"kcal": 457,
+"protein": 5.7,
+"carbs": 57.7,
+"fat": 19.5
+},
+{
+"code": "OSR127",
+"name": "Tutti frutti cake",
+"kcal_100": 347.7,
+"serving": "100 g",
+"kcal": 348,
+"protein": 4.5,
+"carbs": 52.9,
+"fat": 12.7
+},
+{
+"code": "BFP179",
+"name": "Urad sabut special",
+"kcal_100": 79.4,
+"serving": "1 bowl (~442 g)",
+"kcal": 351,
+"protein": 10.3,
+"carbs": 22.2,
+"fat": 24.1
+},
+{
+"code": "BFP171",
+"name": "Urad special dehusked",
+"kcal_100": 69.4,
+"serving": "1 curry bowl (~266 g)",
+"kcal": 185,
+"protein": 8.4,
+"carbs": 23.6,
+"fat": 5.8
+},
+{
+"code": "BFP152",
+"name": "Uttapam",
+"kcal_100": 255.9,
+"serving": "2 uttapam (~68 g)",
+"kcal": 174,
+"protein": 4.2,
+"carbs": 24.7,
+"fat": 6.1
+},
+{
+"code": "BFP359",
+"name": "Vanilla ice cream with apples in hot cherry sauce",
+"kcal_100": 196.3,
+"serving": "1 dish (~251 g)",
+"kcal": 493,
+"protein": 4.4,
+"carbs": 57.1,
+"fat": 28.7
+},
+{
+"code": "BFP347",
+"name": "Vanilla ice cream with egg",
+"kcal_100": 214.9,
+"serving": "1 ice cream cup (~181 g)",
+"kcal": 389,
+"protein": 7.5,
+"carbs": 21.2,
+"fat": 30.8
+},
+{
+"code": "BFP346",
+"name": "Vanilla ice cream without egg",
+"kcal_100": 228.7,
+"serving": "1 ice cream cup (~157 g)",
+"kcal": 360,
+"protein": 4.2,
+"carbs": 22.4,
+"fat": 28.6
+},
+{
+"code": "ASC311",
+"name": "Vanilla souffle",
+"kcal_100": 187.9,
+"serving": "1 souffle cup (~217 g)",
+"kcal": 409,
+"protein": 16.8,
+"carbs": 32.1,
+"fat": 24.3
+},
+{
+"code": "BFP091",
+"name": "Veg paneer stew",
+"kcal_100": 145.5,
+"serving": "1 bowl (~237 g)",
+"kcal": 345,
+"protein": 16.5,
+"carbs": 24.2,
+"fat": 19.9
+},
+{
+"code": "BFP294",
+"name": "Vegetable and cheese pie",
+"kcal_100": 126.9,
+"serving": "100 g",
+"kcal": 127,
+"protein": 4.0,
+"carbs": 8.8,
+"fat": 8.3
+},
+{
+"code": "ASC036",
+"name": "Vegetable and mayonnaise sandwich",
+"kcal_100": 244.3,
+"serving": "2 triangle (~68 g)",
+"kcal": 167,
+"protein": 3.1,
+"carbs": 15.8,
+"fat": 10.5
+},
+{
+"code": "ASC123",
+"name": "Vegetable biryani/biriyani",
+"kcal_100": 174.6,
+"serving": "1 plate (~302 g)",
+"kcal": 527,
+"protein": 9.5,
+"carbs": 56.0,
+"fat": 28.7
+},
+{
+"code": "ASC134",
+"name": "Vegetable chowmein",
+"kcal_100": 129.7,
+"serving": "1 plate (~300 g)",
+"kcal": 389,
+"protein": 9.2,
+"carbs": 46.3,
+"fat": 19.0
+},
+{
+"code": "BFP241",
+"name": "Vegetable curry with coconut",
+"kcal_100": 83.1,
+"serving": "1 bowl (~372 g)",
+"kcal": 309,
+"protein": 10.3,
+"carbs": 26.7,
+"fat": 17.3
+},
+{
+"code": "BFP277",
+"name": "Vegetable jalfrezi",
+"kcal_100": 68.5,
+"serving": "1 bowl (~101 g)",
+"kcal": 69,
+"protein": 1.4,
+"carbs": 5.5,
+"fat": 4.4
+},
+{
+"code": "BFP557",
+"name": "Vegetable mix",
+"kcal_100": 174.2,
+"serving": "1 serving (~100 g)",
+"kcal": 174,
+"protein": 4.7,
+"carbs": 36.0,
+"fat": 0.9
+},
+{
+"code": "OSR101",
+"name": "Vegetable namkeen jave",
+"kcal_100": 112.2,
+"serving": "1 plate (~365 g)",
+"kcal": 410,
+"protein": 10.7,
+"carbs": 69.3,
+"fat": 9.2
+},
+{
+"code": "ASC065",
+"name": "Vegetable pancake",
+"kcal_100": 125.2,
+"serving": "4 pancake (~117 g)",
+"kcal": 147,
+"protein": 4.5,
+"carbs": 14.3,
+"fat": 7.7
+},
+{
+"code": "BFP545",
+"name": "Vegetable patties",
+"kcal_100": 261.9,
+"serving": "1 patty (~116 g)",
+"kcal": 303,
+"protein": 4.6,
+"carbs": 24.3,
+"fat": 20.5
+},
+{
+"code": "BFP045",
+"name": "Vegetable poha",
+"kcal_100": 180.5,
+"serving": "1 bowl (~98 g)",
+"kcal": 177,
+"protein": 4.8,
+"carbs": 21.1,
+"fat": 7.9
+},
+{
+"code": "ASC069",
+"name": "Vegetable stock",
+"kcal_100": 17.6,
+"serving": "1 cup (~415 g)",
+"kcal": 73,
+"protein": 1.2,
+"carbs": 4.0,
+"fat": 5.7
+},
+{
+"code": "BFP043",
+"name": "Vegetable upma",
+"kcal_100": 146.5,
+"serving": "1 plate (~236 g)",
+"kcal": 345,
+"protein": 11.1,
+"carbs": 38.8,
+"fat": 15.6
+},
+{
+"code": "BFP278",
+"name": "Vegetables stir fry",
+"kcal_100": 30.8,
+"serving": "1 small bowl (~389 g)",
+"kcal": 120,
+"protein": 4.0,
+"carbs": 12.4,
+"fat": 5.7
+},
+{
+"code": "ASC032",
+"name": "Vegetarian club sandwich",
+"kcal_100": 198.3,
+"serving": "2 triangle (~83 g)",
+"kcal": 164,
+"protein": 4.5,
+"carbs": 16.3,
+"fat": 9.4
+},
+{
+"code": "ASC285",
+"name": "Vermicelli kheer (Semiya/Seviyan ki kheer)",
+"kcal_100": 120.1,
+"serving": "1 bowl (~232 g)",
+"kcal": 279,
+"protein": 7.8,
+"carbs": 36.9,
+"fat": 11.6
+},
+{
+"code": "BFP036",
+"name": "Vermicelli porridge (Semiya/Seviyan porridge)",
+"kcal_100": 78.4,
+"serving": "1 bowl (~397 g)",
+"kcal": 311,
+"protein": 9.9,
+"carbs": 41.9,
+"fat": 11.8
+},
+{
+"code": "BFP040",
+"name": "Vermicelli upma (Semiya/Seviyan upma)",
+"kcal_100": 149.1,
+"serving": "1 bowl (~106 g)",
+"kcal": 158,
+"protein": 3.3,
+"carbs": 17.9,
+"fat": 7.9
+},
+{
+"code": "BFP492",
+"name": "Victorian sandwich cake",
+"kcal_100": 373.1,
+"serving": "1 piece (~64 g)",
+"kcal": 239,
+"protein": 3.3,
+"carbs": 28.7,
+"fat": 12.7
+},
+{
+"code": "ASC263",
+"name": "Waldroff salad",
+"kcal_100": 141.8,
+"serving": "1 bowl (~246 g)",
+"kcal": 349,
+"protein": 3.6,
+"carbs": 27.2,
+"fat": 24.8
+},
+{
+"code": "ASC151",
+"name": "Washed moong dal (Dhuli moong ki dal)",
+"kcal_100": 50.0,
+"serving": "1 bowl (~277 g)",
+"kcal": 139,
+"protein": 7.4,
+"carbs": 16.4,
+"fat": 4.7
+},
+{
+"code": "ASC152",
+"name": "Washed urad dal (Dhuli urad ki dal)",
+"kcal_100": 61.3,
+"serving": "1 bowl (~296 g)",
+"kcal": 182,
+"protein": 7.4,
+"carbs": 17.3,
+"fat": 8.8
+},
+{
+"code": "OSR028",
+"name": "Watercress sandwich",
+"kcal_100": 229.4,
+"serving": "1 triangle (~54 g)",
+"kcal": 124,
+"protein": 2.8,
+"carbs": 15.2,
+"fat": 6.2
+},
+{
+"code": "BFP406",
+"name": "Wheat and gram flour ladoo (Atta besan ladoo)",
+"kcal_100": 501.7,
+"serving": "2 piece (~30 g)",
+"kcal": 152,
+"protein": 2.8,
+"carbs": 15.3,
+"fat": 9.0
+},
+{
+"code": "OSR120",
+"name": "Wheat cake",
+"kcal_100": 314.6,
+"serving": "1 piece (~67 g)",
+"kcal": 210,
+"protein": 3.2,
+"carbs": 27.5,
+"fat": 10.0
+},
+{
+"code": "ASC053",
+"name": "Wheat flakes",
+"kcal_100": 112.4,
+"serving": "1 bowl (~278 g)",
+"kcal": 313,
+"protein": 10.1,
+"carbs": 43.3,
+"fat": 11.1
+},
+{
+"code": "ASC465",
+"name": "Wheat flour and moong dal burfi (Atta aur moong dal ki burfi)",
+"kcal_100": 441.1,
+"serving": "2 piece (~26 g)",
+"kcal": 116,
+"protein": 2.6,
+"carbs": 15.7,
+"fat": 4.8
+},
+{
+"code": "BFP571",
+"name": "Wheat flour and nuts ladoos (Atta nuts ladoos)",
+"kcal_100": 391.9,
+"serving": "2 ladoo (~36 g)",
+"kcal": 142,
+"protein": 3.4,
+"carbs": 16.1,
+"fat": 7.0
+},
+{
+"code": "OSR129",
+"name": "Whey soup",
+"kcal_100": 68.9,
+"serving": "1 bowl (~223 g)",
+"kcal": 154,
+"protein": 7.7,
+"carbs": 14.0,
+"fat": 7.5
+},
+{
+"code": "BFP062",
+"name": "White stock",
+"kcal_100": 7.0,
+"serving": "100 g",
+"kcal": 7,
+"protein": 0.1,
+"carbs": 0.4,
+"fat": 0.6
+},
+{
+"code": "ASC157",
+"name": "Whole masoor (Masoor ki dal)",
+"kcal_100": 54.1,
+"serving": "1 bowl (~342 g)",
+"kcal": 185,
+"protein": 7.8,
+"carbs": 18.4,
+"fat": 8.6
+},
+{
+"code": "ASC156",
+"name": "Whole moong (Moong ki dal)",
+"kcal_100": 53.7,
+"serving": "1 bowl (~342 g)",
+"kcal": 184,
+"protein": 7.7,
+"carbs": 17.9,
+"fat": 8.8
+},
+{
+"code": "ASC158",
+"name": "Whole moth (Moth ki dal)",
+"kcal_100": 55.0,
+"serving": "1 bowl (~342 g)",
+"kcal": 188,
+"protein": 6.9,
+"carbs": 19.7,
+"fat": 9.0
+},
+{
+"code": "ASC159",
+"name": "Whole urad (Urad ki dal)",
+"kcal_100": 53.8,
+"serving": "1 bowl (~339 g)",
+"kcal": 183,
+"protein": 7.5,
+"carbs": 17.1,
+"fat": 8.9
+},
+{
+"code": "OSR001",
+"name": "Woodapple juice (Bel ka sharbat)",
+"kcal_100": 34.2,
+"serving": "1 glass (~351 g)",
+"kcal": 120,
+"protein": 2.2,
+"carbs": 22.9,
+"fat": 2.5
+}
+]

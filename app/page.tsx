@@ -142,7 +142,7 @@ export default function Home() {
       </button>
 
       {sheet === "compose" && (
-        <ComposeSheet text={text} setText={setText} parsing={parsing} error={error} onSubmit={submitText} onClose={() => setSheet(null)} />
+        <ComposeSheet text={text} setText={setText} parsing={parsing} error={error} onSubmit={submitText} onManual={addItems} onClose={() => setSheet(null)} />
       )}
       {sheet === "review" && <ReviewSheet items={draft} questions={questions} onAnswer={answer} onClose={() => setSheet(null)} onAdd={addItems} />}
       {sheet === "energy" && data && (
@@ -315,6 +315,7 @@ function sourceLabel(s: string) {
   if (base.startsWith("web")) return base.replace(/^web:\s*/, "") + edited;
   if (base === "learned" || base === "my food") return "My foods" + edited;
   if (base === "estimate") return "AI estimate" + edited;
+  if (base === "manual") return "Entered by you" + edited;
   return base + edited;
 }
 
@@ -411,9 +412,26 @@ function MealPicker({ meal, setMeal }: { meal: Meal; setMeal: (m: Meal) => void 
 
 const EXAMPLES = ["chicken rice less rice + kopi-c", "1 bowl rice, 3 tbsp kailan, 2 tbsp curry chicken", "2 egg prata + teh peng"];
 
-function ComposeSheet(p: { text: string; setText: (s: string) => void; parsing: boolean; error: string | null; onSubmit: () => void; onClose: () => void }) {
+function ComposeSheet(p: {
+  text: string;
+  setText: (s: string) => void;
+  parsing: boolean;
+  error: string | null;
+  onSubmit: () => void;
+  onManual: (items: FoodItem[], meal: Meal) => Promise<void>;
+  onClose: () => void;
+}) {
+  const [mode, setMode] = useState<"ai" | "manual">("ai");
   return (
     <Sheet title="What did you eat?" onClose={p.onClose}>
+      <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-track p-1 text-sm">
+        {(["ai", "manual"] as const).map((m) => (
+          <button key={m} onClick={() => setMode(m)} className={`rounded-lg py-1.5 ${mode === m ? "bg-card font-semibold shadow-sm" : "text-ink-2"}`}>
+            {m === "ai" ? "✨ Ask AI" : "✏️ Enter manually"}
+          </button>
+        ))}
+      </div>
+      {mode === "manual" ? <ManualForm onAdd={p.onManual} /> : (
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -452,7 +470,73 @@ function ComposeSheet(p: { text: string; setText: (s: string) => void; parsing: 
           {p.parsing ? "Looking it up…" : "Look up calories"}
         </button>
       </form>
+      )}
     </Sheet>
+  );
+}
+
+function ManualForm({ onAdd }: { onAdd: (items: FoodItem[], meal: Meal) => Promise<void> }) {
+  const [meal, setMeal] = useState<Meal>(mealForNow);
+  const [f, setF] = useState({ name: "", quantity: "", kcal: "", protein: "", carbs: "", fat: "" });
+  const [saving, setSaving] = useState(false);
+  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
+  const ok = f.name.trim() && Number(f.kcal) >= 0 && f.kcal !== "";
+  const field = "mt-1 w-full rounded-lg bg-track px-3 py-2 text-ink outline-none focus:ring-2 focus:ring-brand";
+
+  return (
+    <form
+      className="space-y-3"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (!ok) return;
+        setSaving(true);
+        await onAdd(
+          [
+            {
+              name: f.name.trim(),
+              quantity: f.quantity.trim() || "1 serving",
+              kcal: Math.round(Number(f.kcal)),
+              protein: Number(f.protein) || 0,
+              carbs: Number(f.carbs) || 0,
+              fat: Number(f.fat) || 0,
+              source: "manual",
+              confidence: "high",
+            },
+          ],
+          meal,
+        );
+      }}
+    >
+      <MealPicker meal={meal} setMeal={setMeal} />
+      <label className="block text-sm text-ink-2">
+        Dish
+        <input autoFocus value={f.name} onChange={set("name")} placeholder="e.g. Mum's fried bee hoon" className={field} />
+      </label>
+      <div className="grid grid-cols-[1fr_7rem] gap-2">
+        <label className="block text-sm text-ink-2">
+          Amount
+          <input value={f.quantity} onChange={set("quantity")} placeholder="1 plate" className={field} />
+        </label>
+        <label className="block text-sm text-ink-2">
+          Calories
+          <input type="number" inputMode="numeric" value={f.kcal} onChange={set("kcal")} placeholder="kcal" className={`${field} tabular font-semibold`} />
+        </label>
+      </div>
+      <div className="-mb-2 text-sm text-ink-2">
+        Macros <span className="text-ink-3">(optional)</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {(["protein", "carbs", "fat"] as const).map((k) => (
+          <label key={k} className="block text-xs text-ink-3">
+            {k[0].toUpperCase() + k.slice(1)} g
+            <input type="number" inputMode="decimal" value={f[k]} onChange={set(k)} className={`${field} tabular`} />
+          </label>
+        ))}
+      </div>
+      <button disabled={!ok || saving} className="h-12 w-full rounded-xl bg-brand font-semibold text-white disabled:opacity-40">
+        {saving ? "Adding…" : `Add ${f.kcal ? Math.round(Number(f.kcal)) + " kcal" : ""} to ${MEAL_LABEL[meal]}`}
+      </button>
+    </form>
   );
 }
 

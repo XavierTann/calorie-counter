@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Buddy } from "./Buddy";
+import { DataNotice } from "./DataNotice";
 
 // Shared log-in / sign-up form.
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
@@ -87,6 +88,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           {signup ? "Log in" : "Create an account"}
         </Link>
       </p>
+      <div className="mt-10">
+        <DataNotice compact />
+      </div>
     </main>
   );
 }

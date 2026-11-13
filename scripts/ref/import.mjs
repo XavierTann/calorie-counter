@@ -28,6 +28,24 @@ await db.execute("CREATE INDEX IF NOT EXISTS ref_foods_cuisine ON ref_foods(cuis
 
 const datasets = [
   {
+    source: "sg-foodid",
+    cuisine: "singapore",
+    file: "data/ref/singapore.json",
+    toRow: (r) => ({
+      id: `sg:${r.code}`,
+      name: r.name,
+      name_local: null,
+      search: `${r.name} ${r.subgroup ?? ""}`.replace(/[/()]/g, " "),
+      serving: r.serving || `${r.serving_g} g`,
+      kcal: r.kcal,
+      protein: r.protein,
+      carbs: r.carbs,
+      fat: r.fat,
+      kcal_100: r.kcal_100,
+      note: [r.data_source, r.year].filter(Boolean).join(", "),
+    }),
+  },
+  {
     source: "kr-mfds",
     cuisine: "korean",
     file: "data/ref/korea.json",

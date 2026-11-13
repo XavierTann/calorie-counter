@@ -1,14 +1,15 @@
 // Finds official nutrition data for a meal before the AI sees it.
 // 1. Detect the meal's cuisine by keyword matching (one cuisine per meal; Singapore by default).
-// 2. Search that cuisine's national dataset (imported into the ref_foods table) by dish name.
+// 2. Search that cuisine's dataset (imported into the ref_foods table) by dish name:
+//    Singapore = HPB SG FoodID, Korean = MFDS, Indian = INDB.
 // 3. For parts of the meal nothing matched (and for Western/generic food), ask USDA FoodData Central.
-import { FOODS } from "./foods";
 import { listRefFoods, type RefFood } from "./db";
 import { searchFdc } from "./fdc";
 
 export type Cuisine = "singapore" | "korean" | "indian" | "western";
 
-export const CUISINE_SOURCE: Record<Exclude<Cuisine, "singapore" | "western">, string> = {
+export const CUISINE_SOURCE: Record<Exclude<Cuisine, "western">, string> = {
+  singapore: "HPB SG FoodID",
   korean: "Korea MFDS national dish database",
   indian: "Indian Nutrient Databank (INDB)",
 };
@@ -74,7 +75,7 @@ async function indexFor(cuisine: string) {
   if (hit && Date.now() - hit.at < TTL) return hit;
   const rows = (await listRefFoods(cuisine)).map((row) => {
     const words = norm(`${row.name} ${row.search}`).split(" ");
-    return { row, tokens: new Set(words.filter((w) => w.length > 1)), compact: words.join("") };
+    return { row, tokens: new Set(words.filter(keepToken)), compact: words.join("") };
   });
   const df = new Map<string, number>();
   for (const r of rows) for (const t of r.tokens) df.set(t, (df.get(t) ?? 0) + 1);
@@ -91,10 +92,13 @@ function segments(text: string): string[] {
     .filter((s) => /\p{L}{2,}/u.test(s));
 }
 
+// Single letters are dropped except "c" and "o", which matter in "kopi C" / "teh O".
+const keepToken = (w: string) => w.length > 1 || w === "c" || w === "o";
+
 function queryTokens(seg: string) {
   return norm(seg)
     .split(" ")
-    .filter((w) => w.length > 1 && !STOP.has(w));
+    .filter((w) => keepToken(w) && !STOP.has(w));
 }
 
 function scoreRows(idx: Awaited<ReturnType<typeof indexFor>>, seg: string, limit: number): RefFood[] {
@@ -108,15 +112,19 @@ function scoreRows(idx: Awaited<ReturnType<typeof indexFor>>, seg: string, limit
   for (const r of idx.rows) {
     let s = 0;
     let specific = false;
+    let matched = 0;
     for (const t of q) {
       let w = 0;
       if (r.tokens.has(t)) w = idf(t);
       else if (t.length >= 4) for (const rt of r.tokens) if (rt.length >= 4 && (rt.startsWith(t) || t.startsWith(rt))) w = Math.max(w, 0.6 * idf(rt));
       if (w > 0) {
         s += w;
+        matched++;
         if (!GENERIC.has(t)) specific = true;
       }
     }
+    // All-generic names like "chicken rice" still count when they cover most of the dish name.
+    if (!specific && matched >= 2 && matched / r.tokens.size >= 0.5) specific = true;
     if (local && r.row.nameLocal?.includes(local)) {
       s += 5;
       specific = true;
@@ -133,15 +141,19 @@ function scoreRows(idx: Awaited<ReturnType<typeof indexFor>>, seg: string, limit
     .map((x) => x.row);
 }
 
-// Does the Singapore hawker table already cover this part of the meal?
-function hawkerCovers(seg: string): boolean {
-  const q = queryTokens(seg).filter((t) => !GENERIC.has(t));
-  if (!q.length) return queryTokens(seg).length > 0; // e.g. "chicken rice": all generic words, leave it to the hawker table
-  return FOODS.some((f) => {
-    const words = new Set(norm(`${f.name} ${(f.aliases ?? []).join(" ")}`).split(" "));
-    return q.some((t) => words.has(t));
-  });
-}
+// Hawker shorthand -> the names SG FoodID uses.
+const SG_SPELLINGS: [RegExp, string][] = [
+  [/\bckt\b/g, "char kway teow"],
+  [/\bbcm\b/g, "bak chor mee"],
+  [/\bcai (png|fan)\b|\bchap chye png\b|\bmixed rice\b/g, "economic rice"],
+  [/\broti canai\b/g, "roti prata"],
+  [/\bprata kosong\b/g, "plain prata"],
+  [/\b(kopi|teh)[- ]?(c|o)\b/g, "$1 $2"],
+  [/\b(siew|siu|sui) ?dai\b/g, "siu dai"],
+  [/\bvegs?\b/g, "vegetable"],
+  [/\b(kopi|teh|milo)\b(.*)\b(peng|bing)\b/g, "iced $1$2"],
+];
+const toSgSpelling = (s: string) => SG_SPELLINGS.reduce((acc, [re, to]) => acc.replace(re, to), s.toLowerCase());
 
 // Common English spellings -> Revised Romanization used in the Korean data ("kimchi" -> "gimchi").
 const KOREAN_SPELLINGS: [RegExp, string][] = [
@@ -177,17 +189,18 @@ export async function findSources(text: string): Promise<Lookup> {
   const matches: RefFood[] = [];
   const unmatched: string[] = [];
 
-  if (cuisine === "korean" || cuisine === "indian") {
+  if (cuisine === "western") {
+    unmatched.push(...segs);
+  } else {
     const idx = await indexFor(cuisine).catch(() => null);
+    const spell = cuisine === "korean" ? toKoreanSpelling : cuisine === "singapore" ? toSgSpelling : (s: string) => s;
     for (const seg of segs) {
-      const found = idx ? scoreRows(idx, cuisine === "korean" ? toKoreanSpelling(seg) : seg, 4) : [];
+      const q = spell(seg);
+      // Economic rice has many fixed combinations (1 veg 2 meat, ...); show the AI all the close ones.
+      const found = idx ? scoreRows(idx, q, /economic (rice|beehoon)/.test(q) ? 14 : 5) : [];
       if (found.length) matches.push(...found);
       else unmatched.push(seg);
     }
-  } else if (cuisine === "western") {
-    unmatched.push(...segs);
-  } else {
-    unmatched.push(...segs.filter((s) => !hawkerCovers(s)));
   }
 
   // Anything the cuisine's own data didn't cover: try USDA (generic foods and ingredients).
@@ -197,5 +210,5 @@ export async function findSources(text: string): Promise<Lookup> {
   }
 
   const seen = new Set<string>();
-  return { cuisine, matches: matches.filter((m) => !seen.has(m.id) && seen.add(m.id)).slice(0, 14) };
+  return { cuisine, matches: matches.filter((m) => !seen.has(m.id) && seen.add(m.id)).slice(0, 20) };
 }

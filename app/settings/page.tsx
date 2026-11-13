@@ -1,6 +1,7 @@
 "use client";
 
 import { AppHeader } from "@/components/AppHeader";
+import { DataNotice } from "@/components/DataNotice";
 import { useEffect, useState } from "react";
 import type { HomeUnit, Settings } from "@/lib/types";
 
@@ -107,14 +108,14 @@ export default function SettingsPage() {
           <li>Your Foods (your own numbers and corrections)</li>
           <li>Your home tablespoon sizes</li>
           <li>
-            Official databases for the cuisine: Korea MFDS dish database, Indian Nutrient Databank, USDA FoodData Central
+            Official databases for the cuisine: HPB SG FoodID (Singapore), Korea MFDS dish database, Indian Nutrient Databank, then
+            USDA FoodData Central
           </li>
-          <li>The Singapore hawker table (HPB-based)</li>
           <li>An AI estimate, only if none of the above has it</li>
         </ol>
-        <p className="mt-2 text-xs text-ink-3">
-          Data: Ministry of Food and Drug Safety (Korea), KOGL Type 1 · Indian Nutrient Databank, Vijayakumar et al. 2024 · USDA FoodData Central.
-        </p>
+        <div className="mt-3">
+          <DataNotice />
+        </div>
       </Card>
 
       </div>

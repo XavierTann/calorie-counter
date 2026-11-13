@@ -2,7 +2,7 @@
 
 A calorie counter where you type what you ate in plain language ("roasted chicken rice less rice + kopi-c siew dai") and it fills in calories and macros. It's built around Singapore hawker food and home-cooked meals measured in tablespoons.
 
-- **Hawker database**: ~120 dishes and kopitiam drinks with HPB-based values, in `lib/foods.ts`. Edit or add to it freely.
+- **Official data first**: Singapore dishes come from HPB's SG FoodID, Korean from Korea's MFDS, Indian from the Indian Nutrient Databank, the rest from USDA FoodData Central (see below).
 - **AI parsing** (Gemini, free tier): understands hawker terms and modifiers (less rice, no skin, siew dai, kosong…). It checks your Foods, the hawker database and your tablespoon sizes first and estimates anything else (low confidence). Tap **+**, type the meal, then check the working on the Check & log screen (base serving, each adjustment, total). If you correct the total, the app remembers it and uses your number next time.
 - **Home meals by tablespoon**: type "1 bowl rice, 3 tbsp kailan, 2 tbsp curry chicken". You can calibrate tablespoon sizes in Settings.
 - **Foods dictionary** (menu → Foods): every food you've logged, with its calories, which you can edit, plus custom foods you add yourself.
@@ -76,13 +76,13 @@ For each meal the app works out the cuisine from keywords (one cuisine per meal,
 1. **Your Foods**: custom foods and numbers you corrected.
 2. **Home units**: your tablespoon/bowl sizes for home cooking.
 3. **Official datasets** (loaded into the `ref_foods` table):
+   - Singapore (the default): HPB's Singapore Food Insights Database (SG FoodID), every "freshly prepared" food and drink (hawker, food court and restaurant items). Fetched politely by `scripts/ref/fetch_sgfoodid.mjs` under the SG FoodID Terms of Use (section 10), with the required notice shown on the login page and in Settings.
    - Korean: Korea Ministry of Food and Drug Safety, *통합식품영양성분정보(음식)* (KOGL Type 1), ~1,600 restaurant and home dishes.
    - Indian: Indian Nutrient Databank (Vijayakumar et al., *Current Developments in Nutrition*, 2024), ~800 recipes. Deep-fried recipes are left out because the source counts all frying oil as eaten.
    - Anything else not covered: USDA FoodData Central (live API, per 100 g). Set `FDC_API_KEY`.
-4. **Singapore hawker table** in `lib/foods.ts` (HPB-based approximations written by hand, not an official export).
-5. **AI estimate** as the last resort, marked low confidence.
+4. **AI estimate** as the last resort, marked low confidence.
 
-To rebuild the datasets: download the sources, then run `python3 scripts/ref/prepare_korea.py <csv>`, `python3 scripts/ref/prepare_india.py <INDB.xlsx> <recipes_servingsize.xlsx>` and `node scripts/ref/import.mjs` (add `--local` for `local.db`). The prepared files are in `data/ref/`.
+To rebuild the datasets: run `node scripts/ref/fetch_sgfoodid.mjs` (about 40 minutes, cached and resumable), download the Korean and Indian sources, then run `python3 scripts/ref/prepare_korea.py <csv>`, `python3 scripts/ref/prepare_india.py <INDB.xlsx> <recipes_servingsize.xlsx>` and `node scripts/ref/import.mjs` (add `--local` for `local.db`). The prepared files are in `data/ref/`.
 
 ## Notes
 - Every logged item shows its source (hawker database, home cooking, My foods or AI estimate) and confidence (●●● high / ●●○ medium / ●○○ low). You can edit calories before saving.

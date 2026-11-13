@@ -1,6 +1,5 @@
 import { ApiError, GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { z } from "zod";
-import { FOODS, foodsAsPromptTable } from "./foods";
 import type { Lookup } from "./ref";
 import type { FoodItem, HomeUnit } from "./types";
 
@@ -75,7 +74,7 @@ const RESULT_JSON_SCHEMA = {
           fat: { type: "number", description: "grams" },
           source: {
             type: "string",
-            description: "'my food' for MY FOODS, 'home:<unit id>' for home units, the row id for SOURCE MATCHES (e.g. 'kr:…', 'in:…', 'fdc:…'), 'db:<id>' for the reference table, 'estimate' otherwise",
+            description: "'my food' for MY FOODS, 'home:<unit id>' for home units, the row id for SOURCE MATCHES (e.g. 'sg:…', 'kr:…', 'in:…', 'fdc:…'), 'estimate' otherwise",
           },
           confidence: { type: "string", enum: ["high", "medium", "low"] },
           note: { type: "string", description: "One short line on adjustments made, or empty string" },
@@ -105,11 +104,10 @@ The user types what they ate in casual language (Singlish and hawker terms are n
 How to find the numbers, in this order. Always prefer real data over your own estimate:
 1. MY FOODS (custom foods the user added, and numbers they corrected). These override everything else for the same food. source = "my food".
 2. HOME UNITS (the user's calibrated sizes for mum's cooking, mostly per tablespoon). Use them when the user talks about tablespoons/tbsp, bowls of rice or home food. A specific dish ("3 tbsp kailan", "2 tbsp curry chicken") maps to the closest unit type; multiply by the number of tablespoons. If they say "spoon" for home food, treat it as 1 tbsp; a "scoop" with a serving spoon ≈ 3 tbsp. source = "home:<unit id>".
-3. SOURCE MATCHES (rows from official national food databases, found for this meal: Korea's MFDS dish database, the Indian Nutrient Databank, or USDA FoodData Central). If a row is the same dish (or a close variant), use it: scale its serving to what the user ate, and if its serving size looks unrealistic for one portion, scale from its kcal per 100 g instead. source = the row's id (e.g. "kr:D306-…", "in:ASC122", "fdc:12345"), confidence high (medium if you adapted it a lot). Ignore rows that are a different dish. For Singapore hawker dishes, the REFERENCE TABLE comes before USDA rows.
-4. The REFERENCE TABLE below (Singapore hawker servings, based on HPB data). Use it whenever a dish matches, even loosely (e.g. "ckt" = char kway teow, "bcm" = bak chor mee). Scale it for quantity and modifiers. source = "db:<id>", confidence high (or medium if you adjusted it a lot).
-5. Only if none of the above has the food: estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
+3. SOURCE MATCHES (rows from official food databases, found for this meal: Singapore's HPB SG FoodID for local food, Korea's MFDS dish database, the Indian Nutrient Databank, or USDA FoodData Central). If a row is the same dish (or a close variant, e.g. "ckt" = char kway teow, "bcm" = bak chor mee), use it: scale its serving to what the user ate and apply the modifiers below; if its serving size looks unrealistic for one portion, scale from its kcal per 100 g instead. source = the row's id (e.g. "sg:F05100133", "kr:D306-…", "in:ASC122", "fdc:12345"), confidence high (medium if you adapted it a lot). Ignore rows that are a different dish. Prefer sg: rows over fdc: rows for Singapore food.
+4. Only if none of the above has the food: estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
-Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai, half portion): take the smaller deduction, so the total stays on the high side. Fixed numbers from the tables and the modifier list below are used as given.
+Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai, half portion): take the smaller deduction, so the total stays on the high side. Fixed numbers from the databases and the modifier list below are used as given.
 
 Modifiers to apply:
 - "less rice" ≈ -80 kcal (-18g carbs); "more/extra rice" ≈ +100 kcal; "no rice" removes the rice portion.
@@ -117,19 +115,16 @@ Modifiers to apply:
 - "add egg" + fried egg ≈ 90 kcal; extra meat/sides add their own values.
 - "dry" vs "soup" noodles are different entries. Drinking all the soup/gravy adds calories; "didn't finish the soup" removes some.
 - Kopi/teh: no suffix = condensed milk + sugar; -O = sugar only; -C = evaporated milk + sugar; kosong = no sugar; siew dai = less sugar; gah dai = more sugar; peng = iced (same calories); "po" = weaker (same calories). Combine them, e.g. "kopi-c siew dai" ≈ 75 kcal.
-- Economic rice/cai fan: rice base (half rice = half) + each scoop from the cf-* rows.
+- Economic rice/cai fan: one item per dish taken plus the rice (half rice = half), using SOURCE MATCHES rows where they exist.
 - "half", "shared", "ate a few spoons": scale proportionally.
 
-Range: real portions and oil vary, so also give kcal_low, the low end of a realistic range for what they described. kcal is the upper end. For a reference-table dish with no adjustments, kcal_low is about 15% below kcal; for your own estimates it's usually 20–35% below; for MY FOODS, HOME UNITS and branded items with published values, kcal_low = kcal.
+Range: real portions and oil vary, so also give kcal_low, the low end of a realistic range for what they described. kcal is the upper end. For a database dish with no adjustments, kcal_low is about 15% below kcal; for your own estimates it's usually 20–35% below; for MY FOODS, HOME UNITS and branded items with published values, kcal_low = kcal.
 
 Breakdown: for every item, show the working. Row 1 is the base serving you started from (label like "Chicken rice, 1 plate" with its kcal). Each later row is one modifier or scaling step as a signed kcal change (e.g. "Less rice" -80, "Extra plate" +607, "Half portion" -300). Use only the base row if nothing was adjusted. The rows must add up exactly to kcal.
 
 Clarifying questions: if the user left out a detail that changes the calories a lot (about 15% or 80+ kcal), add a question with 2–4 short options. Examples: "chicken rice" → "Steamed or roasted chicken?" [Steamed, Roasted]; "nasi lemak" → "Which main?" [Fried chicken wing, Fried fish, Egg only]; "fried rice" → "Which kind?" [Egg, Chicken, Seafood, Yang zhou]; "mee goreng" → "Plate size?" [Regular, Large]. Ask at most 2 questions per message and only about things that matter for calories. Never ask about something the text already states (e.g. "roasted chicken rice" already answers steamed vs roasted). Don't ask when the user already said it, when MY FOODS or HOME UNITS already pin it down, or about drinks' ice. Still return items now using the most common choice, and say which in the note (e.g. "Assumed steamed"). If the message includes "Correction from me", apply that correction to the food (it may change the dish, portion or cooking) and ask no questions. If the message includes "Answers to your questions", use them and return no further questions about the same food.
 
-Round kcal to whole numbers and macros to 1 decimal place. One entry per distinct food/drink. If the text isn't food at all, return an empty items list.
-
-REFERENCE TABLE (id | name | serving | kcal | macros):
-${foodsAsPromptTable(FOODS)}`;
+Round kcal to whole numbers and macros to 1 decimal place. One entry per distinct food/drink. If the text isn't food at all, return an empty items list.`;
 
 export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[], sources: Lookup): Promise<ParseResult> {
   const dynamicContext = [

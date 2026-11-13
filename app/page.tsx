@@ -328,7 +328,8 @@ function MealCard({ meal, entries, onRemove, onEdit }: { meal: Meal; entries: En
 function sourceLabel(s: string) {
   const edited = s.includes("(edited)") ? " (edited)" : "";
   const base = s.replace(/\s*\(edited\)/, "");
-  if (base.startsWith("db:")) return "Hawker database" + edited;
+  if (base.startsWith("sg:")) return "SG FoodID (HPB)" + edited;
+  if (base.startsWith("db:")) return "Hawker table (old)" + edited;
   if (base.startsWith("kr:")) return "Korea MFDS database" + edited;
   if (base.startsWith("in:")) return "Indian Nutrient Databank" + edited;
   if (base.startsWith("fdc:")) return "USDA FoodData Central" + edited;

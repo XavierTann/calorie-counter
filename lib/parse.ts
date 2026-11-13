@@ -114,7 +114,7 @@ Modifiers to apply:
 - Chicken rice "no skin" ≈ -100 kcal (-11g fat); "breast meat" is leaner.
 - "add egg" + fried egg ≈ 90 kcal; extra meat/sides add their own values.
 - "dry" vs "soup" noodles are different entries. Drinking all the soup/gravy adds calories; "didn't finish the soup" removes some.
-- Kopi/teh: no suffix = condensed milk + sugar; -O = sugar only; -C = evaporated milk + sugar; kosong = no sugar; siew dai = less sugar; gah dai = more sugar; peng = iced (same calories); "po" = weaker (same calories). Combine them, e.g. "kopi-c siew dai" ≈ 75 kcal.
+- Kopi/teh: no suffix = condensed milk + sugar; -O = sugar only; -C = evaporated milk + sugar; kosong = no sugar; siew dai = less sugar; gah dai = more sugar; peng = iced (same calories); "po" = weaker (same calories). Combine them, e.g. "kopi-c siew dai". Plain kopi/teh (no -O/-C) made kosong still has milk: since condensed milk is sweet, "teh kosong" / "kopi kosong" means the C kosong version (evaporated milk, no sugar), never O kosong unless they said O. Example: "iced teh kosong" = Iced Teh C kosong (~68 kcal), not Iced Teh O kosong.
 - Economic rice/cai fan: one item per dish taken plus the rice (half rice = half), using SOURCE MATCHES rows where they exist.
 - "half", "shared", "ate a few spoons": scale proportionally.
 

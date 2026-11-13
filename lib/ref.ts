@@ -150,6 +150,8 @@ const SG_SPELLINGS: [RegExp, string][] = [
   [/\bprata kosong\b/g, "plain prata"],
   [/\b(kopi|teh)[- ]?(c|o)\b/g, "$1 $2"],
   [/\b(siew|siu|sui) ?dai\b/g, "siu dai"],
+  // Plain kopi/teh is made with condensed milk, so "kosong" (no sugar) means the C (evaporated milk) version.
+  [/\b(kopi|teh) kosong\b/g, "$1 c kosong"],
   [/\bvegs?\b/g, "vegetable"],
   [/\b(kopi|teh|milo)\b(.*)\b(peng|bing)\b/g, "iced $1$2"],
 ];

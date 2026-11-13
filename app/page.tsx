@@ -352,6 +352,15 @@ function ConfidenceTag({ c }: { c: FoodItem["confidence"] }) {
   );
 }
 
+// One-tap modifiers shown under "Modify", based on what kind of food it is.
+function modSuggestions(name: string): string[] {
+  const n = name.toLowerCase();
+  if (/\b(kopi|teh|milo|horlicks|coffee|tea|latte|juice|drink|bandung|chrysanthemum)\b/.test(n)) return ["kosong", "siu dai", "gah dai", "iced", "large cup"];
+  if (/noodle|\bmee\b|bee ?hoon|kway teow|laksa|ramen|ramyeon|pasta|spaghetti/.test(n)) return ["dry", "soup", "extra noodles", "add egg", "large"];
+  if (/rice|nasi|biryani|briyani|\bbap\b|bokkeumbap/.test(n)) return ["less rice", "more rice", "no skin", "add egg", "large"];
+  return ["large", "small", "half portion", "add egg", "extra sauce"];
+}
+
 function ReviewItem({
   item: it,
   onKcal,
@@ -373,11 +382,15 @@ function ReviewItem({
     setFixError(null);
     try {
       await onFix(note.trim());
+      setFixOpen(false);
+      setNote("");
     } catch (e) {
       setFixError(e instanceof Error ? e.message : "Lookup failed");
+    } finally {
       setFixing(false);
     }
   }
+  const addMod = (m: string) => setNote((n) => (n.toLowerCase().includes(m) ? n : n.trim() ? `${n.trim()}, ${m}` : m));
   const aiTotal = it.breakdown.reduce((a, b) => a + b.kcal, 0);
   const yourEdit = Math.round(it.kcal) - aiTotal;
   const signed = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : "0");
@@ -441,32 +454,45 @@ function ReviewItem({
         Protein {Math.round(it.protein)}g · Carbs {Math.round(it.carbs)}g · Fat {Math.round(it.fat)}g
       </div>
       {fixOpen ? (
-        <form
-          className="mt-2 flex gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            submitFix();
-          }}
-        >
-          <input
-            autoFocus
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="What's different? e.g. large plate, no gravy, it was fish"
-            className="min-w-0 flex-1 rounded-lg bg-track px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand"
-          />
-          <button disabled={fixing || !note.trim()} className="rounded-lg bg-brand px-3 text-sm font-semibold text-white disabled:opacity-40">
-            {fixing ? "…" : "Fix"}
+        <div className="mt-2 rounded-xl bg-track p-2.5">
+          <div className="flex flex-wrap gap-1.5">
+            {modSuggestions(it.name).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => addMod(m)}
+                className={`rounded-full px-2.5 py-1 text-xs ring-1 ${note.toLowerCase().includes(m) ? "bg-brand font-semibold text-white ring-brand" : "bg-card ring-line active:opacity-70"}`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+          <form
+            className="mt-2 flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitFix();
+            }}
+          >
+            <input
+              autoFocus
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="What did I miss? e.g. kosong, no gravy, it was fish"
+              className="min-w-0 flex-1 rounded-lg bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand"
+            />
+            <button disabled={fixing || !note.trim()} className="rounded-lg bg-brand px-3 text-sm font-semibold text-white disabled:opacity-40">
+              {fixing ? "…" : "Update"}
+            </button>
+          </form>
+          <button type="button" onClick={() => setFixOpen(false)} className="mt-1.5 text-xs text-ink-3">
+            Cancel
           </button>
-        </form>
+        </div>
       ) : (
-        <p className="mt-1.5 text-[11px] text-ink-3">
-          Tap the total to type your own number, or{" "}
-          <button onClick={() => setFixOpen(true)} className="font-semibold text-brand-strong underline">
-            tell the AI what&apos;s off
-          </button>
-          . Corrections are remembered.
-        </p>
+        <button onClick={() => setFixOpen(true)} className="mt-2 rounded-full bg-track px-3 py-1.5 text-xs font-semibold text-ink-2 active:opacity-70">
+          ✏️ Modify
+        </button>
       )}
       {fixError && <p className="mt-1 text-xs text-over">{fixError}</p>}
     </li>
@@ -649,13 +675,14 @@ function ReviewSheet(p: {
     );
   }
 
-  // Re-asks the AI about one item with the user's correction, e.g. "it was a large plate".
+  // Re-asks the AI about one item with the user's correction, e.g. "kosong" or "large plate".
+  // The note goes on the first line too, so the database search sees e.g. "Iced Teh kosong".
   async function fix(idx: number, note: string) {
     const it = items[idx];
     const r = await fetch("/api/parse", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ text: `${it.name}, ${it.quantity}\nCorrection from me: ${note}` }),
+      body: JSON.stringify({ text: `${it.name} ${note} (${it.quantity})\nCorrection from me: ${note}` }),
     });
     const j = await r.json();
     if (!r.ok) throw new Error(j.error ?? "Lookup failed");
@@ -678,6 +705,15 @@ function ReviewSheet(p: {
           />
         ))}
       </ul>
+      <MissedItem
+        onAdd={async (text) => {
+          const r = await fetch("/api/parse", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text }) });
+          const j = await r.json();
+          if (!r.ok) throw new Error(j.error ?? "Lookup failed");
+          if (!j.items.length) throw new Error("Couldn't find any food in that. Try rephrasing.");
+          setItems((xs) => [...xs, ...withBreakdown(j.items)]);
+        }}
+      />
       <button
         disabled={!items.length || saving}
         onClick={async () => {
@@ -689,6 +725,56 @@ function ReviewSheet(p: {
         Add {total} kcal to {MEAL_LABEL[meal]}
       </button>
     </Sheet>
+  );
+}
+
+function MissedItem({ onAdd }: { onAdd: (text: string) => Promise<void> }) {
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  if (!open)
+    return (
+      <button onClick={() => setOpen(true)} className="mt-1 w-full rounded-xl border border-dashed border-line py-2.5 text-sm text-ink-2 active:bg-track">
+        + Add something I missed
+      </button>
+    );
+  return (
+    <form
+      className="mt-1 rounded-xl bg-track p-2.5"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (!text.trim()) return;
+        setBusy(true);
+        setError(null);
+        try {
+          await onAdd(text.trim());
+          setText("");
+          setOpen(false);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Lookup failed");
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      <div className="flex gap-2">
+        <input
+          autoFocus
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="e.g. a fried egg, 1 curry puff"
+          className="min-w-0 flex-1 rounded-lg bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand"
+        />
+        <button disabled={busy || !text.trim()} className="rounded-lg bg-brand px-3 text-sm font-semibold text-white disabled:opacity-40">
+          {busy ? "…" : "Add"}
+        </button>
+      </div>
+      {error && <p className="mt-1 text-xs text-over">{error}</p>}
+      <button type="button" onClick={() => setOpen(false)} className="mt-1.5 text-xs text-ink-3">
+        Cancel
+      </button>
+    </form>
   );
 }
 

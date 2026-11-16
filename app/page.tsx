@@ -2,8 +2,9 @@
 
 import { AppHeader } from "@/components/AppHeader";
 import { Buddy, buddyLine } from "@/components/Buddy";
+import { GoalSetup, goalSetupSkipped } from "@/components/GoalSetup";
 import { Sheet } from "@/components/Sheet";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Budget } from "@/lib/budget";
 import type { Clarification } from "@/lib/parse";
 import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type Settings } from "@/lib/types";
@@ -48,6 +49,8 @@ export default function Home() {
   const [text, setText] = useState("");
   const [parsing, setParsing] = useState(false);
   const [editing, setEditing] = useState<Entry | null>(null);
+  const [setup, setSetup] = useState(false);
+  const setupChecked = useRef(false);
 
   const load = useCallback(async () => {
     const r = await fetch(`/api/entries?date=${date}`);
@@ -58,6 +61,13 @@ export default function Home() {
   useEffect(() => {
     load();
   }, [load]);
+
+  // First time in with no goal: ask for one so the budget can work out the deficit.
+  useEffect(() => {
+    if (!data || setupChecked.current) return;
+    setupChecked.current = true;
+    if ((data.settings.goalWeightKg === null || !data.settings.goalDate) && !goalSetupSkipped()) setSetup(true);
+  }, [data]);
 
   async function lookup(query: string) {
     const r = await fetch("/api/parse", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: query }) });
@@ -156,6 +166,16 @@ export default function Home() {
           }}
           onSaved={() => {
             setEditing(null);
+            load();
+          }}
+        />
+      )}
+      {setup && data && !sheet && (
+        <GoalSetup
+          settings={data.settings}
+          onClose={() => setSetup(false)}
+          onSaved={() => {
+            setSetup(false);
             load();
           }}
         />

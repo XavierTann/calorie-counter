@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
+import { DeficitCard } from "@/components/DeficitCard";
+import { GoalSetup } from "@/components/GoalSetup";
 import { ReminderCard } from "@/components/ReminderCard";
-import { Sheet } from "@/components/Sheet";
 import type { Settings } from "@/lib/types";
 
 type W = { date: string; kg: number };
@@ -28,8 +29,9 @@ function changeOver(weights: W[], days: number): number | null {
 
 export default function WeightPage() {
   const [weights, setWeights] = useState<W[] | null>(null);
-  const [goal, setGoal] = useState<number | null>(null);
-  const [goalDate, setGoalDate] = useState<string | null>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const goal = settings?.goalWeightKg ?? null;
+  const goalDate = settings?.goalDate ?? null;
   const [date, setDate] = useState(localDate);
   const [kg, setKg] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -38,12 +40,11 @@ export default function WeightPage() {
   const [goalOpen, setGoalOpen] = useState(false);
 
   const load = useCallback(async () => {
-    const r = await fetch("/api/weight");
+    const [r, sr] = await Promise.all([fetch("/api/weight"), fetch("/api/settings")]);
     if (r.status === 401) return (window.location.href = "/login");
     const j = await r.json();
     setWeights(j.weights);
-    setGoal(j.goalKg);
-    setGoalDate(j.goalDate ?? null);
+    if (sr.ok) setSettings(await sr.json());
   }, []);
 
   useEffect(() => {
@@ -147,6 +148,10 @@ export default function WeightPage() {
           </button>
         </div>
 
+        {settings && weights && (
+          <DeficitCard settings={settings} weights={weights} onChange={setSettings} onEditGoal={() => setGoalOpen(true)} />
+        )}
+
         <section className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-line">
           <div className="mb-2 flex items-center justify-between">
             <h2 className="font-semibold">Trend</h2>
@@ -194,15 +199,14 @@ export default function WeightPage() {
         )}
       </div>
 
-      {goalOpen && (
-        <GoalSheet
-          goal={goal}
-          goalDate={goalDate}
+      {goalOpen && settings && (
+        <GoalSetup
+          mode="edit"
+          settings={settings}
           onClose={() => setGoalOpen(false)}
-          onSaved={(g, d) => {
-            setGoal(g);
-            setGoalDate(d);
+          onSaved={() => {
             setGoalOpen(false);
+            load();
           }}
         />
       )}
@@ -220,74 +224,6 @@ function Tile({ label, value, unit, sub }: { label: string; value: string; unit:
       </div>
       <div className="truncate text-[11px] text-ink-3">{sub}</div>
     </div>
-  );
-}
-
-function GoalSheet({
-  goal,
-  goalDate,
-  onClose,
-  onSaved,
-}: {
-  goal: number | null;
-  goalDate: string | null;
-  onClose: () => void;
-  onSaved: (g: number | null, d: string | null) => void;
-}) {
-  const [v, setV] = useState(goal ? String(goal) : "");
-  const [d, setD] = useState(goalDate ?? "");
-  const [busy, setBusy] = useState(false);
-  async function save(value: number | null, date: string | null) {
-    setBusy(true);
-    const s: Settings = await (await fetch("/api/settings")).json();
-    const r = await fetch("/api/settings", {
-      method: "PUT",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ...s, goalWeightKg: value, goalDate: date }),
-    });
-    setBusy(false);
-    if (r.ok) {
-      const saved: Settings = await r.json();
-      onSaved(saved.goalWeightKg, saved.goalDate);
-    }
-  }
-  return (
-    <Sheet title="Goal weight" onClose={onClose}>
-      <label className="flex items-center rounded-xl bg-track px-3 focus-within:ring-2 focus-within:ring-brand">
-        <input
-          autoFocus
-          type="number"
-          inputMode="decimal"
-          step="0.1"
-          value={v}
-          onChange={(e) => setV(e.target.value)}
-          className="tabular min-w-0 flex-1 bg-transparent py-3 text-2xl font-semibold outline-none"
-          aria-label="Goal weight in kg"
-        />
-        <span className="text-ink-3">kg</span>
-      </label>
-      <label className="mt-3 block text-sm text-ink-2">
-        Reach it by
-        <input
-          type="date"
-          value={d}
-          min={localDate(new Date(Date.now() + DAY))}
-          onChange={(e) => setD(e.target.value)}
-          className="mt-1 w-full rounded-xl bg-track px-3 py-2.5 text-ink outline-none focus:ring-2 focus:ring-brand"
-        />
-      </label>
-      <p className="mt-1 text-xs text-ink-3">
-        With a date, the app works out your daily deficit for you (if your budget uses Apple Health). About 0.5 kg a week is a sustainable pace.
-      </p>
-      <button disabled={busy || !(Number(v) > 0)} onClick={() => save(Number(v), d || null)} className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-white disabled:opacity-40">
-        Save goal
-      </button>
-      {goal && (
-        <button disabled={busy} onClick={() => save(null, null)} className="mt-1 h-11 w-full rounded-xl text-sm text-ink-2 active:bg-track">
-          Remove goal
-        </button>
-      )}
-    </Sheet>
   );
 }
 

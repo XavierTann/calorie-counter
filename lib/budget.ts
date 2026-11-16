@@ -13,9 +13,10 @@ export type Budget = {
   budget: number;
   explain: string; // one short line for the dashboard
   lines: BudgetLine[]; // the full working
-  burned: number | null; // estimated (or actual) calories burned for the whole day
-  burnedSoFar: number | null;
+  burn: Burn | null; // calories burned: now, and predicted for the end of the day
 };
+// Predicted = the whole day's estimated resting + active so far (active only counts once you've moved).
+export type Burn = { now: number | null; predicted: number; restingNow: number | null; restingPredicted: number | null; active: number; projected: boolean };
 export type WeightPoint = { date: string; kg: number };
 
 const fmt = (n: number) => Math.round(n).toLocaleString("en-SG");
@@ -31,7 +32,7 @@ function hoursAtSync(e: Energy) {
 }
 const isComplete = (e: Energy) => hoursAtSync(e) >= COMPLETE_AFTER_HOURS;
 
-type Burned = { value: number; soFar: number | null; lines: BudgetLine[] };
+type Burned = { value: number; soFar: number | null; lines: BudgetLine[]; burn: Burn };
 
 // Estimates the whole day's burn: resting builds up evenly through the day, so a midday sync is scaled up;
 // active calories are only counted once you've done them.
@@ -46,12 +47,22 @@ function estimateBurned(e: Energy | null, history: Energy[], isToday: boolean): 
 
   if (!e) {
     if (avgResting === null) return null;
-    return { value: avgResting, soFar: null, lines: [{ label: "No Apple Health sync yet today", kcal: null }, avgLine(), { label: "Active", kcal: 0, detail: "Adds up once your activity syncs" }] };
+    return {
+      value: avgResting,
+      soFar: null,
+      lines: [{ label: "No Apple Health sync yet today", kcal: null }, avgLine(), { label: "Active", kcal: 0, detail: "Adds up once your activity syncs" }],
+      burn: { now: null, predicted: avgResting, restingNow: null, restingPredicted: avgResting, active: 0, projected: true },
+    };
   }
 
   if (e.resting === null) {
     if (e.total === null) return null;
-    return { value: e.total, soFar: e.total, lines: [{ label: "Total burned (from Apple Health)", kcal: e.total, detail: "No resting/active split sent, so this isn't projected to the end of the day" }] };
+    return {
+      value: e.total,
+      soFar: e.total,
+      lines: [{ label: "Total burned (from Apple Health)", kcal: e.total, detail: "No resting/active split sent, so this isn't projected to the end of the day" }],
+      burn: { now: e.total, predicted: e.total, restingNow: null, restingPredicted: null, active: e.active ?? 0, projected: false },
+    };
   }
 
   const active = e.active ?? 0;
@@ -81,7 +92,12 @@ function estimateBurned(e: Energy | null, history: Energy[], isToday: boolean): 
     }
   }
   lines.push(isToday ? { label: "Active so far", kcal: active, detail: "Workouts and steps; goes up as you move" } : { label: "Active", kcal: active });
-  return { value: resting + active, soFar: e.resting + active, lines };
+  return {
+    value: resting + active,
+    soFar: e.resting + active,
+    lines,
+    burn: { now: e.resting + active, predicted: resting + active, restingNow: e.resting, restingPredicted: resting, active, projected: Math.round(resting) !== Math.round(e.resting) },
+  };
 }
 
 type Deficit = { value: number; lines: BudgetLine[] };
@@ -123,7 +139,8 @@ export function dailyBudget(
   ctx: { history: Energy[]; weights: WeightPoint[]; date: string; today: string },
 ): Budget {
   const active = e?.active ?? 0;
-  const soFar = e?.total ?? null;
+  const estimate = estimateBurned(e, ctx.history, ctx.date === ctx.today);
+  const burn = estimate?.burn ?? null;
 
   if (s.budgetMode === "target_plus_active") {
     return {
@@ -134,13 +151,12 @@ export function dailyBudget(
         { label: "Active so far (Apple Health)", kcal: active },
         { label: "Budget", kcal: s.targetKcal + active, total: true },
       ],
-      burned: soFar,
-      burnedSoFar: soFar,
+      burn,
     };
   }
 
   if (s.budgetMode === "total_minus_deficit") {
-    const burned = estimateBurned(e, ctx.history, ctx.date === ctx.today);
+    const burned = estimate;
     if (burned) {
       const auto = s.deficitMode === "auto" ? autoDeficit(s, ctx.weights, ctx.date) : null;
       const deficit: Deficit =
@@ -159,7 +175,7 @@ export function dailyBudget(
         ...(raw < MIN_BUDGET ? [{ label: `Raised to the ${fmt(MIN_BUDGET)} kcal minimum`, kcal: MIN_BUDGET - raw }] : []),
         { label: "Budget", kcal: budget, total: true },
       ];
-      return { budget, explain: `~${fmt(burned.value)} burned − ${fmt(deficit.value)} deficit`, lines, burned: burned.value, burnedSoFar: burned.soFar };
+      return { budget, explain: `~${fmt(burned.value)} burned − ${fmt(deficit.value)} deficit`, lines, burn };
     }
     return {
       budget: s.targetKcal,
@@ -168,8 +184,7 @@ export function dailyBudget(
         { label: "No Apple Health data to estimate from yet", kcal: null, detail: "Using your calorie target until the Shortcut syncs" },
         { label: "Budget", kcal: s.targetKcal, total: true },
       ],
-      burned: soFar,
-      burnedSoFar: soFar,
+      burn,
     };
   }
 
@@ -177,7 +192,6 @@ export function dailyBudget(
     budget: s.targetKcal,
     explain: `${fmt(s.targetKcal)} fixed target`,
     lines: [{ label: "Fixed target", kcal: s.targetKcal, total: true }],
-    burned: soFar,
-    burnedSoFar: soFar,
+    burn,
   };
 }

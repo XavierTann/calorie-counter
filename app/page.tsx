@@ -193,10 +193,10 @@ export default function Home() {
 function Summary({ data, onEditEnergy, onShowBudget }: { data: DayData; onEditEnergy: () => void; onShowBudget: () => void }) {
   const { entries, energy, settings } = data;
   const consumed = Math.round(sum(entries, "kcal"));
-  const { budget, explain, burned, burnedSoFar } = data.budget;
+  const { budget, explain, burn } = data.budget;
   const remaining = budget - consumed;
   const over = remaining < 0;
-  const projected = burned !== null && burnedSoFar !== null && Math.round(burned) !== Math.round(burnedSoFar);
+  const k = (n: number) => Math.round(n).toLocaleString();
 
   return (
     <section className="summary-card mx-4 rounded-3xl p-4 shadow-sm ring-1 ring-line">
@@ -217,17 +217,27 @@ function Summary({ data, onEditEnergy, onShowBudget }: { data: DayData; onEditEn
             <Stat label="Budget" value={budget} sub={`${explain} · how?`} />
           </button>
           <button onClick={onEditEnergy} className="-m-1 rounded-lg p-1 text-left active:bg-track">
-            <Stat
-              label={projected ? "Burned so far" : "Burned"}
-              value={projected ? Math.round(burnedSoFar!) : burned !== null ? Math.round(burned) : null}
-              sub={
-                energy
-                  ? projected
-                    ? `~${Math.round(burned!).toLocaleString()} by end of day`
-                    : `${energy.active !== null ? `${Math.round(energy.active)} active · ` : ""}${energy.source}`
-                  : "Tap to add, or sync Apple Health"
-              }
-            />
+            {burn ? (
+              <div>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-sm text-ink-2">Burned now</span>
+                  <span className="tabular font-semibold">{burn.now === null ? "–" : k(burn.now)}</span>
+                </div>
+                {burn.projected && (
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="text-sm text-ink-2">Predicted</span>
+                    <span className="tabular font-semibold text-ink-2">~{k(burn.predicted)}</span>
+                  </div>
+                )}
+                <div className="truncate text-[11px] text-ink-3">
+                  {burn.projected && burn.restingPredicted !== null
+                    ? `~${k(burn.restingPredicted)} resting by midnight + ${k(burn.active)} active`
+                    : `${burn.restingNow !== null ? `${k(burn.restingNow)} resting + ` : ""}${k(burn.active)} active`}
+                </div>
+              </div>
+            ) : (
+              <Stat label="Burned" value={null} sub={energy ? energy.source : "Tap to add, or sync Apple Health"} />
+            )}
           </button>
         </div>
       </div>

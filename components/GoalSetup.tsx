@@ -23,8 +23,18 @@ export function goalSetupSkipped() {
   }
 }
 
-// First-run setup: current weight, goal weight and date → the daily deficit the budget will use.
-export function GoalSetup({ settings, onClose, onSaved }: { settings: Settings; onClose: () => void; onSaved: () => void }) {
+// Goal weight + date → the daily deficit the budget will use. Shown on first run ("first") and from the Weight page ("edit").
+export function GoalSetup({
+  settings,
+  mode = "first",
+  onClose,
+  onSaved,
+}: {
+  settings: Settings;
+  mode?: "first" | "edit";
+  onClose: () => void;
+  onSaved: () => void;
+}) {
   const [now, setNow] = useState("");
   const [hadToday, setHadToday] = useState<number | null>(null);
   const [goal, setGoal] = useState(settings.goalWeightKg ? String(settings.goalWeightKg) : "");
@@ -60,10 +70,24 @@ export function GoalSetup({ settings, onClose, onSaved }: { settings: Settings; 
   const paceOf = (kgPerWeek: number) => toLose !== null && toLose > 0 && days !== null && Math.abs(days - Math.ceil((toLose / kgPerWeek) * 7)) <= 1;
 
   function skip() {
-    try {
-      localStorage.setItem(SKIP_KEY, "1");
-    } catch {}
+    if (mode === "first") {
+      try {
+        localStorage.setItem(SKIP_KEY, "1");
+      } catch {}
+    }
     onClose();
+  }
+
+  async function removeGoal() {
+    if (!confirm("Remove your goal? The budget will go back to your fixed deficit.")) return;
+    setSaving(true);
+    const r = await fetch("/api/settings", {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...settings, goalWeightKg: null, goalDate: null }),
+    });
+    if (r.ok) onSaved();
+    else setSaving(false);
   }
 
   async function save() {
@@ -92,13 +116,15 @@ export function GoalSetup({ settings, onClose, onSaved }: { settings: Settings; 
   const valid = cur >= 20 && cur <= 400 && target >= 20 && target <= 400 && days !== null && days >= 1;
 
   return (
-    <Sheet title="Set your goal" onClose={skip}>
-      <p className="text-sm text-ink-2">Takes 20 seconds. The app uses it to work out how much to eat each day.</p>
+    <Sheet title={mode === "first" ? "Set your goal" : "Your goal"} onClose={skip}>
+      <p className="text-sm text-ink-2">
+        {mode === "first" ? "Takes 20 seconds. " : ""}Your goal weight and date set how big your daily deficit is.
+      </p>
       <div className="mt-3 grid grid-cols-2 gap-2">
         <label className="text-sm text-ink-2">
           Weight now
           <span className="mt-1 flex items-center rounded-xl bg-track px-3 focus-within:ring-2 focus-within:ring-brand">
-            <input autoFocus type="number" inputMode="decimal" step="0.1" value={now} onChange={(e) => setNow(e.target.value)} placeholder="0.0" className={field} />
+            <input autoFocus={mode === "first"} type="number" inputMode="decimal" step="0.1" value={now} onChange={(e) => setNow(e.target.value)} placeholder="0.0" className={field} />
             <span className="text-ink-3">kg</span>
           </span>
         </label>
@@ -131,14 +157,18 @@ export function GoalSetup({ settings, onClose, onSaved }: { settings: Settings; 
       )}
 
       <label className="mt-3 block text-sm text-ink-2">
-        Reach it by
-        <input
-          type="date"
-          value={date}
-          min={localDate(new Date(Date.now() + DAY))}
-          onChange={(e) => setDate(e.target.value)}
-          className="mt-1 w-full rounded-xl bg-track px-3 py-2.5 text-ink outline-none focus:ring-2 focus:ring-brand"
-        />
+        Reach it by <span className="text-ink-3">(pick a pace above, or a date)</span>
+        {/* An empty date input on iPhone renders as a blank sliver, so draw our own label over it. */}
+        <span className="relative mt-1 block">
+          <input
+            type="date"
+            value={date}
+            min={localDate(new Date(Date.now() + DAY))}
+            onChange={(e) => setDate(e.target.value)}
+            className={`block min-h-12 w-full appearance-none rounded-xl bg-track px-3 py-2.5 text-left outline-none focus:ring-2 focus:ring-brand ${date ? "text-ink" : "text-transparent"}`}
+          />
+          {!date && <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-ink-3">📅 Choose a date</span>}
+        </span>
       </label>
 
       {valid && toLose !== null && (
@@ -170,9 +200,16 @@ export function GoalSetup({ settings, onClose, onSaved }: { settings: Settings; 
       <button disabled={!valid || saving} onClick={save} className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-white disabled:opacity-40">
         {saving ? "Saving…" : "Save goal"}
       </button>
-      <button onClick={skip} className="mt-1 h-11 w-full rounded-xl text-sm text-ink-2 active:bg-track">
-        Not now (set it later on the Weight page)
-      </button>
+      {!valid && cur > 0 && target > 0 && !date && <p className="mt-2 text-xs text-ink-3">Pick a pace or a date to save.</p>}
+      {mode === "edit" && settings.goalWeightKg !== null ? (
+        <button disabled={saving} onClick={removeGoal} className="mt-1 h-11 w-full rounded-xl text-sm text-over active:bg-track">
+          Remove goal
+        </button>
+      ) : (
+        <button onClick={skip} className="mt-1 h-11 w-full rounded-xl text-sm text-ink-2 active:bg-track">
+          {mode === "first" ? "Not now (set it later on the Weight page)" : "Cancel"}
+        </button>
+      )}
     </Sheet>
   );
 }

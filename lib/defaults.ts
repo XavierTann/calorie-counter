@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS: Settings = {
   carbsG: 230,
   fatG: 65,
   budgetMode: "target_plus_active",
-  deficit: 500,
+  deficit: 300,
   deficitMode: "auto",
   goalWeightKg: null,
   goalDate: null,

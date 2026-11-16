@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSettings, saveSettings } from "@/lib/db";
+import { isDate } from "@/lib/date";
 import { currentUserId, unauthorized } from "@/lib/session";
 import type { Settings } from "@/lib/types";
 
@@ -19,8 +20,10 @@ export async function PUT(req: Request) {
     carbsG: Number(s.carbsG) || 0,
     fatG: Number(s.fatG) || 0,
     budgetMode: ["target_plus_active", "total_minus_deficit", "fixed"].includes(s.budgetMode) ? s.budgetMode : "target_plus_active",
-    deficit: Number(s.deficit) || 0,
+    deficit: Math.max(0, Number(s.deficit) || 0),
+    deficitMode: s.deficitMode === "manual" ? "manual" : "auto",
     goalWeightKg: Number(s.goalWeightKg) > 0 ? Math.round(Number(s.goalWeightKg) * 10) / 10 : null,
+    goalDate: isDate(s.goalDate) ? s.goalDate : null,
     homeUnits: (s.homeUnits ?? [])
       .filter((u) => u.label?.trim())
       .map((u, i) => ({

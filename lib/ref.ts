@@ -3,8 +3,10 @@
 // 2. Search that cuisine's dataset (imported into the ref_foods table) by dish name:
 //    Singapore = HPB SG FoodID, Korean = MFDS, Indian = INDB.
 // 3. For parts of the meal nothing matched (and for Western/generic food), ask USDA FoodData Central.
+// 4. For packaged/branded products (and anything still unmatched), search Open Food Facts' product labels.
 import { listRefFoods, type RefFood } from "./db";
 import { searchFdc } from "./fdc";
+import { searchOff } from "./off";
 
 export type Cuisine = "singapore" | "korean" | "indian" | "western";
 
@@ -153,6 +155,9 @@ const SG_SPELLINGS: [RegExp, string][] = [
   // Plain kopi/teh is made with condensed milk, so "kosong" (no sugar) means the C (evaporated milk) version.
   [/\b(kopi|teh) kosong\b/g, "$1 c kosong"],
   [/\bvegs?\b/g, "vegetable"],
+  // Yi mian / yee mee / e-fu are the same fried egg noodle SG FoodID calls "ee mee" / "ee fu".
+  [/\b(yi|yee|ee|e)[- ]?(mian|mein|mee|min)\b/g, "ee mee"],
+  [/\b(yi|yee|ee|e)[- ]?fu\b/g, "ee fu"],
   [/\b(kopi|teh|milo)\b(.*)\b(peng|bing)\b/g, "iced $1$2"],
 ];
 const toSgSpelling = (s: string) => SG_SPELLINGS.reduce((acc, [re, to]) => acc.replace(re, to), s.toLowerCase());
@@ -183,6 +188,10 @@ const KOREAN_SPELLINGS: [RegExp, string][] = [
 ];
 const toKoreanSpelling = (s: string) => KOREAN_SPELLINGS.reduce((acc, [re, to]) => acc.replace(re, to), s.toLowerCase());
 
+// Words that suggest a supermarket product rather than a cooked dish.
+const PACKAGED = /\b(brand|packet|pack|bottle|can of|canned|tub|bar|sachet|box|yogh?urt|milk|cereal|granola|biscuits?|cookies?|chips|crackers|protein (bar|shake|drink)|soy ?milk|oat ?milk|yakult|vitagen|milo|horlicks|ovaltine|marigold|meiji|magnolia|farmers? union|f ?& ?n|pokka|vitasoy|oatside|nestle|gardenia|julie'?s|khong guan|pocari|100 ?plus|coca|coke|pepsi|redbull|red bull|kellogg'?s?|quaker|danone|chobani|emmi|anchor|dutch lady|ayam brand|myojin|nissin|indomie|mamee|koka|maggi|oreo|kit ?kat|cadbury|m ?& ?ms|snickers|lay'?s|pringles|ritz|hup seng|tiger|heineken|haagen|ben ?& ?jerry'?s|walls|daily ?juice|marigold peel fresh)\b/i;
+const looksPackaged = (s: string) => PACKAGED.test(s);
+
 export type Lookup = { cuisine: Cuisine; matches: RefFood[] };
 
 export async function findSources(text: string): Promise<Lookup> {
@@ -206,10 +215,15 @@ export async function findSources(text: string): Promise<Lookup> {
   }
 
   // Anything the cuisine's own data didn't cover: try USDA (generic foods and ingredients).
-  if (unmatched.length) {
-    const fdc = await Promise.all(unmatched.slice(0, 4).map((s) => searchFdc(queryTokens(s).join(" ")).catch(() => [])));
-    matches.push(...fdc.flat());
-  }
+  // Packaged products (and anything unmatched) also go to Open Food Facts, which has brand labels.
+  const packaged = segs.filter((s) => !unmatched.includes(s) && looksPackaged(s));
+  const [fdc, off] = await Promise.all([
+    Promise.all(unmatched.slice(0, 4).map((s) => searchFdc(queryTokens(s).join(" ")).catch(() => []))),
+    Promise.all([...unmatched, ...packaged].slice(0, 4).map((s) => searchOff(queryTokens(s).join(" ")).catch(() => []))),
+  ]);
+  // Brand labels first when the user named a product, so they survive the 20-row cut.
+  const offFirst = segs.some(looksPackaged);
+  matches.push(...(offFirst ? [...off.flat(), ...fdc.flat()] : [...fdc.flat(), ...off.flat()]));
 
   const seen = new Set<string>();
   return { cuisine, matches: matches.filter((m) => !seen.has(m.id) && seen.add(m.id)).slice(0, 20) };

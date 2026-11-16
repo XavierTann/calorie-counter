@@ -50,19 +50,43 @@ export default function SettingsPage() {
       <Card title="How your budget is calculated">
         <div className="space-y-2">
           <Radio
-            checked={s.budgetMode === "target_plus_active"}
-            onChange={() => set("budgetMode", "target_plus_active")}
-            title="Target + Garmin active calories (recommended)"
-            desc="Your calorie target already covers a normal day. Workouts and steps tracked by Garmin add to it as the day goes on. Works all day, including mornings."
-          />
-          <Radio
             checked={s.budgetMode === "total_minus_deficit"}
             onChange={() => set("budgetMode", "total_minus_deficit")}
-            title="Garmin total burned − deficit"
-            desc="Budget = Garmin's total calories minus your deficit. Most accurate at the end of the day; looks low in the morning because resting calories build up through the day."
+            title="Apple Health burned − deficit (recommended)"
+            desc="Based only on Apple Health. Resting calories build up through the day, so the app estimates the whole day's resting (your average from past full days, or scaled up from what's synced so far) and adds your active calories as they come in. Tap Budget on the dashboard to see the working."
           />
-          <Radio checked={s.budgetMode === "fixed"} onChange={() => set("budgetMode", "fixed")} title="Fixed target" desc="Ignore Garmin." />
-          {s.budgetMode === "total_minus_deficit" && <Num label="Deficit (kcal)" value={s.deficit} onChange={(v) => set("deficit", v)} />}
+          {s.budgetMode === "total_minus_deficit" && (
+            <div className="space-y-2 rounded-xl bg-track p-3">
+              <div className="grid grid-cols-2 gap-1 rounded-lg bg-card p-1 text-sm">
+                {(["auto", "manual"] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => set("deficitMode", m)}
+                    className={`rounded-md py-1.5 ${s.deficitMode === m ? "bg-brand font-semibold text-white" : "text-ink-2"}`}
+                  >
+                    {m === "auto" ? "Work out my deficit" : "Fixed deficit"}
+                  </button>
+                ))}
+              </div>
+              {s.deficitMode === "auto" ? (
+                <p className="text-sm text-ink-2">
+                  {s.goalWeightKg && s.goalDate
+                    ? `Aiming for ${s.goalWeightKg} kg by ${new Date(s.goalDate + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}. `
+                    : "Set a goal weight and goal date on the Weight page. "}
+                  Each day the deficit = (this week&apos;s average weight − goal) × 7,700 kcal ÷ days left, capped at 1,000 kcal/day. Until
+                  that&apos;s set up, the fixed deficit below is used.
+                </p>
+              ) : null}
+              <Num label={s.deficitMode === "auto" ? "Fallback deficit (kcal)" : "Deficit (kcal)"} value={s.deficit} onChange={(v) => set("deficit", v)} />
+            </div>
+          )}
+          <Radio
+            checked={s.budgetMode === "target_plus_active"}
+            onChange={() => set("budgetMode", "target_plus_active")}
+            title="Target + Apple Health active calories"
+            desc="Your calorie target (above) covers a normal day. Workouts and steps from Apple Health add to it as the day goes on."
+          />
+          <Radio checked={s.budgetMode === "fixed"} onChange={() => set("budgetMode", "fixed")} title="Fixed target" desc="Ignore Apple Health." />
         </div>
       </Card>
 
@@ -111,6 +135,7 @@ export default function SettingsPage() {
             Official databases for the cuisine: HPB SG FoodID (Singapore), Korea MFDS dish database, Indian Nutrient Databank, then
             USDA FoodData Central
           </li>
+          <li>Open Food Facts product labels, for packaged and branded food</li>
           <li>An AI estimate, only if none of the above has it</li>
         </ol>
         <div className="mt-3">
@@ -196,10 +221,10 @@ function AppleHealthSync({ origin }: { origin: string }) {
 
   const url = `${origin}/api/energy/sync`;
   return (
-    <Card title="Apple Health sync (Garmin calories)">
+    <Card title="Apple Health sync">
       <p className="text-sm text-ink-2">
-        Garmin Connect writes your calories into Apple Health. An iPhone Shortcut then reads them and sends them here. The token below is
-        yours alone, so keep it private.
+        An iPhone Shortcut reads your active and resting calories from Apple Health and sends them here. The token below is yours alone,
+        so keep it private.
       </p>
       <div className="mt-3 space-y-2 text-sm">
         <CopyRow label="URL" value={url} onCopy={() => copy("url", url)} copied={copied === "url"} />
@@ -218,7 +243,7 @@ function AppleHealthSync({ origin }: { origin: string }) {
       <details className="mt-3 text-sm text-ink-2">
         <summary className="cursor-pointer font-medium text-ink">How to set up the Shortcut</summary>
         <ol className="mt-2 list-decimal space-y-1.5 pl-5">
-          <li>Garmin Connect app → Settings → Connected Apps → Apple Health → turn on Active Energy and Resting Energy.</li>
+          <li>Make sure your watch app (e.g. Garmin Connect → Settings → Connected Apps → Apple Health) writes Active Energy and Resting Energy to Apple Health.</li>
           <li>
             Shortcuts app → new shortcut:
             <ul className="mt-1 list-disc space-y-1 pl-4">
@@ -226,7 +251,7 @@ function AppleHealthSync({ origin }: { origin: string }) {
               <li>Find Health Samples: Resting Energy, start date Today → Calculate Statistics: Sum</li>
               <li>
                 Get Contents of URL: the URL above, Method POST, Header <code>Authorization</code> = <code>Bearer</code> + a space + your token,
-                Request Body JSON: <code>active</code> = first sum, <code>resting</code> = second sum
+                Request Body JSON: <code>active</code> = first sum, <code>resting</code> = second sum, <code>source</code> = <code>apple health</code>
               </li>
             </ul>
           </li>

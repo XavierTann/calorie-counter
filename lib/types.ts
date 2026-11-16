@@ -17,7 +17,11 @@ export type FoodItem = {
   kcalLow?: number;
   // How the calories were worked out: first row is the base serving, the rest are signed adjustments.
   breakdown?: { label: string; kcal: number }[];
+  // Main components of a dish (e.g. soup base, lotus root, pork ribs), so you can untick what you didn't eat.
+  parts?: FoodPart[];
 };
+
+export type FoodPart = { name: string; kcal: number; protein: number; carbs: number; fat: number };
 
 export type Entry = FoodItem & {
   id: number;
@@ -44,8 +48,11 @@ export type Settings = {
   fatG: number;
   budgetMode: BudgetMode;
   deficit: number;
+  // "auto" works the deficit out from goal weight + goal date; "manual" uses `deficit`.
+  deficitMode: "auto" | "manual";
   homeUnits: HomeUnit[];
   goalWeightKg: number | null;
+  goalDate: string | null;
 };
 
 export type Energy = {

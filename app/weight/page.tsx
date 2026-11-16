@@ -29,6 +29,7 @@ function changeOver(weights: W[], days: number): number | null {
 export default function WeightPage() {
   const [weights, setWeights] = useState<W[] | null>(null);
   const [goal, setGoal] = useState<number | null>(null);
+  const [goalDate, setGoalDate] = useState<string | null>(null);
   const [date, setDate] = useState(localDate);
   const [kg, setKg] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +43,7 @@ export default function WeightPage() {
     const j = await r.json();
     setWeights(j.weights);
     setGoal(j.goalKg);
+    setGoalDate(j.goalDate ?? null);
   }, []);
 
   useEffect(() => {
@@ -136,7 +138,11 @@ export default function WeightPage() {
               label="Goal"
               value={goal ? goal.toFixed(1) : "Set"}
               unit={goal ? "kg" : ""}
-              sub={goal && latest ? `${Math.abs(latest.kg - goal).toFixed(1)} kg to go` : "Tap to set"}
+              sub={
+                goal && latest
+                  ? `${Math.abs(latest.kg - goal).toFixed(1)} kg to go${goalDate ? ` by ${fmtDate(goalDate)}` : ""}`
+                  : "Tap to set"
+              }
             />
           </button>
         </div>
@@ -188,7 +194,18 @@ export default function WeightPage() {
         )}
       </div>
 
-      {goalOpen && <GoalSheet goal={goal} onClose={() => setGoalOpen(false)} onSaved={(g) => { setGoal(g); setGoalOpen(false); }} />}
+      {goalOpen && (
+        <GoalSheet
+          goal={goal}
+          goalDate={goalDate}
+          onClose={() => setGoalOpen(false)}
+          onSaved={(g, d) => {
+            setGoal(g);
+            setGoalDate(d);
+            setGoalOpen(false);
+          }}
+        />
+      )}
     </main>
   );
 }
@@ -206,15 +223,33 @@ function Tile({ label, value, unit, sub }: { label: string; value: string; unit:
   );
 }
 
-function GoalSheet({ goal, onClose, onSaved }: { goal: number | null; onClose: () => void; onSaved: (g: number | null) => void }) {
+function GoalSheet({
+  goal,
+  goalDate,
+  onClose,
+  onSaved,
+}: {
+  goal: number | null;
+  goalDate: string | null;
+  onClose: () => void;
+  onSaved: (g: number | null, d: string | null) => void;
+}) {
   const [v, setV] = useState(goal ? String(goal) : "");
+  const [d, setD] = useState(goalDate ?? "");
   const [busy, setBusy] = useState(false);
-  async function save(value: number | null) {
+  async function save(value: number | null, date: string | null) {
     setBusy(true);
     const s: Settings = await (await fetch("/api/settings")).json();
-    const r = await fetch("/api/settings", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...s, goalWeightKg: value }) });
+    const r = await fetch("/api/settings", {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ...s, goalWeightKg: value, goalDate: date }),
+    });
     setBusy(false);
-    if (r.ok) onSaved((await r.json()).goalWeightKg);
+    if (r.ok) {
+      const saved: Settings = await r.json();
+      onSaved(saved.goalWeightKg, saved.goalDate);
+    }
   }
   return (
     <Sheet title="Goal weight" onClose={onClose}>
@@ -231,11 +266,24 @@ function GoalSheet({ goal, onClose, onSaved }: { goal: number | null; onClose: (
         />
         <span className="text-ink-3">kg</span>
       </label>
-      <button disabled={busy || !(Number(v) > 0)} onClick={() => save(Number(v))} className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-white disabled:opacity-40">
+      <label className="mt-3 block text-sm text-ink-2">
+        Reach it by
+        <input
+          type="date"
+          value={d}
+          min={localDate(new Date(Date.now() + DAY))}
+          onChange={(e) => setD(e.target.value)}
+          className="mt-1 w-full rounded-xl bg-track px-3 py-2.5 text-ink outline-none focus:ring-2 focus:ring-brand"
+        />
+      </label>
+      <p className="mt-1 text-xs text-ink-3">
+        With a date, the app works out your daily deficit for you (if your budget uses Apple Health). About 0.5 kg a week is a sustainable pace.
+      </p>
+      <button disabled={busy || !(Number(v) > 0)} onClick={() => save(Number(v), d || null)} className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-white disabled:opacity-40">
         Save goal
       </button>
       {goal && (
-        <button disabled={busy} onClick={() => save(null)} className="mt-1 h-11 w-full rounded-xl text-sm text-ink-2 active:bg-track">
+        <button disabled={busy} onClick={() => save(null, null)} className="mt-1 h-11 w-full rounded-xl text-sm text-ink-2 active:bg-track">
           Remove goal
         </button>
       )}

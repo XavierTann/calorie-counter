@@ -25,7 +25,7 @@ export function DataNotice({ compact = false }: { compact?: boolean }) {
       {!compact && (
         <p className="mt-2">
           Also uses: Ministry of Food and Drug Safety (Korea) national food nutrition data (KOGL Type 1); Indian Nutrient Databank
-          (Vijayakumar et al., Current Developments in Nutrition, 2024); USDA FoodData Central. Makan Log is not affiliated with or
+          (Vijayakumar et al., Current Developments in Nutrition, 2024); USDA FoodData Central; Open Food Facts product data (openfoodfacts.org, Open Database License). Makan Log is not affiliated with or
           endorsed by any of these organisations.
         </p>
       )}

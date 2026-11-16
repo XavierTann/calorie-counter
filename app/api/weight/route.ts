@@ -7,7 +7,7 @@ export async function GET() {
   const uid = await currentUserId();
   if (!uid) return unauthorized();
   const [weights, settings] = await Promise.all([listWeights(uid), getSettings(uid)]);
-  return NextResponse.json({ weights, goalKg: settings.goalWeightKg });
+  return NextResponse.json({ weights, goalKg: settings.goalWeightKg, goalDate: settings.goalDate });
 }
 
 export async function POST(req: Request) {

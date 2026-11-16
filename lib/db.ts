@@ -278,6 +278,23 @@ export async function getEnergy(userId: number, date: string): Promise<Energy | 
   };
 }
 
+// Energy rows for from <= date < to (used to estimate a full day's resting calories).
+export async function listEnergy(userId: number, from: string, to: string): Promise<Energy[]> {
+  const c = await db();
+  const r = await c.execute({
+    sql: "SELECT * FROM daily_energy WHERE user_id = ? AND date >= ? AND date < ? ORDER BY date DESC",
+    args: [userId, from, to],
+  });
+  return r.rows.map((row) => ({
+    date: String(row.date),
+    active: num(row.active),
+    resting: num(row.resting),
+    total: num(row.total),
+    source: String(row.source),
+    updated_at: String(row.updated_at),
+  }));
+}
+
 export async function upsertEnergy(userId: number, e: { date: string; active: number | null; resting: number | null; total: number | null; source: string }) {
   const c = await db();
   const total = e.total ?? (e.active !== null && e.resting !== null ? e.active + e.resting : null);

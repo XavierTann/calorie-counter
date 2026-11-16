@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { addEntries, deleteEntry, updateEntry, getEnergy, getSettings, listEntries, recordFoods } from "@/lib/db";
-import { isDate } from "@/lib/date";
+import { addEntries, deleteEntry, updateEntry, getEnergy, getSettings, listEnergy, listEntries, listWeights, recordFoods } from "@/lib/db";
+import { dailyBudget } from "@/lib/budget";
+import { isDate, todaySG } from "@/lib/date";
 import { currentUserId, unauthorized } from "@/lib/session";
 import { MEALS, type FoodItem, type Meal } from "@/lib/types";
 
@@ -9,8 +10,19 @@ export async function GET(req: Request) {
   if (!uid) return unauthorized();
   const date = new URL(req.url).searchParams.get("date");
   if (!isDate(date)) return NextResponse.json({ error: "bad date" }, { status: 400 });
-  const [entries, energy, settings] = await Promise.all([listEntries(uid, date), getEnergy(uid, date), getSettings(uid)]);
-  return NextResponse.json({ entries, energy, settings });
+  const from = new Date(Date.parse(`${date}T00:00:00Z`) - 14 * 86_400_000).toISOString().slice(0, 10);
+  const [entries, energy, settings, history, allWeights] = await Promise.all([
+    listEntries(uid, date),
+    getEnergy(uid, date),
+    getSettings(uid),
+    listEnergy(uid, from, date),
+    listWeights(uid),
+  ]);
+  // Weigh-ins up to the day being viewed, so past days show the budget they had then.
+  const weights = allWeights.filter((w) => w.date <= date);
+  const today = todaySG();
+  const budget = dailyBudget(settings, energy, { history, weights, date, today });
+  return NextResponse.json({ entries, energy, settings, budget });
 }
 
 export async function POST(req: Request) {

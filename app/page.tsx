@@ -4,7 +4,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { Buddy, buddyLine } from "@/components/Buddy";
 import { Sheet } from "@/components/Sheet";
 import { useCallback, useEffect, useState } from "react";
-import { dailyBudget } from "@/lib/budget";
+import type { Budget } from "@/lib/budget";
 import type { Clarification } from "@/lib/parse";
 import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type Settings } from "@/lib/types";
 
@@ -35,13 +35,13 @@ function mealForNow(): Meal {
 }
 const sum = (xs: FoodItem[], k: "kcal" | "protein" | "carbs" | "fat") => xs.reduce((a, x) => a + (Number(x[k]) || 0), 0);
 
-type DayData = { entries: Entry[]; energy: Energy | null; settings: Settings };
+type DayData = { entries: Entry[]; energy: Energy | null; settings: Settings; budget: Budget };
 
 export default function Home() {
   const [date, setDate] = useState(localDate);
   const [data, setData] = useState<DayData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [sheet, setSheet] = useState<null | "compose" | "review" | "energy">(null);
+  const [sheet, setSheet] = useState<null | "compose" | "review" | "energy" | "budget">(null);
   const [draft, setDraft] = useState<FoodItem[]>([]);
   const [questions, setQuestions] = useState<Clarification[]>([]);
   const [asked, setAsked] = useState(""); // the text that produced the current draft
@@ -121,7 +121,7 @@ export default function Home() {
         <p className="px-4 py-10 text-center text-ink-3">Loading…</p>
       ) : (
         <>
-          <Summary data={data} onEditEnergy={() => setSheet("energy")} />
+          <Summary data={data} onEditEnergy={() => setSheet("energy")} onShowBudget={() => setSheet("budget")} />
           <div className="mt-3 space-y-3 px-4">
             {MEALS.map((m) => (
               <MealCard key={m} meal={m} entries={data.entries.filter((e) => e.meal === m)} onRemove={remove} onEdit={(e) => setEditing(e)} />
@@ -160,6 +160,7 @@ export default function Home() {
           }}
         />
       )}
+      {sheet === "budget" && data && <BudgetSheet budget={data.budget} onClose={() => setSheet(null)} />}
       {sheet === "energy" && data && (
         <EnergySheet date={date} energy={data.energy} onClose={() => setSheet(null)} onSaved={() => { setSheet(null); load(); }} />
       )}
@@ -169,13 +170,13 @@ export default function Home() {
 
 /* ---------------- Summary (Cronometer-style energy + macros) ---------------- */
 
-function Summary({ data, onEditEnergy }: { data: DayData; onEditEnergy: () => void }) {
+function Summary({ data, onEditEnergy, onShowBudget }: { data: DayData; onEditEnergy: () => void; onShowBudget: () => void }) {
   const { entries, energy, settings } = data;
   const consumed = Math.round(sum(entries, "kcal"));
-  const { budget, explain } = dailyBudget(settings, energy);
+  const { budget, explain, burned, burnedSoFar } = data.budget;
   const remaining = budget - consumed;
   const over = remaining < 0;
-  const burned = energy?.total ?? null;
+  const projected = burned !== null && burnedSoFar !== null && Math.round(burned) !== Math.round(burnedSoFar);
 
   return (
     <section className="summary-card mx-4 rounded-3xl p-4 shadow-sm ring-1 ring-line">
@@ -192,15 +193,19 @@ function Summary({ data, onEditEnergy }: { data: DayData; onEditEnergy: () => vo
         </Ring>
         <div className="grid flex-1 grid-cols-1 gap-2">
           <Stat label="Consumed" value={consumed} />
-          <Stat label="Budget" value={budget} sub={explain} />
+          <button onClick={onShowBudget} className="-m-1 rounded-lg p-1 text-left active:bg-track">
+            <Stat label="Budget" value={budget} sub={`${explain} · how?`} />
+          </button>
           <button onClick={onEditEnergy} className="-m-1 rounded-lg p-1 text-left active:bg-track">
             <Stat
-              label="Burned"
-              value={burned}
+              label={projected ? "Burned so far" : "Burned"}
+              value={projected ? Math.round(burnedSoFar!) : burned !== null ? Math.round(burned) : null}
               sub={
                 energy
-                  ? `${energy.active !== null ? `${Math.round(energy.active)} active · ` : ""}${energy.source}`
-                  : "Tap to add / sync Garmin"
+                  ? projected
+                    ? `~${Math.round(burned!).toLocaleString()} by end of day`
+                    : `${energy.active !== null ? `${Math.round(energy.active)} active · ` : ""}${energy.source}`
+                  : "Tap to add, or sync Apple Health"
               }
             />
           </button>
@@ -333,6 +338,7 @@ function sourceLabel(s: string) {
   if (base.startsWith("kr:")) return "Korea MFDS database" + edited;
   if (base.startsWith("in:")) return "Indian Nutrient Databank" + edited;
   if (base.startsWith("fdc:")) return "USDA FoodData Central" + edited;
+  if (base.startsWith("off:")) return "Open Food Facts (product label)" + edited;
   if (base.startsWith("home")) return "Home cooking" + edited;
   if (base.startsWith("web")) return base.replace(/^web:\s*/, "") + edited;
   if (base === "learned" || base === "my food") return "My foods" + edited;
@@ -362,16 +368,18 @@ function modSuggestions(name: string): string[] {
 }
 
 function ReviewItem({
-  item: it,
-  onKcal,
+  draft,
+  onChange,
   onFix,
   onRemove,
 }: {
-  item: FoodItem & { breakdown: { label: string; kcal: number }[] };
-  onKcal: (k: number) => void;
+  draft: Draft;
+  onChange: (d: Draft) => void;
   onFix: (note: string) => Promise<void>;
   onRemove: () => void;
 }) {
+  const it = view(draft);
+  const parts = draft.base.parts ?? [];
   const [fixOpen, setFixOpen] = useState(false);
   const [note, setNote] = useState("");
   const [fixing, setFixing] = useState(false);
@@ -412,6 +420,31 @@ function ReviewItem({
         </span>
         <span className="rounded-full bg-track px-2 py-0.5 text-ink-2">Source: {sourceLabel(it.source)}</span>
       </div>
+      <PortionPicker value={draft.portion} onChange={(portion) => onChange({ ...draft, portion, override: null })} />
+      {parts.length >= 2 && (
+        <div className="mt-2">
+          <div className="text-xs text-ink-3">What was in it? Tap anything you didn&apos;t eat.</div>
+          <div className="mt-1 flex flex-wrap gap-1.5">
+            {parts.map((p) => {
+              const out = draft.removed.includes(p.name);
+              return (
+                <button
+                  key={p.name}
+                  type="button"
+                  aria-pressed={!out}
+                  onClick={() =>
+                    onChange({ ...draft, override: null, removed: out ? draft.removed.filter((n) => n !== p.name) : [...draft.removed, p.name] })
+                  }
+                  className={`rounded-full px-2.5 py-1 text-xs ring-1 ${out ? "bg-card text-ink-3 line-through ring-line" : "bg-brand-soft font-medium text-brand-strong ring-brand"}`}
+                >
+                  {out ? "" : "✓ "}
+                  {p.name} <span className="tabular opacity-70">{p.kcal}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
       <table className="tabular mt-2 w-full text-sm">
         <tbody>
           {it.breakdown.map((b, j) => (
@@ -435,7 +468,7 @@ function ReviewItem({
                 type="number"
                 inputMode="numeric"
                 value={Math.round(it.kcal)}
-                onChange={(e) => onKcal(Number(e.target.value) || 0)}
+                onChange={(e) => onChange({ ...draft, override: Number(e.target.value) || 0 })}
                 className="tabular w-20 rounded-lg bg-track px-2 py-1 text-right font-semibold ring-1 ring-line focus:ring-2 focus:ring-brand focus:outline-none"
                 aria-label={`${it.name} total calories`}
               />
@@ -647,7 +680,90 @@ function ManualForm({ onAdd }: { onAdd: (items: FoodItem[], meal: Meal) => Promi
   );
 }
 
-const withBreakdown = (xs: FoodItem[]) => xs.map((x) => ({ ...x, breakdown: x.breakdown ?? [{ label: `${x.name}, ${x.quantity}`, kcal: Math.round(x.kcal) }] }));
+type Shown = FoodItem & { breakdown: { label: string; kcal: number }[] };
+// A looked-up item plus what you changed on Check & log: portion, parts you didn't eat, and a typed-in total.
+type Draft = { base: Shown; portion: number; removed: string[]; override: number | null };
+
+const toDrafts = (xs: FoodItem[]): Draft[] =>
+  xs.map((x) => ({
+    base: { ...x, breakdown: x.breakdown ?? [{ label: `${x.name}, ${x.quantity}`, kcal: Math.round(x.kcal) }] },
+    portion: 1,
+    removed: [],
+    override: null,
+  }));
+
+const PORTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2];
+const FRACTION: Record<string, string> = { "0.25": "¼", "0.5": "½", "0.75": "¾", "1.5": "1½" };
+const portionLabel = (p: number) => FRACTION[String(p)] ?? String(+p.toFixed(2));
+
+// What actually gets logged. No AI call needed: parts carry their own calories, so unticking one just subtracts it.
+function view(d: Draft): Shown {
+  const b = d.base;
+  const gone = (b.parts ?? []).filter((p) => d.removed.includes(p.name));
+  const minus = (k: "kcal" | "protein" | "carbs" | "fat") => gone.reduce((a, p) => a + p[k], 0);
+  const breakdown = [...b.breakdown, ...gone.map((p) => ({ label: `No ${p.name.toLowerCase()}`, kcal: -p.kcal }))];
+  const kept = Math.max(0, b.kcal - minus("kcal"));
+  const scaled = Math.round(kept * d.portion);
+  if (d.portion !== 1) breakdown.push({ label: `${portionLabel(d.portion)} portion`, kcal: scaled - kept });
+  const f = d.override !== null && scaled > 0 ? d.override / scaled : 1;
+  const macro = (k: "protein" | "carbs" | "fat") => +Math.max(0, (b[k] - minus(k)) * d.portion * f).toFixed(1);
+  const low = b.kcalLow !== undefined ? Math.round((b.kcalLow - minus("kcal")) * d.portion) : undefined;
+  const kcal = d.override ?? scaled;
+  return {
+    ...b,
+    name: gone.length ? `${b.name} (no ${gone.map((p) => p.name.toLowerCase()).join(", ")})` : b.name,
+    quantity: d.portion !== 1 ? `${portionLabel(d.portion)} × ${b.quantity}` : b.quantity,
+    kcal,
+    kcalLow: d.override === null && low !== undefined && low > 0 && low < kcal ? low : undefined,
+    protein: macro("protein"),
+    carbs: macro("carbs"),
+    fat: macro("fat"),
+    source: d.override !== null && !b.source.includes("edited") ? `${b.source} (edited)` : b.source,
+    breakdown,
+  };
+}
+
+function PortionPicker({ value, onChange }: { value: number; onChange: (p: number) => void }) {
+  const custom = !PORTIONS.includes(value);
+  const [text, setText] = useState(custom ? String(value) : "");
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs">
+      <span className="text-ink-3">Portion</span>
+      {PORTIONS.map((p) => (
+        <button
+          key={p}
+          type="button"
+          aria-pressed={value === p}
+          onClick={() => {
+            setText("");
+            onChange(p);
+          }}
+          className={`h-7 min-w-8 rounded-full px-2 ring-1 ${value === p ? "bg-brand font-semibold text-white ring-brand" : "bg-card ring-line active:opacity-70"}`}
+        >
+          {portionLabel(p)}
+        </button>
+      ))}
+      <label className={`flex h-7 items-center rounded-full px-2 ring-1 ${custom ? "ring-brand" : "ring-line"}`}>
+        <span className="text-ink-3">×</span>
+        <input
+          type="number"
+          inputMode="decimal"
+          step="0.1"
+          min="0"
+          value={text}
+          placeholder="other"
+          onChange={(e) => {
+            setText(e.target.value);
+            const n = Number(e.target.value);
+            if (n > 0 && n <= 20) onChange(n);
+          }}
+          className="tabular w-11 bg-transparent pl-1 outline-none placeholder:text-ink-3"
+          aria-label="Custom portion multiplier"
+        />
+      </label>
+    </div>
+  );
+}
 
 function ReviewSheet(p: {
   items: FoodItem[];
@@ -657,28 +773,18 @@ function ReviewSheet(p: {
   onAdd: (i: FoodItem[], m: Meal) => Promise<void>;
 }) {
   const { items: initial, onClose, onAdd } = p;
-  // Each item keeps the AI's original working so the table can show your edit separately.
-  const [items, setItems] = useState(() => withBreakdown(initial));
-  useEffect(() => setItems(withBreakdown(initial)), [initial]);
+  // Each item keeps the AI's original working so the table can show your changes separately.
+  const [drafts, setDrafts] = useState(() => toDrafts(initial));
+  useEffect(() => setDrafts(toDrafts(initial)), [initial]);
   const [meal, setMeal] = useState<Meal>(mealForNow);
   const [saving, setSaving] = useState(false);
+  const items = drafts.map(view);
   const total = Math.round(sum(items, "kcal"));
-
-  function setKcal(idx: number, kcal: number) {
-    setItems((xs) =>
-      xs.map((x, i) => {
-        if (i !== idx) return x;
-        // Scale macros with the calorie edit so they stay consistent.
-        const f = x.kcal > 0 ? kcal / x.kcal : 1;
-        return { ...x, kcal, kcalLow: undefined, protein: +(x.protein * f).toFixed(1), carbs: +(x.carbs * f).toFixed(1), fat: +(x.fat * f).toFixed(1), source: x.source.includes("edited") ? x.source : `${x.source} (edited)` };
-      }),
-    );
-  }
 
   // Re-asks the AI about one item with the user's correction, e.g. "kosong" or "large plate".
   // The note goes on the first line too, so the database search sees e.g. "Iced Teh kosong".
   async function fix(idx: number, note: string) {
-    const it = items[idx];
+    const it = view(drafts[idx]);
     const r = await fetch("/api/parse", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -687,7 +793,7 @@ function ReviewSheet(p: {
     const j = await r.json();
     if (!r.ok) throw new Error(j.error ?? "Lookup failed");
     if (!j.items.length) throw new Error("Couldn't work that out. Try rewording.");
-    setItems((xs) => [...xs.slice(0, idx), ...withBreakdown(j.items), ...xs.slice(idx + 1)]);
+    setDrafts((xs) => [...xs.slice(0, idx), ...toDrafts(j.items), ...xs.slice(idx + 1)]);
   }
 
   return (
@@ -695,13 +801,13 @@ function ReviewSheet(p: {
       {p.questions.length > 0 && <Questions questions={p.questions} onAnswer={p.onAnswer} />}
       <MealPicker meal={meal} setMeal={setMeal} />
       <ul className="mt-3 divide-y divide-line">
-        {items.map((it, i) => (
+        {drafts.map((d, i) => (
           <ReviewItem
             key={i}
-            item={it}
-            onKcal={(k) => setKcal(i, k)}
+            draft={d}
+            onChange={(next) => setDrafts((xs) => xs.map((x, j) => (j === i ? next : x)))}
             onFix={(note) => fix(i, note)}
-            onRemove={() => setItems((xs) => xs.filter((_, j) => j !== i))}
+            onRemove={() => setDrafts((xs) => xs.filter((_, j) => j !== i))}
           />
         ))}
       </ul>
@@ -711,14 +817,14 @@ function ReviewSheet(p: {
           const j = await r.json();
           if (!r.ok) throw new Error(j.error ?? "Lookup failed");
           if (!j.items.length) throw new Error("Couldn't find any food in that. Try rephrasing.");
-          setItems((xs) => [...xs, ...withBreakdown(j.items)]);
+          setDrafts((xs) => [...xs, ...toDrafts(j.items)]);
         }}
       />
       <button
         disabled={!items.length || saving}
         onClick={async () => {
           setSaving(true);
-          await onAdd(items, meal);
+          await onAdd(items.map((x) => ({ ...x, breakdown: undefined, parts: undefined })), meal);
         }}
         className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-brand-ink disabled:opacity-40"
       >
@@ -841,7 +947,20 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
   });
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [portion, setPortion] = useState(1);
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
+  // Portion scales everything from the entry as it was logged, e.g. ½ of "1 bowl".
+  const pickPortion = (p: number) => {
+    setPortion(p);
+    setF({
+      ...f,
+      quantity: p === 1 ? entry.quantity : `${portionLabel(p)} × ${entry.quantity}`,
+      kcal: String(Math.round(entry.kcal * p)),
+      protein: String(+(entry.protein * p).toFixed(1)),
+      carbs: String(+(entry.carbs * p).toFixed(1)),
+      fat: String(+(entry.fat * p).toFixed(1)),
+    });
+  };
   // Changing calories scales the macros along with it, unless you edit those yourself.
   const setKcal = (e: React.ChangeEvent<HTMLInputElement>) => {
     const k = Number(e.target.value);
@@ -889,6 +1008,7 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
             <input type="number" inputMode="numeric" value={f.kcal} onChange={setKcal} className={`${field} tabular font-semibold`} />
           </label>
         </div>
+        <PortionPicker value={portion} onChange={pickPortion} />
         {entry.kcalLow !== undefined && (
           <p className="text-xs text-ink-3">
             The AI&apos;s likely range was {entry.kcalLow}–{Math.round(entry.kcal)} kcal. Saving makes your number exact.
@@ -915,6 +1035,26 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
   );
 }
 
+function BudgetSheet({ budget, onClose }: { budget: Budget; onClose: () => void }) {
+  const signed = (n: number) => (n < 0 ? `−${Math.abs(Math.round(n)).toLocaleString()}` : Math.round(n).toLocaleString());
+  return (
+    <Sheet title="How today's budget was worked out" onClose={onClose}>
+      <ul className="divide-y divide-line">
+        {budget.lines.map((l, i) => (
+          <li key={i} className={`flex gap-3 py-2.5 ${l.total ? "font-semibold" : ""}`}>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm">{l.label}</div>
+              {l.detail && <div className="mt-0.5 text-xs font-normal text-ink-3">{l.detail}</div>}
+            </div>
+            {l.kcal !== null && <div className={`tabular shrink-0 text-sm ${l.kcal < 0 ? "text-good" : ""}`}>{signed(l.kcal)}</div>}
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 text-xs text-ink-3">Change how this works in Settings → How your budget is calculated. Set your goal weight and date on the Weight page.</p>
+    </Sheet>
+  );
+}
+
 function EnergySheet({ date, energy, onClose, onSaved }: { date: string; energy: Energy | null; onClose: () => void; onSaved: () => void }) {
   const [active, setActive] = useState(energy?.active?.toString() ?? "");
   const [resting, setResting] = useState(energy?.resting?.toString() ?? "");
@@ -922,7 +1062,7 @@ function EnergySheet({ date, energy, onClose, onSaved }: { date: string; energy:
   return (
     <Sheet title="Calories burned" onClose={onClose}>
       <p className="mb-3 text-sm text-ink-2">
-        Copy these from the Garmin Connect app (My Day → Calories), or set up automatic sync in Settings.
+        Copy these from the Health app (Browse → Activity → Active Energy / Resting Energy), or set up automatic Apple Health sync in Settings.
         {energy && ` Last update: ${energy.source}, ${energy.updated_at} UTC.`}
       </p>
       <div className="grid grid-cols-3 gap-2">

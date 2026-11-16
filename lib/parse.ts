@@ -32,6 +32,7 @@ const ItemSchema = z.object({
   confidence: z.enum(["high", "medium", "low"]),
   note: z.string(),
   breakdown: z.array(z.object({ label: z.string(), kcal: z.number() })),
+  parts: z.array(z.object({ name: z.string(), kcal: z.number(), protein: z.number(), carbs: z.number(), fat: z.number() })),
 });
 const QuestionSchema = z.object({ question: z.string(), options: z.array(z.string()) });
 const ResultSchema = z.object({ items: z.array(ItemSchema), questions: z.array(QuestionSchema) });
@@ -63,7 +64,7 @@ const RESULT_JSON_SCHEMA = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["name", "quantity", "kcal", "kcal_low", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown"],
+        required: ["name", "quantity", "kcal", "kcal_low", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown", "parts"],
         properties: {
           name: { type: "string", description: "Short display name, e.g. 'Roasted chicken rice'" },
           quantity: { type: "string", description: "Amount eaten, e.g. '1 plate, less rice' or '3 tbsp'" },
@@ -78,6 +79,23 @@ const RESULT_JSON_SCHEMA = {
           },
           confidence: { type: "string", enum: ["high", "medium", "low"] },
           note: { type: "string", description: "One short line on adjustments made, or empty string" },
+          parts: {
+            type: "array",
+            description:
+              "Main components of a mixed dish that someone might not eat (e.g. lotus root soup: soup broth, lotus root, pork ribs). 2-5 parts whose kcal and macros add up to the item's totals. Empty array for single foods and drinks.",
+            items: {
+              type: "object",
+              additionalProperties: false,
+              required: ["name", "kcal", "protein", "carbs", "fat"],
+              properties: {
+                name: { type: "string", description: "Short, e.g. 'Pork ribs'" },
+                kcal: { type: "number" },
+                protein: { type: "number", description: "grams" },
+                carbs: { type: "number", description: "grams" },
+                fat: { type: "number", description: "grams" },
+              },
+            },
+          },
           breakdown: {
             type: "array",
             description: "How kcal was worked out. Row 1 = base serving; later rows = signed adjustments. Rows sum to kcal.",
@@ -104,7 +122,8 @@ The user types what they ate in casual language (Singlish and hawker terms are n
 How to find the numbers, in this order. Always prefer real data over your own estimate:
 1. MY FOODS (custom foods the user added, and numbers they corrected). These override everything else for the same food. source = "my food".
 2. HOME UNITS (the user's calibrated sizes for mum's cooking, mostly per tablespoon). Use them when the user talks about tablespoons/tbsp, bowls of rice or home food. A specific dish ("3 tbsp kailan", "2 tbsp curry chicken") maps to the closest unit type; multiply by the number of tablespoons. If they say "spoon" for home food, treat it as 1 tbsp; a "scoop" with a serving spoon ≈ 3 tbsp. source = "home:<unit id>".
-3. SOURCE MATCHES (rows from official food databases, found for this meal: Singapore's HPB SG FoodID for local food, Korea's MFDS dish database, the Indian Nutrient Databank, or USDA FoodData Central). If a row is the same dish (or a close variant, e.g. "ckt" = char kway teow, "bcm" = bak chor mee), use it: scale its serving to what the user ate and apply the modifiers below; if its serving size looks unrealistic for one portion, scale from its kcal per 100 g instead. source = the row's id (e.g. "sg:F05100133", "kr:D306-…", "in:ASC122", "fdc:12345"), confidence high (medium if you adapted it a lot). Ignore rows that are a different dish. Prefer sg: rows over fdc: rows for Singapore food.
+3. SOURCE MATCHES (rows from official food databases, found for this meal: Singapore's HPB SG FoodID for local food, Korea's MFDS dish database, the Indian Nutrient Databank, or USDA FoodData Central). If a row is the same dish (or a close variant, e.g. "ckt" = char kway teow, "bcm" = bak chor mee), use it: scale its serving to what the user ate and apply the modifiers below; if its serving size looks unrealistic for one portion, scale from its kcal per 100 g instead. source = the row's id (e.g. "sg:F05100133", "kr:D306-…", "in:ASC122", "fdc:12345", "off:9300658228537"), confidence high (medium if you adapted it a lot). Ignore rows that are a different dish. Prefer sg: rows over fdc: rows for Singapore food. If the exact dish isn't there but a close relative is (same noodle or base, different style, e.g. "claypot ee mee" for yi mian soup), adapt that row instead of estimating from scratch, say how in the note, confidence medium.
+   off: rows are packaged supermarket products from their nutrition labels (Open Food Facts). Use them when the user names a packaged or branded product (yoghurt, milk, cereal, snacks, bottled drinks): pick the row matching the brand and variant, and scale by the amount eaten (per serving or per 100 g). Never use an off: row for a cooked hawker or home dish.
 4. Only if none of the above has the food: estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
 Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai, half portion): take the smaller deduction, so the total stays on the high side. Fixed numbers from the databases and the modifier list below are used as given.
@@ -123,6 +142,10 @@ Range: real portions and oil vary, so also give kcal_low, the low end of a reali
 Breakdown: for every item, show the working. Row 1 is the base serving you started from (label like "Chicken rice, 1 plate" with its kcal). Each later row is one modifier or scaling step as a signed kcal change (e.g. "Less rice" -80, "Extra plate" +607, "Half portion" -300). Use only the base row if nothing was adjusted. The rows must add up exactly to kcal.
 
 Clarifying questions: if the user left out a detail that changes the calories a lot (about 15% or 80+ kcal), add a question with 2–4 short options. Examples: "chicken rice" → "Steamed or roasted chicken?" [Steamed, Roasted]; "nasi lemak" → "Which main?" [Fried chicken wing, Fried fish, Egg only]; "fried rice" → "Which kind?" [Egg, Chicken, Seafood, Yang zhou]; "mee goreng" → "Plate size?" [Regular, Large]. Ask at most 2 questions per message and only about things that matter for calories. Never ask about something the text already states (e.g. "roasted chicken rice" already answers steamed vs roasted). Don't ask when the user already said it, when MY FOODS or HOME UNITS already pin it down, or about drinks' ice. Still return items now using the most common choice, and say which in the note (e.g. "Assumed steamed"). If the message includes "Correction from me", apply that correction to the food (it may change the dish, portion or cooking) and ask no questions. If the message includes "Answers to your questions", use them and return no further questions about the same food.
+
+Cooking style: when the user names a food without saying how it was cooked (e.g. "tofu", "egg", "chicken", "fish", "pork"), never assume a richer preparation such as hong shao / braised, deep-fried, sweet and sour, curry or with gravy. Assume the plain version (steamed, plain stir-fried with little oil, boiled, or as it comes, e.g. plain tofu), and if the common preparations differ by about 80+ kcal, ask which one it was (e.g. "How was the tofu cooked?" [Plain / steamed, Stir-fried, Braised (hong shao), Deep-fried]).
+
+Parts: for mixed dishes (soups with solids, noodle dishes, rice plates, sets, stews), list the main components in parts so the user can untick anything they didn't eat, e.g. lotus root and pork rib soup → Soup broth, Lotus root, Pork ribs; chicken rice → Rice, Chicken, Chilli and sauces; kaya toast set → Kaya toast, Soft-boiled eggs, Kopi. Parts must add up to the item's kcal and macros. If the user already said they didn't eat something, leave it out of the item and of parts. Use an empty array for single foods and drinks.
 
 Round kcal to whole numbers and macros to 1 decimal place. One entry per distinct food/drink. If the text isn't food at all, return an empty items list.`;
 
@@ -174,7 +197,16 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: Fo
         const kcalLow = width > 0 && width < kcal ? kcal - width : undefined;
         const { kcal_low: _low, ...rest } = i;
         void _low;
-        return { ...rest, kcal, kcalLow, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
+        // Make the parts add up to the total exactly, so unticking one subtracts the right amount.
+        const partSum = i.parts.reduce((a, p) => a + p.kcal, 0);
+        const parts =
+          i.parts.length >= 2 && partSum > 0
+            ? i.parts.map((p) => {
+                const f = kcal / partSum;
+                return { name: p.name, kcal: Math.round(p.kcal * f), protein: +(p.protein * f).toFixed(1), carbs: +(p.carbs * f).toFixed(1), fat: +(p.fat * f).toFixed(1) };
+              })
+            : undefined;
+        return { ...rest, kcal, kcalLow, parts, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
       });
       const questions = parsed.questions
         .filter((q) => q.question.trim() && q.options.length >= 2)

@@ -214,7 +214,7 @@ function Summary({ data, onEditEnergy, onShowBudget }: { data: DayData; onEditEn
         <div className="grid flex-1 grid-cols-1 gap-2">
           <Stat label="Consumed" value={consumed} />
           <button onClick={onShowBudget} className="-m-1 rounded-lg p-1 text-left active:bg-track">
-            <Stat label="Budget" value={budget} sub={`${explain} · how?`} />
+            <Stat label="Budget" value={budget} sub={explain} />
           </button>
           <button onClick={onEditEnergy} className="-m-1 rounded-lg p-1 text-left active:bg-track">
             {burn ? (

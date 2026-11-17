@@ -247,8 +247,12 @@ function AppleHealthSync({ origin }: { origin: string }) {
           <li>
             Shortcuts app → new shortcut:
             <ul className="mt-1 list-disc space-y-1 pl-4">
-              <li>Find Health Samples: Active Energy, start date Today → Calculate Statistics: Sum</li>
-              <li>Find Health Samples: Resting Energy, start date Today → Calculate Statistics: Sum</li>
+              <li>Find Health Samples: Active Energy, start date Today, Source is Connect → Calculate Statistics: Sum</li>
+              <li>Find Health Samples: Resting Energy, start date Today, Source is Connect → Calculate Statistics: Sum</li>
+              <li>
+                The Source filter (tap Add Filter → Source → Connect, which is Garmin Connect) matters: your iPhone also writes energy to Apple Health, and adding up samples
+                from both counts the same calories twice.
+              </li>
               <li>
                 Get Contents of URL: the URL above, Method POST, Header <code>Authorization</code> = <code>Bearer</code> + a space + your token,
                 Request Body JSON: <code>active</code> = first sum, <code>resting</code> = second sum, <code>source</code> = <code>apple health</code>

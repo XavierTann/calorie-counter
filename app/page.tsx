@@ -46,6 +46,7 @@ export default function Home() {
   const [draft, setDraft] = useState<FoodItem[]>([]);
   const [questions, setQuestions] = useState<Clarification[]>([]);
   const [asked, setAsked] = useState(""); // the text that produced the current draft
+  const [extras, setExtras] = useState<FoodItem[]>([]); // usual foods picked alongside the typed text
   const [text, setText] = useState("");
   const [parsing, setParsing] = useState(false);
   const [editing, setEditing] = useState<Entry | null>(null);
@@ -69,22 +70,31 @@ export default function Home() {
     if ((data.settings.goalWeightKg === null || !data.settings.goalDate) && !goalSetupSkipped()) setSetup(true);
   }, [data]);
 
-  async function lookup(query: string) {
+  async function lookup(query: string, picked: FoodItem[]) {
     const r = await fetch("/api/parse", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: query }) });
     const j = await r.json();
     if (!r.ok) throw new Error(j.error ?? "Lookup failed");
     if (!j.items.length) throw new Error("Couldn't find any food in that. Try rephrasing.");
-    setDraft(j.items);
+    setDraft([...j.items, ...picked]);
     setQuestions(j.questions ?? []);
     setAsked(query);
   }
 
-  async function submitText() {
-    if (!text.trim() || parsing) return;
+  // Typed text goes to the AI; usual foods you tapped are added as they are (no AI call).
+  async function submitText(picked: FoodItem[] = []) {
+    if ((!text.trim() && !picked.length) || parsing) return;
+    setExtras(picked);
+    if (!text.trim()) {
+      setDraft(picked);
+      setQuestions([]);
+      setAsked("");
+      setSheet("review");
+      return;
+    }
     setParsing(true);
     setError(null);
     try {
-      await lookup(text);
+      await lookup(text, picked);
       setText("");
       setSheet("review");
     } catch (e) {
@@ -96,7 +106,7 @@ export default function Home() {
 
   // Re-runs the lookup with the answers to the AI's clarifying questions.
   async function answer(answers: { question: string; answer: string }[]) {
-    await lookup(`${asked}\n\nAnswers to your questions:\n${answers.map((a) => `- ${a.question} ${a.answer}`).join("\n")}`);
+    await lookup(`${asked}\n\nAnswers to your questions:\n${answers.map((a) => `- ${a.question} ${a.answer}`).join("\n")}`, extras);
   }
 
   async function addItems(items: FoodItem[], meal: Meal) {
@@ -372,6 +382,7 @@ function sourceLabel(s: string) {
   if (base.startsWith("home")) return "Home cooking" + edited;
   if (base.startsWith("web")) return base.replace(/^web:\s*/, "") + edited;
   if (base === "learned" || base === "my food") return "My foods" + edited;
+  if (base === "history") return "Your past logs" + edited;
   if (base === "estimate") return "AI estimate" + edited;
   if (base === "manual") return "Entered by you" + edited;
   return base + edited;
@@ -582,16 +593,35 @@ function MealPicker({ meal, setMeal }: { meal: Meal; setMeal: (m: Meal) => void 
 
 const EXAMPLES = ["chicken rice less rice + kopi-c", "1 bowl rice, 3 tbsp kailan, 2 tbsp curry chicken", "2 egg prata + teh peng"];
 
+// Your usual foods for the meal you're probably logging, from your own history.
+function useUsuals() {
+  const [meal] = useState<Meal>(mealForNow);
+  const [items, setItems] = useState<FoodItem[] | null>(null);
+  useEffect(() => {
+    fetch(`/api/foods/suggest?meal=${meal}`)
+      .then((r) => (r.ok ? r.json() : { items: [] }))
+      .then((j: { items: FoodItem[] }) => setItems(j.items))
+      .catch(() => setItems([]));
+  }, [meal]);
+  return { meal, items };
+}
+
 function ComposeSheet(p: {
   text: string;
   setText: (s: string) => void;
   parsing: boolean;
   error: string | null;
-  onSubmit: () => void;
+  onSubmit: (picked: FoodItem[]) => void;
   onManual: (items: FoodItem[], meal: Meal) => Promise<void>;
   onClose: () => void;
 }) {
   const [mode, setMode] = useState<"ai" | "manual">("ai");
+  const usuals = useUsuals();
+  const [picked, setPicked] = useState<number[]>([]);
+  const pickedItems = picked.map((i) => usuals.items![i]);
+  const pickedKcal = Math.round(sum(pickedItems, "kcal"));
+  const toggle = (i: number) => setPicked((xs) => (xs.includes(i) ? xs.filter((x) => x !== i) : [...xs, i]));
+  const submit = () => p.onSubmit(pickedItems);
   return (
     <Sheet title="What did you eat?" onClose={p.onClose}>
       <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-track p-1 text-sm">
@@ -605,7 +635,7 @@ function ComposeSheet(p: {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          p.onSubmit();
+          submit();
         }}
       >
         <textarea
@@ -615,7 +645,7 @@ function ComposeSheet(p: {
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
-              p.onSubmit();
+              submit();
             }
           }}
           rows={3}
@@ -623,21 +653,53 @@ function ComposeSheet(p: {
           className="w-full resize-none rounded-xl bg-track px-3 py-2.5 outline-none placeholder:text-ink-3 focus:ring-2 focus:ring-brand"
         />
         {p.error && <p className="mt-2 text-sm text-over">{p.error}</p>}
-        {!p.text && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {EXAMPLES.map((x) => (
-              <button type="button" key={x} onClick={() => p.setText(x)} className="rounded-full bg-track px-2.5 py-1 text-xs text-ink-2 active:opacity-70">
-                {x}
-              </button>
-            ))}
+        {usuals.items?.length ? (
+          <div className="mt-2">
+            <div className="text-xs text-ink-3">Your usual for {MEAL_LABEL[usuals.meal].toLowerCase()} · tap to add, no AI needed</div>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {usuals.items.map((it, i) => {
+                const on = picked.includes(i);
+                return (
+                  <button
+                    type="button"
+                    key={`${it.name}|${it.quantity}`}
+                    onClick={() => toggle(i)}
+                    aria-pressed={on}
+                    className={`rounded-full px-2.5 py-1 text-xs ring-1 active:opacity-70 ${on ? "bg-brand text-white ring-brand" : "bg-track text-ink-2 ring-transparent"}`}
+                  >
+                    {on ? "✓ " : ""}
+                    {it.name} <span className={on ? "text-white/75" : "text-ink-3"}>{Math.round(it.kcal)}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
+        ) : (
+          usuals.items &&
+          !p.text && (
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {EXAMPLES.map((x) => (
+                <button type="button" key={x} onClick={() => p.setText(x)} className="rounded-full bg-track px-2.5 py-1 text-xs text-ink-2 active:opacity-70">
+                  {x}
+                </button>
+              ))}
+            </div>
+          )
         )}
         <button
           type="submit"
-          disabled={p.parsing || !p.text.trim()}
+          disabled={p.parsing || (!p.text.trim() && !picked.length)}
           className="mt-3 h-12 w-full rounded-xl bg-brand font-semibold text-brand-ink disabled:opacity-40"
         >
-          {p.parsing ? "Looking it up…" : "Look up calories"}
+          {p.parsing
+            ? "Looking it up…"
+            : p.text.trim()
+              ? picked.length
+                ? `Look up calories + ${picked.length} picked`
+                : "Look up calories"
+              : picked.length
+                ? `Add ${picked.length} picked · ${pickedKcal.toLocaleString()} kcal`
+                : "Look up calories"}
         </button>
       </form>
       )}

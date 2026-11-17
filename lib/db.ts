@@ -234,6 +234,42 @@ export async function listEntries(userId: number, date: string): Promise<Entry[]
   }));
 }
 
+// Your usual foods for this meal, for the quick-pick chips. Ranked by how often you've logged each one in the last
+// 60 days, counting it double in the same meal slot, with recent logs counting more. Uses the latest logged numbers.
+export async function suggestFoods(userId: number, meal: Meal, today: string, limit = 3): Promise<FoodItem[]> {
+  const c = await db();
+  const from = new Date(Date.parse(`${today}T00:00:00Z`) - 60 * 86_400_000).toISOString().slice(0, 10);
+  const r = await c.execute({
+    sql: "SELECT date, meal, name, quantity, kcal, kcal_low, protein, carbs, fat, source, confidence FROM entries WHERE user_id = ? AND date >= ? ORDER BY id DESC",
+    args: [userId, from],
+  });
+  const now = Date.parse(`${today}T00:00:00Z`);
+  const seen = new Map<string, { item: FoodItem; score: number }>();
+  for (const row of r.rows) {
+    const key = foodKey(String(row.name), String(row.quantity));
+    const age = Math.max(0, (now - Date.parse(`${row.date}T00:00:00Z`)) / 86_400_000);
+    const weight = (row.meal === meal ? 2 : 1) * Math.pow(0.5, age / 14); // a log counts half as much every 2 weeks
+    const hit = seen.get(key);
+    if (hit) hit.score += weight;
+    else
+      seen.set(key, {
+        score: weight,
+        item: {
+          name: String(row.name),
+          quantity: String(row.quantity),
+          kcal: Number(row.kcal),
+          kcalLow: row.kcal_low === null || row.kcal_low === undefined ? undefined : Number(row.kcal_low),
+          protein: Number(row.protein),
+          carbs: Number(row.carbs),
+          fat: Number(row.fat),
+          source: String(row.source),
+          confidence: String(row.confidence) as FoodItem["confidence"],
+        },
+      });
+  }
+  return [...seen.values()].sort((a, b) => b.score - a.score).slice(0, limit).map((x) => x.item);
+}
+
 export async function addEntries(userId: number, date: string, meal: Meal, items: FoodItem[]) {
   const c = await db();
   await c.batch(
@@ -347,16 +383,6 @@ export async function listMyFoods(userId: number): Promise<MyFood[]> {
   const c = await db();
   const r = await c.execute({ sql: "SELECT * FROM user_foods WHERE user_id = ? ORDER BY COALESCE(last_used, updated_at) DESC", args: [userId] });
   return r.rows.map((row) => rowToMyFood(row as Record<string, unknown>));
-}
-
-// Foods the AI should treat as the user's own numbers: custom foods and corrected ones.
-export async function foodsForAI(userId: number): Promise<FoodItem[]> {
-  const c = await db();
-  const r = await c.execute({
-    sql: "SELECT * FROM user_foods WHERE user_id = ? AND (kind = 'custom' OR edited = 1) ORDER BY COALESCE(last_used, updated_at) DESC LIMIT 300",
-    args: [userId],
-  });
-  return r.rows.map((row) => ({ ...rowToMyFood(row as Record<string, unknown>), source: "my food", confidence: "high" as const }));
 }
 
 // Called on every log. Keeps counts; corrected numbers win, otherwise the latest AI numbers are kept.
@@ -504,4 +530,13 @@ export async function listRefFoods(cuisine: string): Promise<RefFood[]> {
     kcal100: row.kcal_100 === null ? null : Number(row.kcal_100),
     note: row.note ? String(row.note) : null,
   }));
+}
+
+/* ---------------- Your food history, for lookups ---------------- */
+
+// Every food you've logged or saved, one row per name + quantity.
+export async function listUserFoods(userId: number): Promise<MyFood[]> {
+  const c = await db();
+  const r = await c.execute({ sql: "SELECT * FROM user_foods WHERE user_id = ? ORDER BY edited DESC, times DESC, COALESCE(last_used, updated_at) DESC", args: [userId] });
+  return r.rows.map((row) => rowToMyFood(row as Record<string, unknown>));
 }

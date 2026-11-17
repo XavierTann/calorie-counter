@@ -75,7 +75,7 @@ const RESULT_JSON_SCHEMA = {
           fat: { type: "number", description: "grams" },
           source: {
             type: "string",
-            description: "'my food' for MY FOODS, 'home:<unit id>' for home units, the row id for SOURCE MATCHES (e.g. 'sg:…', 'kr:…', 'in:…', 'fdc:…'), 'estimate' otherwise",
+            description: "'my food' for MY FOODS, 'history' for PAST LOGS, 'home:<unit id>' for home units, the row id for SOURCE MATCHES (e.g. 'sg:…', 'kr:…', 'in:…', 'fdc:…'), 'estimate' otherwise",
           },
           confidence: { type: "string", enum: ["high", "medium", "low"] },
           note: { type: "string", description: "One short line on adjustments made, or empty string" },
@@ -124,7 +124,8 @@ How to find the numbers, in this order. Always prefer real data over your own es
 2. HOME UNITS (the user's calibrated sizes for mum's cooking, mostly per tablespoon). Use them when the user talks about tablespoons/tbsp, bowls of rice or home food. A specific dish ("3 tbsp kailan", "2 tbsp curry chicken") maps to the closest unit type; multiply by the number of tablespoons. If they say "spoon" for home food, treat it as 1 tbsp; a "scoop" with a serving spoon ≈ 3 tbsp. source = "home:<unit id>".
 3. SOURCE MATCHES (rows from official food databases, found for this meal: Singapore's HPB SG FoodID for local food, Korea's MFDS dish database, the Indian Nutrient Databank, or USDA FoodData Central). If a row is the same dish (or a close variant, e.g. "ckt" = char kway teow, "bcm" = bak chor mee), use it: scale its serving to what the user ate and apply the modifiers below; if its serving size looks unrealistic for one portion, scale from its kcal per 100 g instead. source = the row's id (e.g. "sg:F05100133", "kr:D306-…", "in:ASC122", "fdc:12345", "off:9300658228537"), confidence high (medium if you adapted it a lot). Ignore rows that are a different dish. Prefer sg: rows over fdc: rows for Singapore food. If the exact dish isn't there but a close relative is (same noodle or base, different style, e.g. "claypot ee mee" for yi mian soup), adapt that row instead of estimating from scratch, say how in the note, confidence medium.
    off: rows are packaged supermarket products from their nutrition labels (Open Food Facts). Use them when the user names a packaged or branded product (yoghurt, milk, cereal, snacks, bottled drinks): pick the row matching the brand and variant, and scale by the amount eaten (per serving or per 100 g). Never use an off: row for a cooked hawker or home dish.
-4. Only if none of the above has the food: estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
+4. PAST LOGS (foods I logged before). If the same food isn't in the sources above, reuse its numbers (scaled to the amount and adjusted for any modifiers) so the same food gets the same calories every time. source = "history", confidence medium.
+5. Only if none of the above has the food: estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
 Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai, half portion): take the smaller deduction, so the total stays on the high side. Fixed numbers from the databases and the modifier list below are used as given.
 
@@ -149,7 +150,7 @@ Parts: for mixed dishes (soups with solids, noodle dishes, rice plates, sets, st
 
 Round kcal to whole numbers and macros to 1 decimal place. One entry per distinct food/drink. If the text isn't food at all, return an empty items list.`;
 
-export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[], sources: Lookup): Promise<ParseResult> {
+export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: FoodItem[], sources: Lookup, past: FoodItem[] = []): Promise<ParseResult> {
   const dynamicContext = [
     `SOURCE MATCHES (detected cuisine: ${sources.cuisine}; id | dish | serving | kcal per serving | macros per serving | kcal per 100 g | notes):`,
     sources.matches.length
@@ -167,6 +168,9 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: Fo
     myFoods.length
       ? myFoods.map((f) => `${f.name} | ${f.quantity} | ${f.kcal} kcal | P${f.protein} C${f.carbs} F${f.fat}`).join("\n")
       : "(none yet)",
+    "",
+    "PAST LOGS (foods I logged before, with the numbers used then):",
+    past.length ? past.map((f) => `${f.name} | ${f.quantity} | ${f.kcal} kcal | P${f.protein} C${f.carbs} F${f.fat}`).join("\n") : "(none relevant)",
   ].join("\n");
 
   let lastError: unknown;

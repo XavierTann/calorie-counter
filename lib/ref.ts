@@ -194,6 +194,22 @@ const looksPackaged = (s: string) => PACKAGED.test(s);
 
 export type Lookup = { cuisine: Cuisine; matches: RefFood[] };
 
+// Shorthand → the spelling the cuisine's database uses, then lower-cased with punctuation removed.
+export function dishKey(text: string, cuisine: Cuisine = detectCuisine(text)) {
+  const spell = cuisine === "korean" ? toKoreanSpelling : cuisine === "singapore" ? toSgSpelling : (s: string) => s.toLowerCase();
+  return norm(spell(text));
+}
+
+// A database dish whose name is exactly what was typed (after fixing shorthand), or null.
+export async function exactRef(text: string, cuisine: Cuisine): Promise<RefFood | null> {
+  if (cuisine === "western") return null;
+  const idx = await indexFor(cuisine).catch(() => null);
+  if (!idx) return null;
+  const want = dishKey(text, cuisine);
+  const local = text.trim();
+  return idx.rows.find((r) => dishKey(r.row.name, cuisine) === want || (!!r.row.nameLocal && r.row.nameLocal === local))?.row ?? null;
+}
+
 export async function findSources(text: string): Promise<Lookup> {
   const cuisine = detectCuisine(text);
   const segs = segments(text);

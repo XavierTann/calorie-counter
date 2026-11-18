@@ -88,6 +88,21 @@ export default function SettingsPage() {
           />
           <Radio checked={s.budgetMode === "fixed"} onChange={() => set("budgetMode", "fixed")} title="Fixed target" desc="Ignore Apple Health." />
         </div>
+        <label className="mt-3 flex items-start gap-3 rounded-xl bg-track p-3">
+          <input
+            type="checkbox"
+            checked={s.predictResting}
+            onChange={(e) => set("predictResting", e.target.checked)}
+            className="mt-1 h-5 w-5 shrink-0 accent-[var(--brand)]"
+          />
+          <span>
+            <span className="block font-medium">Predict resting calories for the rest of the day</span>
+            <span className="block text-sm text-ink-2">
+              On: resting calories synced so far are scaled up to a full day, and Burned shows a Predicted number. Turn this off if your watch app
+              writes the whole day&apos;s resting calories at once, so the number it sends is used as is.
+            </span>
+          </span>
+        </label>
       </Card>
 
       <Card title="Home cooking: tablespoon sizes">

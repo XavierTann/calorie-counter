@@ -22,6 +22,7 @@ export async function PUT(req: Request) {
     budgetMode: ["target_plus_active", "total_minus_deficit", "fixed"].includes(s.budgetMode) ? s.budgetMode : "target_plus_active",
     deficit: Math.max(0, Number(s.deficit) || 0),
     deficitMode: s.deficitMode === "manual" ? "manual" : "auto",
+    predictResting: s.predictResting !== false,
     goalWeightKg: Number(s.goalWeightKg) > 0 ? Math.round(Number(s.goalWeightKg) * 10) / 10 : null,
     goalDate: isDate(s.goalDate) ? s.goalDate : null,
     homeUnits: (s.homeUnits ?? [])

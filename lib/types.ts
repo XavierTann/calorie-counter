@@ -50,6 +50,9 @@ export type Settings = {
   deficit: number;
   // "auto" works the deficit out from goal weight + goal date; "manual" uses `deficit`.
   deficitMode: "auto" | "manual";
+  // true: scale today's resting calories up to a whole day (Apple Watch, Garmin add them through the day).
+  // false: use resting as sent (for apps that write the whole day's resting in one go).
+  predictResting: boolean;
   homeUnits: HomeUnit[];
   goalWeightKg: number | null;
   goalDate: string | null;

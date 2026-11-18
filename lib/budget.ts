@@ -4,7 +4,6 @@ import type { Energy, Settings } from "./types";
 
 export const KCAL_PER_KG = 7700; // rough energy content of 1 kg of body fat
 export const MAX_DEFICIT = 1000; // never plan to lose faster than ~1 kg a week
-export const MIN_BUDGET = 1200; // never budget below this, whatever the maths says
 const MIN_HOURS_TO_EXTRAPOLATE = 4; // before ~4am there's too little resting data to scale up
 const COMPLETE_AFTER_HOURS = 23; // a sync after 11pm counts as the whole day
 
@@ -36,7 +35,7 @@ type Burned = { value: number; soFar: number | null; lines: BudgetLine[]; burn: 
 
 // Estimates the whole day's burn: resting builds up evenly through the day, so a midday sync is scaled up;
 // active calories are only counted once you've done them.
-function estimateBurned(e: Energy | null, history: Energy[], isToday: boolean): Burned | null {
+function estimateBurned(e: Energy | null, history: Energy[], isToday: boolean, predict: boolean): Burned | null {
   const fullDays = history.filter((h) => h.resting !== null && isComplete(h)).slice(0, 7);
   const avgResting = fullDays.length >= 3 ? fullDays.reduce((a, h) => a + h.resting!, 0) / fullDays.length : null;
   const avgLine = (): BudgetLine => ({
@@ -46,7 +45,7 @@ function estimateBurned(e: Energy | null, history: Energy[], isToday: boolean): 
   });
 
   if (!e) {
-    if (avgResting === null) return null;
+    if (avgResting === null || !predict) return null;
     return {
       value: avgResting,
       soFar: null,
@@ -74,6 +73,9 @@ function estimateBurned(e: Energy | null, history: Energy[], isToday: boolean): 
   if (!isToday || hours >= COMPLETE_AFTER_HOURS) {
     resting = e.resting;
     lines.push({ label: "Resting (whole day)", kcal: resting, detail: `From Apple Health, ${synced}` });
+  } else if (!predict) {
+    resting = e.resting;
+    lines.push({ label: "Resting", kcal: resting, detail: `From Apple Health, ${synced}. Used as sent (prediction is off in Settings)` });
   } else {
     lines.push({ label: "Resting so far", kcal: e.resting, detail: `From Apple Health, ${synced}` });
     if (avgResting !== null) {
@@ -139,7 +141,7 @@ export function dailyBudget(
   ctx: { history: Energy[]; weights: WeightPoint[]; date: string; today: string },
 ): Budget {
   const active = e?.active ?? 0;
-  const estimate = estimateBurned(e, ctx.history, ctx.date === ctx.today);
+  const estimate = estimateBurned(e, ctx.history, ctx.date === ctx.today, s.predictResting);
   const burn = estimate?.burn ?? null;
 
   if (s.budgetMode === "target_plus_active") {
@@ -167,12 +169,11 @@ export function dailyBudget(
               lines: [{ label: "Deficit (your fixed number)", kcal: -s.deficit, detail: auto && "reason" in auto ? `${auto.reason} to have it worked out automatically` : undefined }],
             };
       const raw = burned.value - deficit.value;
-      const budget = Math.round(Math.max(MIN_BUDGET, raw));
+      const budget = Math.round(Math.max(0, raw));
       const lines: BudgetLine[] = [
         ...burned.lines,
         { label: ctx.date === ctx.today ? "Estimated burn today" : "Burned that day", kcal: burned.value, total: true },
         ...deficit.lines,
-        ...(raw < MIN_BUDGET ? [{ label: `Raised to the ${fmt(MIN_BUDGET)} kcal minimum`, kcal: MIN_BUDGET - raw }] : []),
         { label: "Budget", kcal: budget, total: true },
       ];
       return { budget, explain: `~${fmt(burned.value)} burned − ${fmt(deficit.value)} deficit`, lines, burn };

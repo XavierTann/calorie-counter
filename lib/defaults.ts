@@ -10,6 +10,7 @@ export const DEFAULT_SETTINGS: Settings = {
   budgetMode: "target_plus_active",
   deficit: 300,
   deficitMode: "auto",
+  predictResting: true,
   goalWeightKg: null,
   goalDate: null,
   homeUnits: [

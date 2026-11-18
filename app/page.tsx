@@ -51,6 +51,7 @@ export default function Home() {
   const [parsing, setParsing] = useState(false);
   const [editing, setEditing] = useState<Entry | null>(null);
   const [setup, setSetup] = useState(false);
+  const [logMeal, setLogMeal] = useState<Meal>(mealForNow); // the meal the + you tapped belongs to
   const setupChecked = useRef(false);
 
   const load = useCallback(async () => {
@@ -117,6 +118,12 @@ export default function Home() {
     load();
   }
 
+  function openCompose(meal: Meal) {
+    setError(null);
+    setLogMeal(meal);
+    setSheet("compose");
+  }
+
   async function remove(id: number) {
     setData((d) => (d ? { ...d, entries: d.entries.filter((e) => e.id !== id) } : d));
     await fetch(`/api/entries?id=${id}`, { method: "DELETE" });
@@ -144,7 +151,7 @@ export default function Home() {
           <Summary data={data} onEditEnergy={() => setSheet("energy")} onShowBudget={() => setSheet("budget")} />
           <div className="mt-3 space-y-3 px-4">
             {MEALS.map((m) => (
-              <MealCard key={m} meal={m} entries={data.entries.filter((e) => e.meal === m)} onRemove={remove} onEdit={(e) => setEditing(e)} />
+              <MealCard key={m} meal={m} entries={data.entries.filter((e) => e.meal === m)} onRemove={remove} onEdit={(e) => setEditing(e)} onAdd={() => openCompose(m)} />
             ))}
           </div>
         </>
@@ -152,10 +159,7 @@ export default function Home() {
 
       <button
         aria-label="Log food"
-        onClick={() => {
-          setError(null);
-          setSheet("compose");
-        }}
+        onClick={() => openCompose(mealForNow())}
         className="fab fixed right-5 z-10 flex h-16 w-16 items-center justify-center rounded-full text-4xl leading-none font-light text-white shadow-lg active:scale-95"
         style={{ bottom: "max(calc(env(safe-area-inset-bottom) + 12px), 24px)", transition: "transform 120ms" }}
       >
@@ -163,9 +167,9 @@ export default function Home() {
       </button>
 
       {sheet === "compose" && (
-        <ComposeSheet text={text} setText={setText} parsing={parsing} error={error} onSubmit={submitText} onManual={addItems} onClose={() => setSheet(null)} />
+        <ComposeSheet meal={logMeal} text={text} setText={setText} parsing={parsing} error={error} onSubmit={submitText} onManual={addItems} onClose={() => setSheet(null)} />
       )}
-      {sheet === "review" && <ReviewSheet items={draft} questions={questions} onAnswer={answer} onClose={() => setSheet(null)} onAdd={addItems} />}
+      {sheet === "review" && <ReviewSheet meal={logMeal} items={draft} questions={questions} onAnswer={answer} onClose={() => setSheet(null)} onAdd={addItems} />}
       {editing && (
         <EntrySheet
           entry={editing}
@@ -324,7 +328,7 @@ function MacroBar({ label, value, target, color }: { label: string; value: numbe
 
 /* ---------------- Diary ---------------- */
 
-function MealCard({ meal, entries, onRemove, onEdit }: { meal: Meal; entries: Entry[]; onRemove: (id: number) => void; onEdit: (e: Entry) => void }) {
+function MealCard({ meal, entries, onRemove, onEdit, onAdd }: { meal: Meal; entries: Entry[]; onRemove: (id: number) => void; onEdit: (e: Entry) => void; onAdd: () => void }) {
   const total = Math.round(sum(entries, "kcal"));
   return (
     <section className="rounded-2xl bg-card shadow-sm ring-1 ring-line">
@@ -338,6 +342,13 @@ function MealCard({ meal, entries, onRemove, onEdit }: { meal: Meal; entries: En
         ) : (
           <span className="text-xs text-ink-3">Nothing yet</span>
         )}
+        <button
+          onClick={onAdd}
+          aria-label={`Add to ${MEAL_LABEL[meal].toLowerCase()}`}
+          className="-mr-1 flex h-9 w-9 items-center justify-center rounded-full bg-track text-xl leading-none text-ink-2 active:scale-95 active:opacity-70"
+        >
+          +
+        </button>
       </div>
       {entries.length > 0 && (
         <ul className="divide-y divide-line border-t border-line">
@@ -594,8 +605,7 @@ function MealPicker({ meal, setMeal }: { meal: Meal; setMeal: (m: Meal) => void 
 const EXAMPLES = ["chicken rice less rice + kopi-c", "1 bowl rice, 3 tbsp kailan, 2 tbsp curry chicken", "2 egg prata + teh peng"];
 
 // Your usual foods for the meal you're probably logging, from your own history.
-function useUsuals() {
-  const [meal] = useState<Meal>(mealForNow);
+function useUsuals(meal: Meal) {
   const [items, setItems] = useState<FoodItem[] | null>(null);
   useEffect(() => {
     fetch(`/api/foods/suggest?meal=${meal}`)
@@ -607,6 +617,7 @@ function useUsuals() {
 }
 
 function ComposeSheet(p: {
+  meal: Meal;
   text: string;
   setText: (s: string) => void;
   parsing: boolean;
@@ -616,7 +627,7 @@ function ComposeSheet(p: {
   onClose: () => void;
 }) {
   const [mode, setMode] = useState<"ai" | "manual">("ai");
-  const usuals = useUsuals();
+  const usuals = useUsuals(p.meal);
   const [picked, setPicked] = useState<number[]>([]);
   const pickedItems = picked.map((i) => usuals.items![i]);
   const pickedKcal = Math.round(sum(pickedItems, "kcal"));
@@ -631,7 +642,7 @@ function ComposeSheet(p: {
           </button>
         ))}
       </div>
-      {mode === "manual" ? <ManualForm onAdd={p.onManual} /> : (
+      {mode === "manual" ? <ManualForm meal={p.meal} onAdd={p.onManual} /> : (
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -707,8 +718,8 @@ function ComposeSheet(p: {
   );
 }
 
-function ManualForm({ onAdd }: { onAdd: (items: FoodItem[], meal: Meal) => Promise<void> }) {
-  const [meal, setMeal] = useState<Meal>(mealForNow);
+function ManualForm({ meal: initialMeal, onAdd }: { meal: Meal; onAdd: (items: FoodItem[], meal: Meal) => Promise<void> }) {
+  const [meal, setMeal] = useState<Meal>(initialMeal);
   const [f, setF] = useState({ name: "", quantity: "", kcal: "", protein: "", carbs: "", fat: "" });
   const [saving, setSaving] = useState(false);
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
@@ -858,6 +869,7 @@ function PortionPicker({ value, onChange }: { value: number; onChange: (p: numbe
 }
 
 function ReviewSheet(p: {
+  meal: Meal;
   items: FoodItem[];
   questions: Clarification[];
   onAnswer: (a: { question: string; answer: string }[]) => Promise<void>;
@@ -868,7 +880,7 @@ function ReviewSheet(p: {
   // Each item keeps the AI's original working so the table can show your changes separately.
   const [drafts, setDrafts] = useState(() => toDrafts(initial));
   useEffect(() => setDrafts(toDrafts(initial)), [initial]);
-  const [meal, setMeal] = useState<Meal>(mealForNow);
+  const [meal, setMeal] = useState<Meal>(p.meal);
   const [saving, setSaving] = useState(false);
   const items = drafts.map(view);
   const total = Math.round(sum(items, "kcal"));

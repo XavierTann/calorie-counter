@@ -3,6 +3,7 @@
 import { AppHeader } from "@/components/AppHeader";
 import { Buddy, buddyLine } from "@/components/Buddy";
 import { GoalSetup, goalSetupSkipped } from "@/components/GoalSetup";
+import { PullToRefresh } from "@/components/PullToRefresh";
 import { Sheet } from "@/components/Sheet";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Budget } from "@/lib/budget";
@@ -132,6 +133,7 @@ export default function Home() {
 
   return (
     <main className="mx-auto min-h-dvh max-w-xl pb-28" style={{ paddingTop: "env(safe-area-inset-top)" }}>
+      <PullToRefresh onRefresh={load} disabled={!!sheet || !!editing || setup} />
       <AppHeader
         center={
           <div className="flex items-center gap-1">

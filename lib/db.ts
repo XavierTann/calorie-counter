@@ -47,7 +47,8 @@ async function db(): Promise<Client> {
             note TEXT,
             created_at TEXT NOT NULL DEFAULT (datetime('now')),
             user_id INTEGER NOT NULL DEFAULT 0,
-            kcal_low REAL
+            kcal_low REAL,
+            portion REAL NOT NULL DEFAULT 1
           )`,
           `CREATE TABLE IF NOT EXISTS daily_energy (
             user_id INTEGER NOT NULL,
@@ -133,6 +134,7 @@ async function migrateSingleUserData(c: Client) {
   const stmts: string[] = [];
   if (!entryCols.includes("user_id")) stmts.push("ALTER TABLE entries ADD COLUMN user_id INTEGER NOT NULL DEFAULT 0");
   if (!entryCols.includes("kcal_low")) stmts.push("ALTER TABLE entries ADD COLUMN kcal_low REAL");
+  if (!entryCols.includes("portion")) stmts.push("ALTER TABLE entries ADD COLUMN portion REAL NOT NULL DEFAULT 1");
   if (tables.has("energy")) {
     stmts.push(
       `INSERT OR IGNORE INTO daily_energy (user_id, date, active, resting, total, source, updated_at)
@@ -210,6 +212,22 @@ export async function setSyncToken(userId: number, token: string) {
 }
 
 const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
+const portionOf = (v: unknown) => (Number(v) > 0 ? Number(v) : 1);
+const r1 = (n: number) => Math.round(n * 10) / 10;
+
+// One full serving of a logged item (entries store what was eaten, i.e. already × portion).
+function perServing<T extends { kcal: number; protein: number; carbs: number; fat: number; kcalLow?: number; portion?: number }>(i: T): T {
+  const p = portionOf(i.portion);
+  if (p === 1) return i;
+  return {
+    ...i,
+    kcal: Math.round(i.kcal / p),
+    kcalLow: i.kcalLow === undefined ? undefined : Math.round(i.kcalLow / p),
+    protein: r1(i.protein / p),
+    carbs: r1(i.carbs / p),
+    fat: r1(i.fat / p),
+  };
+}
 
 /* ---------------- Diary ---------------- */
 
@@ -230,17 +248,19 @@ export async function listEntries(userId: number, date: string): Promise<Entry[]
     source: String(row.source),
     confidence: String(row.confidence) as Entry["confidence"],
     note: row.note ? String(row.note) : undefined,
+    portion: portionOf(row.portion),
     created_at: String(row.created_at),
   }));
 }
 
 // Your usual foods for this meal, for the quick-pick chips. Ranked by how often you've logged each one in the last
-// 60 days, counting it double in the same meal slot, with recent logs counting more. Uses the latest logged numbers.
+// 60 days, counting it double in the same meal slot, with recent logs counting more. Uses the latest logged numbers,
+// as one serving plus the portion you last had (so the chip logs the same amount, and the picker can change it).
 export async function suggestFoods(userId: number, meal: Meal, today: string, limit = 3): Promise<FoodItem[]> {
   const c = await db();
   const from = new Date(Date.parse(`${today}T00:00:00Z`) - 60 * 86_400_000).toISOString().slice(0, 10);
   const r = await c.execute({
-    sql: "SELECT date, meal, name, quantity, kcal, kcal_low, protein, carbs, fat, source, confidence FROM entries WHERE user_id = ? AND date >= ? ORDER BY id DESC",
+    sql: "SELECT date, meal, name, quantity, kcal, kcal_low, protein, carbs, fat, source, confidence, portion FROM entries WHERE user_id = ? AND date >= ? ORDER BY id DESC",
     args: [userId, from],
   });
   const now = Date.parse(`${today}T00:00:00Z`);
@@ -254,7 +274,7 @@ export async function suggestFoods(userId: number, meal: Meal, today: string, li
     else
       seen.set(key, {
         score: weight,
-        item: {
+        item: perServing({
           name: String(row.name),
           quantity: String(row.quantity),
           kcal: Number(row.kcal),
@@ -264,7 +284,8 @@ export async function suggestFoods(userId: number, meal: Meal, today: string, li
           fat: Number(row.fat),
           source: String(row.source),
           confidence: String(row.confidence) as FoodItem["confidence"],
-        },
+          portion: portionOf(row.portion),
+        }),
       });
   }
   return [...seen.values()].sort((a, b) => b.score - a.score).slice(0, limit).map((x) => x.item);
@@ -274,22 +295,26 @@ export async function addEntries(userId: number, date: string, meal: Meal, items
   const c = await db();
   await c.batch(
     items.map((i) => ({
-      sql: `INSERT INTO entries (user_id, date, meal, name, quantity, kcal, kcal_low, protein, carbs, fat, source, confidence, note)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [userId, date, meal, i.name, i.quantity, i.kcal, i.kcalLow ?? null, i.protein, i.carbs, i.fat, i.source, i.confidence, i.note ?? null],
+      sql: `INSERT INTO entries (user_id, date, meal, name, quantity, kcal, kcal_low, protein, carbs, fat, source, confidence, note, portion)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [userId, date, meal, i.name, i.quantity, i.kcal, i.kcalLow ?? null, i.protein, i.carbs, i.fat, i.source, i.confidence, i.note ?? null, portionOf(i.portion)],
     })),
     "write",
   );
 }
 
 // A correction from the diary: the numbers become exact (no range) and are marked as edited.
-export async function updateEntry(userId: number, id: number, f: { meal: Meal; name: string; quantity: string; kcal: number; protein: number; carbs: number; fat: number }) {
+export async function updateEntry(
+  userId: number,
+  id: number,
+  f: { meal: Meal; name: string; quantity: string; kcal: number; protein: number; carbs: number; fat: number; portion: number },
+) {
   const c = await db();
   const r = await c.execute({
-    sql: `UPDATE entries SET meal = ?, name = ?, quantity = ?, kcal = ?, kcal_low = NULL, protein = ?, carbs = ?, fat = ?,
+    sql: `UPDATE entries SET meal = ?, name = ?, quantity = ?, kcal = ?, kcal_low = NULL, protein = ?, carbs = ?, fat = ?, portion = ?,
             source = CASE WHEN source LIKE '%(edited)%' THEN source ELSE source || ' (edited)' END
           WHERE id = ? AND user_id = ? RETURNING source, confidence`,
-    args: [f.meal, f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat, id, userId],
+    args: [f.meal, f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat, f.portion, id, userId],
   });
   return r.rows[0] ? String(r.rows[0].source) : null;
 }
@@ -386,8 +411,10 @@ export async function listMyFoods(userId: number): Promise<MyFood[]> {
 }
 
 // Called on every log. Keeps counts; corrected numbers win, otherwise the latest AI numbers are kept.
-export async function recordFoods(userId: number, items: FoodItem[], countUse = true) {
-  if (!items.length) return;
+// Foods are remembered as one full serving, so logging half a plate today doesn't shrink next time's plate.
+export async function recordFoods(userId: number, logged: FoodItem[], countUse = true) {
+  if (!logged.length) return;
+  const items = logged.map(perServing);
   const c = await db();
   const pick = (col: string) =>
     `${col} = CASE WHEN excluded.edited = 1 OR (user_foods.kind = 'recorded' AND user_foods.edited = 0) THEN excluded.${col} ELSE user_foods.${col} END`;

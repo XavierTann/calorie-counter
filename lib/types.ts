@@ -19,6 +19,10 @@ export type FoodItem = {
   breakdown?: { label: string; kcal: number }[];
   // Main components of a dish (e.g. soup base, lotus root, pork ribs), so you can untick what you didn't eat.
   parts?: FoodPart[];
+  // How many servings of `quantity` were eaten (0.5 for "half a plate"). Foods are always known by one full serving:
+  //  - a lookup result (AI, database, history) has kcal/macros for ONE serving; portion is what to start the picker on.
+  //  - a logged entry has kcal/macros for what was eaten (already × portion); quantity is still the one-serving amount.
+  portion?: number;
 };
 
 export type FoodPart = { name: string; kcal: number; protein: number; carbs: number; fat: number };

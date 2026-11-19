@@ -33,6 +33,7 @@ const ItemSchema = z.object({
   note: z.string(),
   breakdown: z.array(z.object({ label: z.string(), kcal: z.number() })),
   parts: z.array(z.object({ name: z.string(), kcal: z.number(), protein: z.number(), carbs: z.number(), fat: z.number() })),
+  portion: z.number(),
 });
 const QuestionSchema = z.object({ question: z.string(), options: z.array(z.string()) });
 const ResultSchema = z.object({ items: z.array(ItemSchema), questions: z.array(QuestionSchema) });
@@ -64,11 +65,12 @@ const RESULT_JSON_SCHEMA = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["name", "quantity", "kcal", "kcal_low", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown", "parts"],
+        required: ["name", "quantity", "kcal", "kcal_low", "protein", "carbs", "fat", "source", "confidence", "note", "breakdown", "parts", "portion"],
         properties: {
           name: { type: "string", description: "Short display name, e.g. 'Roasted chicken rice'" },
-          quantity: { type: "string", description: "Amount eaten, e.g. '1 plate, less rice' or '3 tbsp'" },
-          kcal: { type: "number", description: "Upper end of the likely range (this is what gets logged)" },
+          quantity: { type: "string", description: "ONE serving, e.g. '1 plate, less rice' or '3 tbsp'. Never 'half a plate' or '2 plates': that goes in portion." },
+          portion: { type: "number", description: "How many of that serving were eaten: 1 normally, 0.5 for half / shared, 2 for two plates or x2" },
+          kcal: { type: "number", description: "Upper end of the likely range for ONE serving (before portion)" },
           kcal_low: { type: "number", description: "Low end of the likely range for this item" },
           protein: { type: "number", description: "grams" },
           carbs: { type: "number", description: "grams" },
@@ -127,7 +129,7 @@ How to find the numbers, in this order. Always prefer real data over your own es
 4. PAST LOGS (foods I logged before). If the same food isn't in the sources above, reuse its numbers (scaled to the amount and adjusted for any modifiers) so the same food gets the same calories every time. source = "history", confidence medium.
 5. Only if none of the above has the food: estimate from your own knowledge of typical Singapore servings (for chains like McDonald's SG, Subway, Starbucks, KFC, use their published nutrition values if you know them). source = "estimate", confidence low (medium if you're confident about a branded item).
 
-Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai, half portion): take the smaller deduction, so the total stays on the high side. Fixed numbers from the databases and the modifier list below are used as given.
+Err on the high side: whenever you estimate and the calories are uncertain or sources disagree (e.g. teh-c kosong is listed anywhere from 30 to 66 kcal), use the UPPER end of the range, never the middle or low end. Say so in the note, e.g. "Range 30–66 kcal, used the upper bound". The same goes for any deduction you work out yourself (kosong, siew dai): take the smaller deduction, so the total stays on the high side. Fixed numbers from the databases and the modifier list below are used as given.
 
 Modifiers to apply:
 - "less rice" ≈ -80 kcal (-18g carbs); "more/extra rice" ≈ +100 kcal; "no rice" removes the rice portion.
@@ -136,11 +138,13 @@ Modifiers to apply:
 - "dry" vs "soup" noodles are different entries. Drinking all the soup/gravy adds calories; "didn't finish the soup" removes some.
 - Kopi/teh: no suffix = condensed milk + sugar; -O = sugar only; -C = evaporated milk + sugar; kosong = no sugar; siew dai = less sugar; gah dai = more sugar; peng = iced (same calories); "po" = weaker (same calories). Combine them, e.g. "kopi-c siew dai". Plain kopi/teh (no -O/-C) made kosong still has milk: since condensed milk is sweet, "teh kosong" / "kopi kosong" means the C kosong version (evaporated milk, no sugar), never O kosong unless they said O. Example: "iced teh kosong" = Iced Teh C kosong (~68 kcal), not Iced Teh O kosong.
 - Economic rice/cai fan: one item per dish taken plus the rice (half rice = half), using SOURCE MATCHES rows where they exist.
-- "half", "shared", "ate a few spoons": scale proportionally.
+- "half", "shared", "ate a few spoons", "2 plates", "x2": don't scale the numbers, set portion instead (see Portion below).
 
 Range: real portions and oil vary, so also give kcal_low, the low end of a realistic range for what they described. kcal is the upper end. For a database dish with no adjustments, kcal_low is about 15% below kcal; for your own estimates it's usually 20–35% below; for MY FOODS, HOME UNITS and branded items with published values, kcal_low = kcal.
 
-Breakdown: for every item, show the working. Row 1 is the base serving you started from (label like "Chicken rice, 1 plate" with its kcal). Each later row is one modifier or scaling step as a signed kcal change (e.g. "Less rice" -80, "Extra plate" +607, "Half portion" -300). Use only the base row if nothing was adjusted. The rows must add up exactly to kcal.
+Breakdown: for every item, show the working. Row 1 is the base serving you started from (label like "Chicken rice, 1 plate" with its kcal). Each later row is one modifier or scaling step as a signed kcal change (e.g. "Less rice" -80, "No skin" -100). Never add a row for half / double portions; that's what portion is for. Use only the base row if nothing was adjusted. The rows must add up exactly to kcal.
+
+Portion: every number you return (kcal, kcal_low, macros, breakdown, parts) is for ONE serving, and quantity says what one serving is ("1 plate", "1 cup", "3 tbsp"). If they ate a fraction or a multiple of that serving, put it in portion and the app does the maths: "half a chicken rice" → quantity "1 plate", portion 0.5; "shared a plate of ckt with a friend" → portion 0.5; "ate a few spoons of fried rice" → portion 0.25; "2 plates of mee goreng" or "kopi x2" → portion 2. Otherwise portion is 1. Measured home amounts stay in quantity with portion 1 ("3 tbsp kailan" → quantity "3 tbsp", portion 1).
 
 Clarifying questions: if the user left out a detail that changes the calories a lot (about 15% or 80+ kcal), add a question with 2–4 short options. Examples: "chicken rice" → "Steamed or roasted chicken?" [Steamed, Roasted]; "nasi lemak" → "Which main?" [Fried chicken wing, Fried fish, Egg only]; "fried rice" → "Which kind?" [Egg, Chicken, Seafood, Yang zhou]; "mee goreng" → "Plate size?" [Regular, Large]. Ask at most 2 questions per message and only about things that matter for calories. Never ask about something the text already states (e.g. "roasted chicken rice" already answers steamed vs roasted). Don't ask when the user already said it, when MY FOODS or HOME UNITS already pin it down, or about drinks' ice. Still return items now using the most common choice, and say which in the note (e.g. "Assumed steamed"). If the message includes "Correction from me", apply that correction to the food (it may change the dish, portion or cooking) and ask no questions. If the message includes "Answers to your questions", use them and return no further questions about the same food.
 
@@ -210,7 +214,8 @@ export async function parseMeal(text: string, homeUnits: HomeUnit[], myFoods: Fo
                 return { name: p.name, kcal: Math.round(p.kcal * f), protein: +(p.protein * f).toFixed(1), carbs: +(p.carbs * f).toFixed(1), fat: +(p.fat * f).toFixed(1) };
               })
             : undefined;
-        return { ...rest, kcal, kcalLow, parts, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
+        const portion = i.portion > 0 && i.portion <= 20 ? +i.portion.toFixed(2) : 1;
+        return { ...rest, kcal, kcalLow, parts, portion, breakdown: breakdown.length ? breakdown : undefined, note: i.note || undefined };
       });
       const questions = parsed.questions
         .filter((q) => q.question.trim() && q.options.length >= 2)

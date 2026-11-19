@@ -27,17 +27,16 @@ function split(text: string): Seg[] {
     });
 }
 
-const r1 = (n: number) => Math.round(n * 10) / 10;
-const times = (count: number, quantity: string) => (count === 1 ? quantity : `${count} × ${quantity}`);
-
+// Numbers are for one serving; the count ("half", "2 x") becomes the portion, which Check & log applies.
 function fromMine(f: MyFood, count: number, source: string): FoodItem {
   return {
     name: f.name,
-    quantity: times(count, f.quantity),
-    kcal: Math.round(f.kcal * count),
-    protein: r1(f.protein * count),
-    carbs: r1(f.carbs * count),
-    fat: r1(f.fat * count),
+    quantity: f.quantity,
+    kcal: Math.round(f.kcal),
+    protein: f.protein,
+    carbs: f.carbs,
+    fat: f.fat,
+    portion: count,
     source,
     confidence: "high",
     note: source === "history" ? `Same as last time you logged it (${f.times}×)` : undefined,
@@ -45,18 +44,18 @@ function fromMine(f: MyFood, count: number, source: string): FoodItem {
 }
 
 function fromRef(r: RefFood, count: number): FoodItem {
-  const kcal = Math.round(r.kcal * count);
+  const kcal = Math.round(r.kcal);
   return {
     name: r.name,
-    quantity: times(count, r.serving),
+    quantity: r.serving,
     kcal,
     kcalLow: Math.round(kcal * 0.85),
-    protein: r1(r.protein * count),
-    carbs: r1(r.carbs * count),
-    fat: r1(r.fat * count),
+    protein: r.protein,
+    carbs: r.carbs,
+    fat: r.fat,
+    portion: count,
     source: r.id,
     confidence: "high",
-    breakdown: count === 1 ? undefined : [{ label: `${r.name}, ${r.serving}`, kcal: Math.round(r.kcal) }, { label: `× ${count}`, kcal: kcal - Math.round(r.kcal) }],
   };
 }
 

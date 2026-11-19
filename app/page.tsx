@@ -357,7 +357,7 @@ function MealCard({ meal, entries, onRemove, onEdit, onAdd }: { meal: Meal; entr
               <button onClick={() => onEdit(e)} className="min-w-0 flex-1 text-left" aria-label={`Edit ${e.name}`}>
                 <div className="truncate text-[15px]">{e.name}</div>
                 <div className="truncate text-xs text-ink-3">
-                  {e.quantity}
+                  {amount(e.quantity, e.portion)}
                   {e.quantity ? " · " : ""}
                   {sourceLabel(e.source)} · <ConfidenceTag c={e.confidence} />
                 </div>
@@ -460,7 +460,7 @@ function ReviewItem({
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
           <div className="font-medium">{it.name}</div>
-          <div className="text-xs text-ink-3">{it.quantity}</div>
+          <div className="text-xs text-ink-3">{amount(it.quantity, it.portion)}</div>
         </div>
         <button aria-label={`Remove ${it.name}`} onClick={onRemove} className="-mr-2 h-8 w-8 shrink-0 rounded-full text-ink-3 active:bg-track">
           ×
@@ -656,7 +656,7 @@ function ComposeSheet(p: {
   const usuals = useUsuals(p.meal);
   const [picked, setPicked] = useState<number[]>([]);
   const pickedItems = picked.map((i) => usuals.items![i]);
-  const pickedKcal = Math.round(sum(pickedItems, "kcal"));
+  const pickedKcal = Math.round(pickedItems.reduce((a, x) => a + x.kcal * (x.portion ?? 1), 0));
   const toggle = (i: number) => setPicked((xs) => (xs.includes(i) ? xs.filter((x) => x !== i) : [...xs, i]));
   const submit = () => p.onSubmit(pickedItems);
   return (
@@ -705,7 +705,7 @@ function ComposeSheet(p: {
                     className={`rounded-full px-2.5 py-1 text-xs ring-1 active:opacity-70 ${on ? "bg-brand text-white ring-brand" : "bg-track text-ink-2 ring-transparent"}`}
                   >
                     {on ? "✓ " : ""}
-                    {it.name} <span className={on ? "text-white/75" : "text-ink-3"}>{Math.round(it.kcal)}</span>
+                    {it.name} <span className={on ? "text-white/75" : "text-ink-3"}>{Math.round(it.kcal * (it.portion ?? 1))}</span>
                   </button>
                 );
               })}
@@ -816,7 +816,7 @@ type Draft = { base: Shown; portion: number; removed: string[]; override: number
 const toDrafts = (xs: FoodItem[]): Draft[] =>
   xs.map((x) => ({
     base: { ...x, breakdown: x.breakdown ?? [{ label: `${x.name}, ${x.quantity}`, kcal: Math.round(x.kcal) }] },
-    portion: 1,
+    portion: x.portion ?? 1,
     removed: [],
     override: null,
   }));
@@ -824,6 +824,8 @@ const toDrafts = (xs: FoodItem[]): Draft[] =>
 const PORTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2];
 const FRACTION: Record<string, string> = { "0.25": "¼", "0.5": "½", "0.75": "¾", "1.5": "1½" };
 const portionLabel = (p: number) => FRACTION[String(p)] ?? String(+p.toFixed(2));
+// "½ × 1 plate": the serving with how many of it you had.
+const amount = (quantity: string, portion = 1) => (portion !== 1 ? `${portionLabel(portion)} × ${quantity}` : quantity);
 
 // What actually gets logged. No AI call needed: parts carry their own calories, so unticking one just subtracts it.
 function view(d: Draft): Shown {
@@ -841,7 +843,8 @@ function view(d: Draft): Shown {
   return {
     ...b,
     name: gone.length ? `${b.name} (no ${gone.map((p) => p.name.toLowerCase()).join(", ")})` : b.name,
-    quantity: d.portion !== 1 ? `${portionLabel(d.portion)} × ${b.quantity}` : b.quantity,
+    quantity: b.quantity,
+    portion: d.portion,
     kcal,
     kcalLow: d.override === null && low !== undefined && low > 0 && low < kcal ? low : undefined,
     protein: macro("protein"),
@@ -913,8 +916,10 @@ function ReviewSheet(p: {
 
   // Re-asks the AI about one item with the user's correction, e.g. "kosong" or "large plate".
   // The note goes on the first line too, so the database search sees e.g. "Iced Teh kosong".
+  // The portion you picked carries over unless the correction itself changes it (e.g. "only ate half").
   async function fix(idx: number, note: string) {
     const it = view(drafts[idx]);
+    const keep = drafts[idx].portion;
     const r = await fetch("/api/parse", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -923,7 +928,8 @@ function ReviewSheet(p: {
     const j = await r.json();
     if (!r.ok) throw new Error(j.error ?? "Lookup failed");
     if (!j.items.length) throw new Error("Couldn't work that out. Try rewording.");
-    setDrafts((xs) => [...xs.slice(0, idx), ...toDrafts(j.items), ...xs.slice(idx + 1)]);
+    const fixed = toDrafts(j.items).map((d) => (d.portion === 1 ? { ...d, portion: keep } : d));
+    setDrafts((xs) => [...xs.slice(0, idx), ...fixed, ...xs.slice(idx + 1)]);
   }
 
   return (
@@ -1077,18 +1083,20 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
   });
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [portion, setPortion] = useState(1);
+  const [portion, setPortion] = useState(entry.portion ?? 1);
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
-  // Portion scales everything from the entry as it was logged, e.g. ½ of "1 bowl".
+  // The entry holds what you ate; Amount is one serving. Picking a portion works from that one full serving,
+  // so an entry logged at ½ shows ½ here, and 1 gives the whole plate.
+  const logged = entry.portion ?? 1;
   const pickPortion = (p: number) => {
     setPortion(p);
+    const k = p / logged;
     setF({
       ...f,
-      quantity: p === 1 ? entry.quantity : `${portionLabel(p)} × ${entry.quantity}`,
-      kcal: String(Math.round(entry.kcal * p)),
-      protein: String(+(entry.protein * p).toFixed(1)),
-      carbs: String(+(entry.carbs * p).toFixed(1)),
-      fat: String(+(entry.fat * p).toFixed(1)),
+      kcal: String(Math.round(entry.kcal * k)),
+      protein: String(+(entry.protein * k).toFixed(1)),
+      carbs: String(+(entry.carbs * k).toFixed(1)),
+      fat: String(+(entry.fat * k).toFixed(1)),
     });
   };
   // Changing calories scales the macros along with it, unless you edit those yourself.
@@ -1113,7 +1121,7 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
     const r = await fetch("/api/entries", {
       method: "PATCH",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ id: entry.id, meal, ...f }),
+      body: JSON.stringify({ id: entry.id, meal, ...f, portion }),
     });
     setSaving(false);
     if (!r.ok) return setError((await r.json()).error ?? "Couldn't save");
@@ -1130,7 +1138,7 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
         </label>
         <div className="grid grid-cols-[1fr_7rem] gap-2">
           <label className="block text-sm text-ink-2">
-            Amount
+            One serving
             <input value={f.quantity} onChange={set("quantity")} className={field} />
           </label>
           <label className="block text-sm text-ink-2">

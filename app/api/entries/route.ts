@@ -5,6 +5,9 @@ import { isDate, todaySG } from "@/lib/date";
 import { currentUserId, unauthorized } from "@/lib/session";
 import { MEALS, type FoodItem, type Meal } from "@/lib/types";
 
+// Servings eaten: 0.5 for half a plate. Anything odd counts as 1.
+const portion = (v: unknown) => (Number(v) > 0 && Number(v) <= 20 ? Number(v) : 1);
+
 export async function GET(req: Request) {
   const uid = await currentUserId();
   if (!uid) return unauthorized();
@@ -45,6 +48,7 @@ export async function POST(req: Request) {
       source: String(i.source ?? "manual").slice(0, 200),
       confidence: (["high", "medium", "low"].includes(i.confidence) ? i.confidence : "medium") as FoodItem["confidence"],
       note: i.note ? String(i.note).slice(0, 300) : undefined,
+      portion: portion(i.portion),
     }));
   if (items.length) await addEntries(uid, body.date, body.meal, items);
   // Every logged food goes into your Foods dictionary; corrected calories are used by the AI next time.
@@ -71,6 +75,7 @@ export async function PATCH(req: Request) {
     protein: Math.max(0, Number(b.protein) || 0),
     carbs: Math.max(0, Number(b.carbs) || 0),
     fat: Math.max(0, Number(b.fat) || 0),
+    portion: portion(b.portion),
   };
   const source = await updateEntry(uid, id, fixed);
   if (source === null) return NextResponse.json({ error: "Not found" }, { status: 404 });

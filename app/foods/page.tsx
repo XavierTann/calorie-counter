@@ -35,6 +35,11 @@ export default function FoodsPage() {
     return (foods ?? []).filter((f) => f.kind === tab && (!needle || `${f.name} ${f.quantity}`.toLowerCase().includes(needle)));
   }, [foods, tab, q]);
 
+  const star = async (f: MyFood) => {
+    setFoods((xs) => xs?.map((x) => (x.id === f.id ? { ...x, favourite: !f.favourite } : x)) ?? xs);
+    await fetch("/api/foods", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: f.id, favourite: !f.favourite }) });
+  };
+
   const open = (f: MyFood) =>
     setDraft({ id: f.id, kind: f.kind, name: f.name, quantity: f.quantity, kcal: String(f.kcal), protein: String(f.protein), carbs: String(f.carbs), fat: String(f.fat) });
 
@@ -54,7 +59,8 @@ export default function FoodsPage() {
         <p className="mt-3 text-sm text-ink-2">
           {tab === "recorded"
             ? "Everything you've logged. Tap a food to fix its calories; the AI uses your numbers next time."
-            : "Foods you add yourself, like a home recipe or a packaged snack. Type the name when logging and the AI uses these numbers."}
+            : "Foods you add yourself, like a home recipe or a packaged snack. Type the name when logging and the AI uses these numbers."}{" "}
+          Star a food (☆) to log it in one tap from Enter manually.
         </p>
 
         <input
@@ -76,8 +82,16 @@ export default function FoodsPage() {
         ) : (
           <ul className="mt-3 divide-y divide-line overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-line">
             {shown.map((f) => (
-              <li key={f.id}>
-                <button onClick={() => open(f)} className="flex w-full items-center gap-3 px-4 py-3 text-left active:bg-track">
+              <li key={f.id} className="flex items-center">
+                <button
+                  onClick={() => star(f)}
+                  aria-pressed={f.favourite}
+                  aria-label={f.favourite ? `Remove ${f.name} from favourites` : `Add ${f.name} to favourites`}
+                  className={`ml-1 h-10 w-10 shrink-0 rounded-full text-xl active:bg-track ${f.favourite ? "text-brand" : "text-ink-3"}`}
+                >
+                  {f.favourite ? "★" : "☆"}
+                </button>
+                <button onClick={() => open(f)} className="flex min-w-0 flex-1 items-center gap-3 py-3 pr-4 pl-1 text-left active:bg-track">
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-[15px]">{f.name}</div>
                     <div className="truncate text-xs text-ink-3">

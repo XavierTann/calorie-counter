@@ -49,6 +49,7 @@ export async function POST(req: Request) {
       confidence: (["high", "medium", "low"].includes(i.confidence) ? i.confidence : "medium") as FoodItem["confidence"],
       note: i.note ? String(i.note).slice(0, 300) : undefined,
       portion: portion(i.portion),
+      favourite: i.favourite === true,
     }));
   if (items.length) await addEntries(uid, body.date, body.meal, items);
   // Every logged food goes into your Foods dictionary; corrected calories are used by the AI next time.

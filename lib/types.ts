@@ -23,6 +23,8 @@ export type FoodItem = {
   //  - a lookup result (AI, database, history) has kcal/macros for ONE serving; portion is what to start the picker on.
   //  - a logged entry has kcal/macros for what was eaten (already × portion); quantity is still the one-serving amount.
   portion?: number;
+  // When logging: also star this food as a favourite.
+  favourite?: boolean;
 };
 
 export type FoodPart = { name: string; kcal: number; protein: number; carbs: number; fat: number };
@@ -82,6 +84,7 @@ export type MyFood = {
   fat: number;
   kind: "recorded" | "custom";
   edited: boolean;
+  favourite: boolean;
   times: number;
   lastUsed: string | null;
 };

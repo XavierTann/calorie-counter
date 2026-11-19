@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createCustomFood, deleteMyFood, listMyFoods, updateMyFood, type FoodInput } from "@/lib/db";
+import { createCustomFood, deleteMyFood, listMyFoods, setFavourite, updateMyFood, type FoodInput } from "@/lib/db";
 import { currentUserId, unauthorized } from "@/lib/session";
 
 function clean(b: Partial<FoodInput>): FoodInput | null {
@@ -46,6 +46,18 @@ export async function PUT(req: Request) {
     if (conflict(e)) return NextResponse.json({ error: "You already have a food with that name and serving" }, { status: 409 });
     throw e;
   }
+  return NextResponse.json({ ok: true });
+}
+
+// Star / unstar: { id, favourite } or { name, quantity, favourite }.
+export async function PATCH(req: Request) {
+  const uid = await currentUserId();
+  if (!uid) return unauthorized();
+  const b = (await req.json().catch(() => ({}))) as { id?: number; name?: string; quantity?: string; favourite?: boolean };
+  const favourite = b.favourite === true;
+  if (Number.isInteger(b.id)) await setFavourite(uid, { id: Number(b.id) }, favourite);
+  else if (typeof b.name === "string" && b.name.trim()) await setFavourite(uid, { name: b.name, quantity: String(b.quantity ?? "") }, favourite);
+  else return NextResponse.json({ error: "bad request" }, { status: 400 });
   return NextResponse.json({ ok: true });
 }
 

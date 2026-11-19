@@ -112,6 +112,7 @@ async function db(): Promise<Client> {
             times INTEGER NOT NULL DEFAULT 0,
             last_used TEXT,
             updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+            favourite INTEGER NOT NULL DEFAULT 0,
             UNIQUE (user_id, key)
           )`,
         ],
@@ -131,7 +132,9 @@ async function db(): Promise<Client> {
 async function migrateSingleUserData(c: Client) {
   const tables = new Set((await c.execute("SELECT name FROM sqlite_master WHERE type = 'table'")).rows.map((r) => String(r.name)));
   const entryCols = (await c.execute("SELECT name FROM pragma_table_info('entries')")).rows.map((r) => String(r.name));
+  const foodCols = (await c.execute("SELECT name FROM pragma_table_info('user_foods')")).rows.map((r) => String(r.name));
   const stmts: string[] = [];
+  if (!foodCols.includes("favourite")) stmts.push("ALTER TABLE user_foods ADD COLUMN favourite INTEGER NOT NULL DEFAULT 0");
   if (!entryCols.includes("user_id")) stmts.push("ALTER TABLE entries ADD COLUMN user_id INTEGER NOT NULL DEFAULT 0");
   if (!entryCols.includes("kcal_low")) stmts.push("ALTER TABLE entries ADD COLUMN kcal_low REAL");
   if (!entryCols.includes("portion")) stmts.push("ALTER TABLE entries ADD COLUMN portion REAL NOT NULL DEFAULT 1");
@@ -399,6 +402,7 @@ function rowToMyFood(row: Record<string, unknown>): MyFood {
     fat: Number(row.fat),
     kind: row.kind === "custom" ? "custom" : "recorded",
     edited: Number(row.edited) === 1,
+    favourite: Number(row.favourite) === 1,
     times: Number(row.times),
     lastUsed: row.last_used ? String(row.last_used) : null,
   };
@@ -420,12 +424,13 @@ export async function recordFoods(userId: number, logged: FoodItem[], countUse =
     `${col} = CASE WHEN excluded.edited = 1 OR (user_foods.kind = 'recorded' AND user_foods.edited = 0) THEN excluded.${col} ELSE user_foods.${col} END`;
   await c.batch(
     items.map((i) => ({
-      sql: `INSERT INTO user_foods (user_id, key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'recorded', ?, ${countUse ? 1 : 0}, datetime('now'))
+      sql: `INSERT INTO user_foods (user_id, key, name, quantity, kcal, protein, carbs, fat, kind, edited, times, last_used, favourite)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'recorded', ?, ${countUse ? 1 : 0}, datetime('now'), ?)
             ON CONFLICT(user_id, key) DO UPDATE SET times = user_foods.times + ${countUse ? 1 : 0}, last_used = excluded.last_used,
               ${["kcal", "protein", "carbs", "fat"].map(pick).join(", ")},
-              edited = MAX(user_foods.edited, excluded.edited), updated_at = datetime('now')`,
-      args: [userId, foodKey(i.name, i.quantity), i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source.includes("(edited)") ? 1 : 0],
+              edited = MAX(user_foods.edited, excluded.edited), favourite = MAX(user_foods.favourite, excluded.favourite),
+              updated_at = datetime('now')`,
+      args: [userId, foodKey(i.name, i.quantity), i.name, i.quantity, i.kcal, i.protein, i.carbs, i.fat, i.source.includes("(edited)") ? 1 : 0, i.favourite ? 1 : 0],
     })),
     "write",
   );
@@ -451,6 +456,16 @@ export async function updateMyFood(userId: number, id: number, f: FoodInput) {
           WHERE id = ? AND user_id = ?`,
     args: [foodKey(f.name, f.quantity), f.name, f.quantity, f.kcal, f.protein, f.carbs, f.fat, id, userId],
   });
+}
+
+// Star or unstar a food, by its id or by name + serving (from a diary entry).
+export async function setFavourite(userId: number, by: { id: number } | { name: string; quantity: string }, favourite: boolean) {
+  const c = await db();
+  await c.execute(
+    "id" in by
+      ? { sql: "UPDATE user_foods SET favourite = ? WHERE id = ? AND user_id = ?", args: [favourite ? 1 : 0, by.id, userId] }
+      : { sql: "UPDATE user_foods SET favourite = ? WHERE key = ? AND user_id = ?", args: [favourite ? 1 : 0, foodKey(by.name, by.quantity), userId] },
+  );
 }
 
 export async function deleteMyFood(userId: number, id: number) {

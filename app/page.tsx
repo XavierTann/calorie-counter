@@ -7,7 +7,7 @@ import { Sheet } from "@/components/Sheet";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Budget } from "@/lib/budget";
 import type { Clarification } from "@/lib/parse";
-import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type Settings } from "@/lib/types";
+import { MEALS, type Energy, type Entry, type FoodItem, type Meal, type MyFood, type Settings } from "@/lib/types";
 
 const MEAL_LABEL: Record<Meal, string> = { breakfast: "Breakfast", lunch: "Lunch", dinner: "Dinner", snacks: "Snacks" };
 const MEAL_ICON: Record<Meal, string> = { breakfast: "☀️", lunch: "🍜", dinner: "🌙", snacks: "🍪" };
@@ -744,10 +744,35 @@ function ComposeSheet(p: {
   );
 }
 
+// Your starred foods, most logged first.
+function useFavourites() {
+  const [foods, setFoods] = useState<MyFood[] | null>(null);
+  useEffect(() => {
+    fetch("/api/foods")
+      .then((r) => (r.ok ? r.json() : { foods: [] }))
+      .then((j: { foods: MyFood[] }) => setFoods(j.foods.filter((f) => f.favourite).sort((a, b) => b.times - a.times)))
+      .catch(() => setFoods([]));
+  }, []);
+  return foods;
+}
+
+const sameFood = (f: { name: string; quantity: string }, g: { name: string; quantity: string }) =>
+  f.name.trim().toLowerCase() === g.name.trim().toLowerCase() && f.quantity.trim().toLowerCase() === g.quantity.trim().toLowerCase();
+
 function ManualForm({ meal: initialMeal, onAdd }: { meal: Meal; onAdd: (items: FoodItem[], meal: Meal) => Promise<void> }) {
   const [meal, setMeal] = useState<Meal>(initialMeal);
   const [f, setF] = useState({ name: "", quantity: "", kcal: "", protein: "", carbs: "", fat: "" });
   const [saving, setSaving] = useState(false);
+  const [favourite, setFavourite] = useState(false);
+  const favourites = useFavourites();
+  const logFavourite = async (x: MyFood) => {
+    if (saving) return;
+    setSaving(true);
+    await onAdd(
+      [{ name: x.name, quantity: x.quantity, kcal: x.kcal, protein: x.protein, carbs: x.carbs, fat: x.fat, source: x.kind === "custom" || x.edited ? "my food" : "history", confidence: "high" }],
+      meal,
+    );
+  };
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF({ ...f, [k]: e.target.value });
   const ok = f.name.trim() && Number(f.kcal) >= 0 && f.kcal !== "";
   const field = "mt-1 w-full rounded-lg bg-track px-3 py-2 text-ink outline-none focus:ring-2 focus:ring-brand";
@@ -770,6 +795,7 @@ function ManualForm({ meal: initialMeal, onAdd }: { meal: Meal; onAdd: (items: F
               fat: Number(f.fat) || 0,
               source: "manual",
               confidence: "high",
+              favourite,
             },
           ],
           meal,
@@ -777,6 +803,26 @@ function ManualForm({ meal: initialMeal, onAdd }: { meal: Meal; onAdd: (items: F
       }}
     >
       <MealPicker meal={meal} setMeal={setMeal} />
+      {favourites && favourites.length > 0 && (
+        <div>
+          <div className="text-xs text-ink-3">★ Favourites · tap to add to {MEAL_LABEL[meal].toLowerCase()}</div>
+          <ul className="mt-1.5 max-h-56 divide-y divide-line overflow-y-auto rounded-xl bg-track">
+            {favourites.map((x) => (
+              <li key={x.id}>
+                <button type="button" disabled={saving} onClick={() => logFavourite(x)} className="flex w-full items-center gap-3 px-3 py-2 text-left active:opacity-60 disabled:opacity-40">
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm">{x.name}</div>
+                    <div className="truncate text-xs text-ink-3">{x.quantity}</div>
+                  </div>
+                  <span className="tabular text-sm font-medium">{Math.round(x.kcal)}</span>
+                  <span className="text-lg leading-none text-brand">+</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-3 text-xs text-ink-3">Or enter something new</div>
+        </div>
+      )}
       <label className="block text-sm text-ink-2">
         Dish
         <input autoFocus value={f.name} onChange={set("name")} placeholder="e.g. Mum's fried bee hoon" className={field} />
@@ -802,6 +848,10 @@ function ManualForm({ meal: initialMeal, onAdd }: { meal: Meal; onAdd: (items: F
           </label>
         ))}
       </div>
+      <label className="flex items-center gap-2 text-sm text-ink-2">
+        <input type="checkbox" checked={favourite} onChange={(e) => setFavourite(e.target.checked)} className="h-4 w-4 accent-[var(--brand)]" />
+        ★ Save to favourites for one-tap logging
+      </label>
       <button disabled={!ok || saving} className="h-12 w-full rounded-xl bg-brand font-semibold text-white disabled:opacity-40">
         {saving ? "Adding…" : `Add ${f.kcal ? Math.round(Number(f.kcal)) + " kcal" : ""} to ${MEAL_LABEL[meal]}`}
       </button>
@@ -1088,6 +1138,17 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
   // The entry holds what you ate; Amount is one serving. Picking a portion works from that one full serving,
   // so an entry logged at ½ shows ½ here, and 1 gives the whole plate.
   const logged = entry.portion ?? 1;
+  const favourites = useFavourites();
+  const [starred, setStarred] = useState<boolean | null>(null);
+  const isFavourite = starred ?? (favourites ? favourites.some((x) => sameFood(x, entry)) : null);
+  const toggleStar = async () => {
+    setStarred(!isFavourite);
+    await fetch("/api/foods", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ name: entry.name, quantity: entry.quantity, favourite: !isFavourite }),
+    });
+  };
   const pickPortion = (p: number) => {
     setPortion(p);
     const k = p / logged;
@@ -1165,6 +1226,11 @@ function EntrySheet({ entry, onClose, onSaved, onDelete }: { entry: Entry; onClo
           {saving ? "Saving…" : "Save changes"}
         </button>
         <p className="text-center text-xs text-ink-3">Your corrected numbers are remembered for next time.</p>
+        {isFavourite !== null && (
+          <button onClick={toggleStar} aria-pressed={isFavourite} className="h-11 w-full rounded-xl text-sm text-ink-2 ring-1 ring-line active:bg-track">
+            {isFavourite ? "★ In your favourites · tap to remove" : "☆ Add to favourites"}
+          </button>
+        )}
         <button onClick={() => confirm(`Delete ${entry.name}?`) && onDelete()} className="h-11 w-full rounded-xl text-sm text-over active:bg-track">
           Delete from diary
         </button>

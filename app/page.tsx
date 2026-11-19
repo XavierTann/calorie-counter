@@ -516,11 +516,9 @@ function ReviewItem({
           <tr className="border-t border-line font-semibold">
             <td className="pt-2 pr-2">Total</td>
             <td className="pt-2 text-right">
-              <input
-                type="number"
-                inputMode="numeric"
+              <KcalInput
                 value={Math.round(it.kcal)}
-                onChange={(e) => onChange({ ...draft, override: Number(e.target.value) || 0 })}
+                onChange={(n) => onChange({ ...draft, override: n })}
                 className="tabular w-20 rounded-lg bg-track px-2 py-1 text-right font-semibold ring-1 ring-line focus:ring-2 focus:ring-brand focus:outline-none"
                 aria-label={`${it.name} total calories`}
               />
@@ -581,6 +579,34 @@ function ReviewItem({
       )}
       {fixError && <p className="mt-1 text-xs text-over">{fixError}</p>}
     </li>
+  );
+}
+
+// A whole-number box that shows exactly what you type while you're editing (so clearing it doesn't leave a 0 that
+// your digits then get appended to), and only snaps back to the computed value when you leave it.
+function KcalInput({ value, onChange, ...rest }: { value: number; onChange: (n: number) => void } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange">) {
+  const [text, setText] = useState<string | null>(null);
+  return (
+    <input
+      {...rest}
+      type="text"
+      inputMode="numeric"
+      pattern="[0-9]*"
+      value={text ?? String(value)}
+      onFocus={(e) => {
+        setText(String(value));
+        e.target.select();
+      }}
+      onChange={(e) => {
+        const digits = e.target.value.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+        setText(digits);
+        if (digits) onChange(Number(digits));
+      }}
+      onBlur={() => {
+        if (text === "") onChange(0);
+        setText(null);
+      }}
+    />
   );
 }
 
